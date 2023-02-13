@@ -4,7 +4,8 @@
     align-items: center;
     justify-content: top;
     min-height: 100vh;
-    background-image: linear-gradient(to bottom, #0e3a60, #082238);
+    background-image: linear-gradient(to bottom, white, white);
+    /* background-image: linear-gradient(to bottom, #0e3a60, #082238); */
 }
 
 .container {

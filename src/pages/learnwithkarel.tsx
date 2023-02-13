@@ -2,7 +2,43 @@ import styles from "../styles/learnwithkarel.module.css";
 import Commands from "../components/commands";
 import { type NextPage } from "next";
 import Code from "../components/code";
-import Game from "../components/game";
+import Canvas from "../components/canvas";
+
+// walls:
+// "0,0,0,0,0,0,0,0\n" +
+// "0,0,0,0,0,0,0,0\n" +
+// "0,0,9,8,12,0,0,0\n" +
+// "0,0,1,0,0,0,0,0\n" +
+// "0,0,3,2,6,0,0,0\n" +
+// "0,0,0,0,0,0,0,0\n" +
+// "0,0,0,0,0,0,0,0\n" +
+// "0,0,0,0,0,0,0,0",
+
+const world = {
+    walls: [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 9, 8, 12, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 3, 2, 6, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    beepers: [{ x: 4, y: 3, count: 1 }],
+    solution: [{ x: 5, y: 3, count: 1 }],
+    karel: { x: 4, y: 2, direction: 3, isSuper: false, beeperCount: 0 }
+}
+
+const level = {
+    code: "move();\npickBeeper();\n//hier drunter weiteren Code einfügen. Ausgegrauter Code macht nichts,\n//Und kann gelöscht werden (muss aber nicht).",
+    name: "Bring the trash outside - Basic commands",
+    worlds: [
+        world,
+    ],
+};
+
+const solution: boolean = false;
 
 const LearnWithKarel: NextPage = () => {
     return (
@@ -16,9 +52,9 @@ const LearnWithKarel: NextPage = () => {
                 </div>
                 <div className={styles.container}>
                     <div className={styles.components}>
-                        <Commands></Commands>
+                        <Commands world={world}></Commands>
                         <Code></Code>
-                        <Game></Game>
+                        <Canvas world={world}></Canvas>
                     </div>
                 </div>
             </main>
