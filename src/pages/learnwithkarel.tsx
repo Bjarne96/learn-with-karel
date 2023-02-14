@@ -3,16 +3,7 @@ import Commands from "../components/commands";
 import { type NextPage } from "next";
 import Code from "../components/code";
 import Canvas from "../components/canvas";
-
-// walls:
-// "0,0,0,0,0,0,0,0\n" +
-// "0,0,0,0,0,0,0,0\n" +
-// "0,0,9,8,12,0,0,0\n" +
-// "0,0,1,0,0,0,0,0\n" +
-// "0,0,3,2,6,0,0,0\n" +
-// "0,0,0,0,0,0,0,0\n" +
-// "0,0,0,0,0,0,0,0\n" +
-// "0,0,0,0,0,0,0,0",
+import Karel from "../components/karel";
 
 const world = {
     walls: [
@@ -40,7 +31,16 @@ const level = {
 
 const solution: boolean = false;
 
+var karel = new Karel(
+    world.karel.x,
+    world.karel.y,
+    world.karel.direction,
+    world.karel.isSuper,
+    world.karel.beeperCount
+);
+
 const LearnWithKarel: NextPage = () => {
+
     return (
         <>
             <main className={styles.main}>
@@ -52,7 +52,7 @@ const LearnWithKarel: NextPage = () => {
                 </div>
                 <div className={styles.container}>
                     <div className={styles.components}>
-                        <Commands world={world}></Commands>
+                        <Commands karel={karel}></Commands>
                         <Code></Code>
                         <Canvas world={world}></Canvas>
                     </div>

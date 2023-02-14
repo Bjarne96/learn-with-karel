@@ -1,20 +1,27 @@
-function Commands(world: any, karel: any) {
-    // var commands = world[0].karel.commands();
-    // for (var i = 0; i < commands.length; i++) {
-    //     commandsContainer.append("<li><a href=\"#\">" + commands[i] + "</a></li>");
-    //     commandsContainer.children().last().click(this.addCode.bind(this, commands[i]));
-    //     //commandsContainer.children().last().click(commands[i], this.addCode.bind(this));
-    //     //commandsContainer[0].lastChild.addEventListener('click', this.addCode.bind(this, commands[i]));
-    //   }
-    return <div className="info row-item">
-        <div className="commands">
-            <p> Available Commands: </p>
-            <ul className="help-commands"></ul>
-        </div>
-        <div className="beepers">
-            <p>Initial Beeper Count: <span className="beeper-count"></span></p>
-        </div>
-    </div>;
+import React from "react";
+import Karel from "./karel";
+
+interface ICommandProps {
+    // world: any,
+    karel: Karel
 }
 
-export default Commands;
+export default class Commands extends React.Component<ICommandProps> {
+
+    render() {
+        var commands = this.props.karel.commands();
+        return <div className="info row-item">
+            <div className="commands">
+                <p> Available Commands: </p>
+                <ul className="help-commands">
+                    {commands.map((command) => {
+                        return <li key={command}>{command}</li>;
+                    })}
+                </ul>
+            </div>
+            <div className="beepers">
+                <p>Initial Beeper Count: <span className="beeper-count"></span></p>
+            </div>
+        </div>;
+    }
+}
