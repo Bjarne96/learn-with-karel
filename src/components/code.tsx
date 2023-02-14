@@ -4,7 +4,7 @@ import { javascript } from '@codemirror/lang-javascript';
 
 function Code() {
     const onChange = React.useCallback((value: any, viewUpdate: any) => {
-        console.log('value:', value);
+        // console.log('value:', value);
     }, []);
     return (
         <CodeMirror

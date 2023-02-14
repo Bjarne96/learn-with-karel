@@ -5,12 +5,12 @@ export default class Karel {
     isSuper: boolean;
     beeperCount: number;
 
-    constructor(x: number, y: number, direction: number, isSuper: boolean, beeperCount: number) {
+    constructor(x: number, y: number, direction: number, isSuper: boolean) {
         this.x = x
         this.y = y
         this.direction = direction
         this.isSuper = isSuper
-        this.beeperCount = beeperCount
+        this.beeperCount = Infinity
         this.front = this.front;
         this.commands = this.commands;
         this.left = this.left;
