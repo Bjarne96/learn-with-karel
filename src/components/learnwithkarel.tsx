@@ -28,8 +28,17 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
         this.state = {
             currentLevel: 0,
             karel: karel,
-            world: world
+            world: world,
+            code: this.props.levels[0].code
         };
+
+        this.onCodeChange = this.onCodeChange
+    }
+
+    onCodeChange(code) {
+        this.setState({
+            code: code
+        })
     }
 
 
@@ -38,7 +47,7 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
         return <>
             <main className={styles.main}>
                 <div className={styles.btns}>
-                    <button className={styles.btn} onClick={() => console.log(this.state.karel)}>Run Code</button>
+                    <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
                     <button className={styles.btn}>See Goal</button>
                     <button className={styles.btn}>Reset Code</button>
                     <button className={styles.btn}>Level</button>
@@ -46,7 +55,7 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
                 <div className={styles.container}>
                     <div className={styles.components}>
                         <Commands karel={this.state.karel}></Commands>
-                        <Code></Code>
+                        <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
                         <Canvas world={this.state.world}></Canvas>
                     </div>
                 </div>

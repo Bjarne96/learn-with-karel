@@ -1,20 +1,24 @@
 import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { ICode } from '../interfaces/Ilearnwithkarel';
 
-function Code() {
-    const onChange = React.useCallback((value: any, viewUpdate: any) => {
-        // console.log('value:', value);
-    }, []);
-    return (
-        <CodeMirror
-            value="console.log('hello world!');"
-            height="33vw"
-            minWidth="33vw"
-            extensions={[javascript({ jsx: true })]}
-            onChange={onChange}
-            theme={"dark"}
-        />
-    );
+export default class Code extends React.Component<ICode> {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <CodeMirror
+                value={this.props.code}
+                height="33vw"
+                minWidth="33vw"
+                extensions={[javascript({ jsx: true })]}
+                onChange={(value) => this.props.onCodeChange(value)}
+                theme={"dark"}
+            />
+        );
+    }
 }
-export default Code;

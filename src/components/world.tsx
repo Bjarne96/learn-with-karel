@@ -29,7 +29,6 @@ export default class World {
         this.rightWall = this.rightWall
         this.bottomWall = this.bottomWall
         this.leftWall = this.leftWall
-
         this.canMove = this.canMove
         this.canMoveLeft = this.canMoveLeft
         this.canMoveRight = this.canMoveRight
@@ -38,28 +37,31 @@ export default class World {
         this.executeCommand = this.executeCommand
         this.executeCode = this.executeCode
         this.takeSnapshot = this.takeSnapshot
-
-        /* Actions */
-        this.beepersInBag = this.beepersInBag
-        this.beepersPresent = this.beepersPresent
-        this.facingEast = this.facingEast
-        this.facingNorth = this.facingNorth
-        this.facingWest = this.facingWest
-        this.frontIsBlocked = this.frontIsBlocked
-        this.frontIsClear = this.frontIsClear
-        this.leftIsBlocked = this.leftIsBlocked
-        this.leftIsClear = this.leftIsClear
+        /* Commands */
         this.move = this.move
-        this.noBeepersInBag = this.noBeepersInBag
-        this.noBeepersPresent = this.noBeepersPresent
-        this.notFacingEast = this.notFacingEast
+        this.turnLeft = this.turnLeft
         this.putBeeper = this.putBeeper
         this.pickBeeper = this.pickBeeper
-        this.rightIsBlocked = this.rightIsBlocked
-        this.rightIsClear = this.rightIsClear
-        this.turnAround = this.turnAround
-        this.turnLeft = this.turnLeft
-        this.turnRight = this.turnRight
+        //this does not work jet, you can still use supercommands
+        /* Super Commands */
+        if (this.karel.isSuper) {
+            this.beepersInBag = this.beepersInBag
+            this.beepersPresent = this.beepersPresent
+            this.facingEast = this.facingEast
+            this.facingNorth = this.facingNorth
+            this.facingWest = this.facingWest
+            this.frontIsBlocked = this.frontIsBlocked
+            this.frontIsClear = this.frontIsClear
+            this.leftIsBlocked = this.leftIsBlocked
+            this.leftIsClear = this.leftIsClear
+            this.noBeepersInBag = this.noBeepersInBag
+            this.noBeepersPresent = this.noBeepersPresent
+            this.notFacingEast = this.notFacingEast
+            this.rightIsBlocked = this.rightIsBlocked
+            this.rightIsClear = this.rightIsClear
+            this.turnAround = this.turnAround
+            this.turnRight = this.turnRight
+        }
     }
 
     // public: returns a boolean validating whether a move can be made in give
@@ -136,12 +138,19 @@ export default class World {
             return
         }
         this.isExecutingCode = true;
-
-        var commands = this.karel.commands();
-        for (var i = 0; i < commands.length; i++) {
-            eval('var ' + commands[i] + ' = function() { return this.executeCommand("' + commands[i] + '"); }.bind(this);');
+        //pattern: movE3() or 3Move()
+        const pattern = /([a-zA-Z0-9_]+)\(\)/g
+        var time = 300;
+        var code = code.replace(pattern, function (_, group) {
+            //adds "this" and a "settimout function" to every karel function 
+            time += 300
+            return "setTimeout(() => {this." + group + "()}, " + time + ")";
+        });
+        try {
+            eval(code);
+        } catch (e) {
+            console.log('Du versuchst fehlerhafeten Code auszuführen:', e);
         }
-        eval(code);
     }
 
     takeSnapshot() {
@@ -155,14 +164,14 @@ export default class World {
     }
 
     /* Actions */
-    beepersInBag(world) {
-        return !!world.karel.beeperCount;
+    beepersInBag() {
+        return !!this.karel.beeperCount;
     }
-    beepersPresent(world) {
-        var x = world.karel.x;
-        var y = world.karel.y;
+    beepersPresent() {
+        var x = this.karel.x;
+        var y = this.karel.y;
         var result = false;
-        world.beepers.forEach(function (beeper) {
+        this.beepers.forEach(function (beeper) {
             if (beeper.x === x && beeper.y === y) {
                 result = true;
             }
@@ -170,73 +179,73 @@ export default class World {
         return result;
     }
 
-    facingEast(world) {
-        return world.karel.direction === 2;
+    facingEast() {
+        return this.karel.direction === 2;
     }
 
-    facingNorth(world) {
-        return world.karel.direction === 1;
+    facingNorth() {
+        return this.karel.direction === 1;
     }
 
-    facingSouth(world) {
-        return world.karel.direction === 3;
+    facingSouth() {
+        return this.karel.direction === 3;
     }
 
-    facingWest(world) {
-        return world.karel.direction === 0;
+    facingWest() {
+        return this.karel.direction === 0;
     }
 
-    frontIsBlocked(world) {
-        return !this.frontIsClear(world);
+    frontIsBlocked() {
+        return !this.frontIsClear();
     }
 
-    frontIsClear(world) {
-        return world.canMove(world.karel.front(), world.karel.x, world.karel.y);
+    frontIsClear() {
+        return this.canMove(this.karel.front(), this.karel.x, this.karel.y);
     }
 
-    leftIsBlocked(world) {
-        return !this.leftIsClear(world);
+    leftIsBlocked() {
+        return !this.leftIsClear();
     }
 
-    leftIsClear(world) {
-        return world.canMove(world.karel.left(), world.karel.x, world.karel.y);
+    leftIsClear() {
+        return this.canMove(this.karel.left(), this.karel.x, this.karel.y);
     }
 
-    move(world) {
-        if (world.canMove(world.karel.direction, world.karel.x, world.karel.y)) {
-            world.karel.move();
+    move() {
+        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y)) {
+            this.karel.move();
         }
     }
 
-    noBeepersInBag(world) {
-        return !this.beepersInBag(world);
+    noBeepersInBag() {
+        return !this.beepersInBag();
     }
 
-    noBeepersPresent(world) {
-        return !this.beepersPresent(world);
+    noBeepersPresent() {
+        return !this.beepersPresent();
     }
 
-    notFacingEast(world) {
-        return !this.facingEast(world);
+    notFacingEast() {
+        return !this.facingEast();
     }
 
-    notFacingNorth(world) {
-        return !this.facingNorth(world);
+    notFacingNorth() {
+        return !this.facingNorth();
     }
 
-    notFacingSouth(world) {
-        return !this.facingSouth(world);
+    notFacingSouth() {
+        return !this.facingSouth();
     }
 
-    notFacingWest(world) {
-        return !this.facingWest(world);
+    notFacingWest() {
+        return !this.facingWest();
     }
 
-    putBeeper(world) {
-        if (world.karel.beeperCount > 0) {
-            world.karel.beeperCount--;
-            const x = world.karel.x;
-            const y = world.karel.y;
+    putBeeper() {
+        if (this.karel.beeperCount > 0) {
+            this.karel.beeperCount--;
+            const x = this.karel.x;
+            const y = this.karel.y;
             var beeper: Beeper;
             for (var i = 0; i < this.beepers.length; i++) {
                 beeper = this.beepers[i]!;
@@ -249,12 +258,12 @@ export default class World {
         }
     }
 
-    pickBeeper(world) {
-        if (this.beepersPresent(world)) {
-            world.karel.beeperCount++;
+    pickBeeper() {
+        if (this.beepersPresent()) {
+            this.karel.beeperCount++;
             var beeper: Beeper;
-            const x = world.karel.x;
-            const y = world.karel.y;
+            const x = this.karel.x;
+            const y = this.karel.y;
             for (var i = 0; i < this.beepers.length; i++) {
                 beeper = this.beepers[i]!;
                 if (beeper.x === x && beeper.y === y) {
@@ -269,24 +278,24 @@ export default class World {
         }
     }
 
-    rightIsBlocked(world) {
-        return !this.rightIsClear(world);
+    rightIsBlocked() {
+        return !this.rightIsClear();
     }
 
-    rightIsClear(world) {
-        return world.canMove(world.karel.right(), world.karel.x, world.karel.y);
+    rightIsClear() {
+        return this.canMove(this.karel.right(), this.karel.x, this.karel.y);
     }
 
-    turnAround(world) {
-        world.karel.turnAround();
+    turnAround() {
+        this.karel.turnAround();
     }
 
-    turnLeft(world) {
-        world.karel.turnLeft();
+    turnLeft() {
+        this.karel.turnLeft();
     }
 
-    turnRight(world) {
-        world.karel.turnRight();
+    turnRight() {
+        this.karel.turnRight();
     }
     /* End Action */
 }

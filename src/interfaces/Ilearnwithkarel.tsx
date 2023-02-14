@@ -11,6 +11,7 @@ export default interface IKarel {
 }
 export interface ILearnWithKarelState {
     currentLevel: number
+    code: string
     karel: Karel
     world: World
 }
@@ -47,4 +48,9 @@ export interface KarelAttributes {
     direction: number;
     isSuper: boolean;
     beeperCount?: number;
+}
+
+export interface ICode {
+    code: string;
+    onCodeChange?;
 }
