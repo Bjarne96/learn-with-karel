@@ -1,0 +1,5 @@
+.helperCommands li {
+    cursor: pointer;
+    margin: 2px;
+    padding: 2px;
+}

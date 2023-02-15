@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react'
+import World from './world';
 
 interface ICanvasProps {
-    world: any,
-    // solution: boolean
+    world: World,
+    goal: number
 }
 
 const Canvas = (props: ICanvasProps) => {
@@ -82,7 +83,6 @@ const Canvas = (props: ICanvasProps) => {
             context.restore();
         }
     };
-
     const drawKarel = function () {
         const canvas = canvasRef.current
         const karelImage = document.createElement('img');
@@ -103,8 +103,6 @@ const Canvas = (props: ICanvasProps) => {
 
     useEffect(() => {
         const canvas = canvasRef.current
-        const context = canvas.getContext('2d')
-        let frameCount: any = 0
         let animationFrameId: any
 
         //Our draw came here
@@ -113,8 +111,11 @@ const Canvas = (props: ICanvasProps) => {
             var context: any = canvas.getContext("2d");
             let walls = props.world.walls;
             var beepers = props.world.beepers;
-            // if (props.solution) beepers = props.world.solution
-            blockSize = clientWidth / props.world.walls[0].length;
+            const yCount = props.world.walls.length;
+            const xCount = props.world.walls[0].length;
+            // TODO Fix stretch bug
+            // const canvasHeight = clientWidth / (8 / yCount)
+            blockSize = clientWidth / yCount;
             canvas.width = clientWidth;
             canvas.height = clientWidth;
 
@@ -125,14 +126,13 @@ const Canvas = (props: ICanvasProps) => {
                     drawWall(x, y, walls[y][x]);
                 }
             }
+            if (props.goal) beepers = props.world.solutions;
             // beepers
             for (var i = 0; i < beepers.length; i++) {
                 var beeper = beepers[i];
                 drawBeeper(beeper.x, beeper.y, beeper.count);
             }
-            //Karel
-            drawKarel();
-            frameCount++
+            if (!props.goal) drawKarel();
             animationFrameId = window.requestAnimationFrame(render)
         }
         render()
@@ -142,7 +142,7 @@ const Canvas = (props: ICanvasProps) => {
         }
     }, [drawBeeper, drawWall])
 
-    return <canvas ref={canvasRef} {...props} />
+    return <canvas ref={canvasRef} />
 }
 
 export default Canvas

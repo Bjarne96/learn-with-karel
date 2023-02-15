@@ -19,10 +19,11 @@ export default class World {
         solutions: Array<Solution>,
         walls: Array<Array<number>>
     ) {
+        //JSON.parse(JSON.stringify(array)) makes a deep copy -> not just shallow copy
         this.karel = karel
-        this.beepers = beepers
-        this.solutions = solutions
-        this.walls = walls
+        this.beepers = JSON.parse(JSON.stringify(beepers))
+        this.solutions = JSON.parse(JSON.stringify(solutions))
+        this.walls = JSON.parse(JSON.stringify(walls))
         this.snapshots = []
         this.isExecutingCode = false
         this.topWall = this.topWall
@@ -42,7 +43,7 @@ export default class World {
         this.turnLeft = this.turnLeft
         this.putBeeper = this.putBeeper
         this.pickBeeper = this.pickBeeper
-        //this does not work jet, you can still use supercommands
+        //TODO: this does not work jet, you can still use supercommands
         /* Super Commands */
         if (this.karel.isSuper) {
             this.beepersInBag = this.beepersInBag
@@ -151,6 +152,11 @@ export default class World {
         } catch (e) {
             console.log('Du versuchst fehlerhafeten Code auszuführen:', e);
         }
+        setTimeout(() => {
+            if (this.checkSolution()) {
+                this.levelCompleted();
+            }
+        }, time + 100);
     }
 
     takeSnapshot() {
@@ -162,8 +168,84 @@ export default class World {
         }
         this.snapshots.push(snapshot);
     }
+    levelCompleted() {
+        console.log('completed');
+    }
 
-    /* Actions */
+    checkSolution() {
+        const compareBeeper = (a, b) => {
+            return a.x === b.x && a.y === b.y && a.count === b.count;
+        };
+        var found = false;
+
+        if (this.beepers.length !== this.solutions.length) return false;
+
+
+        for (var j = 0; j < this.beepers.length; j++) {
+            found = false;
+            for (var k = 0; k < this.solutions.length; k++) {
+                if (compareBeeper(this.beepers[j], this.solutions[k])) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /* Commands */
+
+    putBeeper() {
+        if (this.karel.beeperCount > 0) {
+            this.karel.beeperCount--;
+            const x = this.karel.x;
+            const y = this.karel.y;
+            var beeper: Beeper;
+            for (var i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i]!;
+                if (beeper.x === x && beeper.y === y) {
+                    beeper.count++;
+                    return;
+                }
+            }
+            this.beepers.push({ x: x, y: y, count: 1 });
+        }
+    }
+
+    pickBeeper() {
+        if (this.beepersPresent()) {
+            this.karel.beeperCount++;
+            var beeper: Beeper;
+            const x = this.karel.x;
+            const y = this.karel.y;
+            for (var i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i]!;
+                if (beeper.x === x && beeper.y === y) {
+                    beeper.count--;
+                    if (beeper.count <= 0) {
+                        var i = this.beepers.indexOf(beeper);
+                        this.beepers.splice(i, 1);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    move() {
+        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y)) {
+            this.karel.move();
+        }
+    }
+
+    turnLeft() {
+        this.karel.turnLeft();
+    }
+
+    /* Super Commands */
+
     beepersInBag() {
         return !!this.karel.beeperCount;
     }
@@ -211,12 +293,6 @@ export default class World {
         return this.canMove(this.karel.left(), this.karel.x, this.karel.y);
     }
 
-    move() {
-        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y)) {
-            this.karel.move();
-        }
-    }
-
     noBeepersInBag() {
         return !this.beepersInBag();
     }
@@ -241,43 +317,6 @@ export default class World {
         return !this.facingWest();
     }
 
-    putBeeper() {
-        if (this.karel.beeperCount > 0) {
-            this.karel.beeperCount--;
-            const x = this.karel.x;
-            const y = this.karel.y;
-            var beeper: Beeper;
-            for (var i = 0; i < this.beepers.length; i++) {
-                beeper = this.beepers[i]!;
-                if (beeper.x === x && beeper.y === y) {
-                    beeper.count++;
-                    return;
-                }
-            }
-            this.beepers.push({ x: x, y: y, count: 1 });
-        }
-    }
-
-    pickBeeper() {
-        if (this.beepersPresent()) {
-            this.karel.beeperCount++;
-            var beeper: Beeper;
-            const x = this.karel.x;
-            const y = this.karel.y;
-            for (var i = 0; i < this.beepers.length; i++) {
-                beeper = this.beepers[i]!;
-                if (beeper.x === x && beeper.y === y) {
-                    beeper.count--;
-                    if (beeper.count <= 0) {
-                        var i = this.beepers.indexOf(beeper);
-                        this.beepers.splice(i, 1);
-                    }
-                    return;
-                }
-            }
-        }
-    }
-
     rightIsBlocked() {
         return !this.rightIsClear();
     }
@@ -288,10 +327,6 @@ export default class World {
 
     turnAround() {
         this.karel.turnAround();
-    }
-
-    turnLeft() {
-        this.karel.turnLeft();
     }
 
     turnRight() {

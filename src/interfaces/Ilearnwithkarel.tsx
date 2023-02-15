@@ -14,6 +14,7 @@ export interface ILearnWithKarelState {
     code: string
     karel: Karel
     world: World
+    goal: boolean
 }
 export interface ILearnWithKarelProps {
     levels: Array<ILevel>
@@ -52,5 +53,11 @@ export interface KarelAttributes {
 
 export interface ICode {
     code: string;
-    onCodeChange?;
+    onCodeChange;
+}
+export interface ICommandProps {
+    // world: any,
+    karel: Karel,
+    onCodeChange;
+    code: string;
 }
