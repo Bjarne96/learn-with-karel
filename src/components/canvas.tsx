@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import World from './world';
+import styles from "../styles/learnwithkarel.module.css";
 
 interface ICanvasProps {
     world: World,
@@ -113,11 +114,15 @@ const Canvas = (props: ICanvasProps) => {
             var beepers = props.world.beepers;
             const yCount = props.world.walls.length;
             const xCount = props.world.walls[0].length;
-            // TODO Fix stretch bug
-            // const canvasHeight = clientWidth / (8 / yCount)
-            blockSize = clientWidth / yCount;
+            var teiler = yCount;
+            var canvasHeight = clientWidth / (xCount / yCount)
+            if (props.world.walls.length != props.world.walls[0].length) {
+                canvasHeight = clientWidth / (8 / yCount)
+            }
+            if (yCount < xCount) teiler = xCount
+            blockSize = clientWidth / teiler;
             canvas.width = clientWidth;
-            canvas.height = clientWidth;
+            canvas.height = canvasHeight;
 
             // walls
             for (var y = 0; y < walls.length; y++) {
@@ -142,7 +147,7 @@ const Canvas = (props: ICanvasProps) => {
         }
     }, [drawBeeper, drawWall])
 
-    return <canvas ref={canvasRef} />
+    return <div className={styles.canvasContainer}><canvas ref={canvasRef} /></div>
 }
 
 export default Canvas

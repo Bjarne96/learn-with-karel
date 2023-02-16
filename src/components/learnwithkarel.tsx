@@ -44,31 +44,30 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
 
     setLevel(currentLevel?: number) {
         if (currentLevel == undefined) currentLevel = this.state.currentLevel
-        console.log('currentLevel', currentLevel);
         let defaultKarel = new Karel(
             this.props.levels[currentLevel].worlds[0].karel.x,
             this.props.levels[currentLevel].worlds[0].karel.y,
             this.props.levels[currentLevel].worlds[0].karel.direction,
             this.props.levels[currentLevel].worlds[0].karel.isSuper
         )
-        console.log('this.props.levels[currentLevel].worlds[0].walls', this.props.levels[currentLevel].worlds[0].walls);
         let defaultWorld = new World(
             defaultKarel,
             this.props.levels[currentLevel].worlds[0].beepers,
             this.props.levels[currentLevel].worlds[0].solutions,
             this.props.levels[currentLevel].worlds[0].walls,
         )
+        // deep copy (' ' + this.props.levels[currentLevel].code).slice(1)
         this.setState({
             currentLevel: currentLevel,
             karel: defaultKarel,
-            world: defaultWorld
+            world: defaultWorld,
+            code: (' ' + this.props.levels[currentLevel].code).slice(1)
         })
     }
 
     toggleGoal() {
         this.setState({ goal: !this.state.goal })
     }
-
 
     render() {
         return <>
