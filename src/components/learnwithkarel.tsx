@@ -76,27 +76,35 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
     render() {
         return <>
             <main className={styles.main}>
-                <div className={styles.btns}>
-                    <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
-                    <button className={styles.btn} onClick={() => this.toggleGoal()}>See Goal</button>
-                    <button className={styles.btn} onClick={() => this.setLevel()}>Reset Map</button>
-                    <select
-                        value={this.state.currentLevel}
-                        className={styles.btn}
-                        onChange={(e) => this.setLevel(Number(e.target.value), true)}
-                    >
-                        {
-                            this.props.levels.map((level: ILevel, i: number) => {
-                                return <option value={i} key={i}>{level.name}</option>;
-                            })
-                        }
-                    </select>
-                </div>
                 <div className={styles.container}>
-                    <div className={styles.components}>
-                        <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
-                        <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
-                        <Canvas goal={this.state.goal ? 1 : 0} world={this.state.world}></Canvas>
+                    <div >
+                        <div className={styles.components}>
+                            <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
+                            <div>
+                                <div className={styles.btnContainer}>
+                                    <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
+                                    <button className={styles.btn} onClick={() => this.toggleGoal()}>See Goal</button>
+                                </div>
+                                <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
+                            </div>
+                            <div>
+                                <div className={styles.btnContainer}>
+                                    <button className={styles.btn} onClick={() => this.setLevel()}>Reset Map</button>
+                                    <select
+                                        value={this.state.currentLevel}
+                                        className={styles.btn}
+                                        onChange={(e) => this.setLevel(Number(e.target.value), true)}
+                                    >
+                                        {
+                                            this.props.levels.map((level: ILevel, i: number) => {
+                                                return <option value={i} key={i}>{level.name}</option>;
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                                <Canvas goal={this.state.goal ? 1 : 0} world={this.state.world}></Canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

@@ -1,5 +1,32 @@
+.commandContainer {
+    background-color: #282c34;
+    padding: 1rem 2rem 2rem 2rem;
+    min-width: 220px;
+}
+
+.commandContainer p {
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
 .helperCommands li {
     cursor: pointer;
-    margin: 2px;
-    padding: 2px;
+    margin: 5px 0;
+    padding: 5px 0;
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+.helperCommands {
+    list-style-type: none;
+    color: #61afef;
+    font-weight: 600;
+    padding: 0;
+}
+
+.helperCommands span {
+    color: #7d8799;
+    font-weight: 600;
+    letter-spacing: 3px;
 }
