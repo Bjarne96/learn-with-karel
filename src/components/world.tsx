@@ -1,31 +1,38 @@
-import { Beeper, IWorld, Solution } from "../interfaces/Ilearnwithkarel";
+import { Beeper, Solution } from "../interfaces/Ilearnwithkarel";
 import Karel from "./karel";
 
 export default class World {
     karel: Karel;
-    snapshots: Array<IWorld> = [];
     beepers: Array<Beeper>;
     solutions: Array<Solution>;
     walls: Array<Array<number>>;
-    isExecutingCode: boolean;
+    isExecutingCode: boolean = false;
     topWall = 8
     rightWall = 4
     bottomWall = 2
     leftWall = 1
+    timer = 500;
+    interval = 1000;
+    commandCounter = 0;
 
     constructor(
         karel: Karel,
         beepers: Array<Beeper>,
         solutions: Array<Solution>,
-        walls: Array<Array<number>>
+        walls: Array<Array<number>>,
+        isExecutingCode?: boolean
     ) {
-        //JSON.parse(JSON.stringify(array)) makes a deep copy -> not just shallow copy
+        //deep copy => JSON.parse(JSON.stringify(array))
         this.karel = karel
         this.beepers = JSON.parse(JSON.stringify(beepers))
         this.solutions = JSON.parse(JSON.stringify(solutions))
         this.walls = JSON.parse(JSON.stringify(walls))
-        this.snapshots = []
-        this.isExecutingCode = false
+        this.timer = this.timer;
+        this.interval = this.interval;
+        this.commandCounter = this.commandCounter
+        if (isExecutingCode) {
+            this.isExecutingCode = JSON.parse(JSON.stringify(isExecutingCode))
+        }
         this.topWall = this.topWall
         this.rightWall = this.rightWall
         this.bottomWall = this.bottomWall
@@ -37,40 +44,30 @@ export default class World {
         this.canMoveDown = this.canMoveDown
         this.executeCommand = this.executeCommand
         this.executeCode = this.executeCode
-        this.takeSnapshot = this.takeSnapshot
         /* Commands */
         this.move = this.move
         this.turnLeft = this.turnLeft
         this.putBeeper = this.putBeeper
         this.pickBeeper = this.pickBeeper
-        //TODO: this does not work jet, you can still use supercommands
         /* Super Commands */
-        if (this.karel.isSuper) {
-            this.beepersInBag = this.beepersInBag
-            this.beepersPresent = this.beepersPresent
-            this.facingEast = this.facingEast
-            this.facingNorth = this.facingNorth
-            this.facingWest = this.facingWest
-            this.frontIsBlocked = this.frontIsBlocked
-            this.frontIsClear = this.frontIsClear
-            this.leftIsBlocked = this.leftIsBlocked
-            this.leftIsClear = this.leftIsClear
-            this.noBeepersInBag = this.noBeepersInBag
-            this.noBeepersPresent = this.noBeepersPresent
-            this.notFacingEast = this.notFacingEast
-            this.rightIsBlocked = this.rightIsBlocked
-            this.rightIsClear = this.rightIsClear
-            this.turnAround = this.turnAround
-            this.turnRight = this.turnRight
-        }
+        this.beepersInBag = this.beepersInBag
+        this.beepersPresent = this.beepersPresent
+        this.facingEast = this.facingEast
+        this.facingNorth = this.facingNorth
+        this.facingWest = this.facingWest
+        this.frontIsBlocked = this.frontIsBlocked
+        this.frontIsClear = this.frontIsClear
+        this.leftIsBlocked = this.leftIsBlocked
+        this.leftIsClear = this.leftIsClear
+        this.noBeepersInBag = this.noBeepersInBag
+        this.noBeepersPresent = this.noBeepersPresent
+        this.notFacingEast = this.notFacingEast
+        this.rightIsBlocked = this.rightIsBlocked
+        this.rightIsClear = this.rightIsClear
+        this.turnAround = this.turnAround
+        this.turnRight = this.turnRight
     }
 
-    // public: returns a boolean validating whether a move can be made in give
-    // direction from given position.
-    //
-    // direction: 0 - 3 representing Right, Up, Left, Down
-    // x: location of x coordinate
-    // y: location of y coordinate
     canMove(direction: number, x: number, y: number) {
         switch (direction) {
             case 0: // right
@@ -122,52 +119,56 @@ export default class World {
         return noBottomWall && noTopWall;
     }
 
-    executeCommand(command: string) {
-        var result = this[command](this);
-
-        if (result === undefined) {
-            // likely something changed because it is not a predicate function
-            this.takeSnapshot();
-        }
-
-        return result;
+    executeCommand(command) {
+        this.commandCounter++;
+        setTimeout(() => {
+            //Execute
+            this[command](this)
+            this.commandCounter--
+            // All commands are executed
+            if (this.commandCounter == 0) {
+                if (this.checkSolution) this.levelCompleted();
+                this.isExecutingCode = false
+            }
+        }, this.timer)
+        //Increase timer for each command
+        this.timer += this.interval
     }
 
-    executeCode(code: string) {
+    executeCode(code) {
         if (this.isExecutingCode) {
             console.log("already executing code");
             return
         }
         this.isExecutingCode = true;
-        //pattern: movE3() or 3Move()
-        const pattern = /([a-zA-Z0-9_]+)\(\)/g
-        var time = 300;
-        var code = code.replace(pattern, function (_, group) {
-            //adds "this" and a "settimout function" to every karel function 
-            time += 300
-            return "setTimeout(() => {this." + group + "()}, " + time + ")";
-        });
-        try {
-            eval(code);
-        } catch (e) {
-            console.log('Du versuchst fehlerhafeten Code auszuführen:', e);
+        // Commands
+        var move = () => this.executeCommand("move")
+        var turnLeft = () => this.executeCommand("turnLeft")
+        var pickBeeper = () => this.executeCommand("pickBeeper")
+        var putBeeper = () => this.executeCommand("putBeeper")
+        // Super Commands
+        if (this.karel.isSuper) {
+            var beepersInBag = () => this.executeCommand("beepersInBag")
+            var beepersPresent = () => this.executeCommand("beepersPresent")
+            var facingEast = () => this.executeCommand("facingEast")
+            var facingNorth = () => this.executeCommand("facingNorth")
+            var facingWest = () => this.executeCommand("facingWest")
+            var frontIsBlocked = () => this.executeCommand("frontIsBlocked")
+            var frontIsClear = () => this.executeCommand("frontIsClear")
+            var leftIsBlocked = () => this.executeCommand("leftIsBlocked")
+            var leftIsClear = () => this.executeCommand("leftIsClear")
+            var noBeepersInBag = () => this.executeCommand("noBeepersInBag")
+            var noBeepersPresent = () => this.executeCommand("noBeepersPresent")
+            var notFacingEast = () => this.executeCommand("notFacingEast")
+            var rightIsBlocked = () => this.executeCommand("rightIsBlocked")
+            var rightIsClear = () => this.executeCommand("rightIsClear")
+            var turnAround = () => this.executeCommand("turnAround")
+            var turnRight = () => this.executeCommand("turnRight")
         }
-        setTimeout(() => {
-            if (this.checkSolution()) {
-                this.levelCompleted();
-            }
-        }, time + 100);
+        //Execute code
+        eval(code);
     }
 
-    takeSnapshot() {
-        const snapshot = {
-            beepers: this.beepers,
-            karel: this.karel.attributes(),
-            solutions: this.solutions,
-            walls: this.walls
-        }
-        this.snapshots.push(snapshot);
-    }
     levelCompleted() {
         console.log('completed');
     }
@@ -179,7 +180,6 @@ export default class World {
         var found = false;
 
         if (this.beepers.length !== this.solutions.length) return false;
-
 
         for (var j = 0; j < this.beepers.length; j++) {
             found = false;
@@ -249,6 +249,7 @@ export default class World {
     beepersInBag() {
         return !!this.karel.beeperCount;
     }
+
     beepersPresent() {
         var x = this.karel.x;
         var y = this.karel.y;
@@ -332,5 +333,4 @@ export default class World {
     turnRight() {
         this.karel.turnRight();
     }
-    /* End Action */
 }

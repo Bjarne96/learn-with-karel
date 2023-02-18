@@ -78,7 +78,7 @@ export default class Karel {
         };
     }
 
-    commands() {
+    commands(): Array<String> {
         var commands = ["move", "turnLeft", "putBeeper", "pickBeeper"];
         var superCommands = [
             "turnRight",
