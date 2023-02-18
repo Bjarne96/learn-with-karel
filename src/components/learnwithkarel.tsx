@@ -42,26 +42,30 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
         })
     }
 
-    setLevel(currentLevel?: number) {
-        if (currentLevel == undefined) currentLevel = this.state.currentLevel
+    setLevel(level?: number, code?: boolean) {
+        if (level == undefined) level = this.state.currentLevel
         let defaultKarel = new Karel(
-            this.props.levels[currentLevel].worlds[0].karel.x,
-            this.props.levels[currentLevel].worlds[0].karel.y,
-            this.props.levels[currentLevel].worlds[0].karel.direction,
-            this.props.levels[currentLevel].worlds[0].karel.isSuper
+            this.props.levels[level].worlds[0].karel.x,
+            this.props.levels[level].worlds[0].karel.y,
+            this.props.levels[level].worlds[0].karel.direction,
+            this.props.levels[level].worlds[0].karel.isSuper
         )
         let defaultWorld = new World(
             defaultKarel,
-            this.props.levels[currentLevel].worlds[0].beepers,
-            this.props.levels[currentLevel].worlds[0].solutions,
-            this.props.levels[currentLevel].worlds[0].walls,
+            this.props.levels[level].worlds[0].beepers,
+            this.props.levels[level].worlds[0].solutions,
+            this.props.levels[level].worlds[0].walls,
         )
-        // deep copy (' ' + this.props.levels[currentLevel].code).slice(1)
+        // deep copy (' ' + this.props.levels[level].code).slice(1)
+        var codeString = this.state.code
+        if (code) {
+            codeString = (' ' + this.props.levels[level].code).slice(1)
+        }
         this.setState({
-            currentLevel: currentLevel,
+            currentLevel: level,
             karel: defaultKarel,
             world: defaultWorld,
-            code: (' ' + this.props.levels[currentLevel].code).slice(1)
+            code: codeString
         })
     }
 
@@ -79,7 +83,7 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
                     <select
                         value={this.state.currentLevel}
                         className={styles.btn}
-                        onChange={(e) => this.setLevel(Number(e.target.value))}
+                        onChange={(e) => this.setLevel(Number(e.target.value), true)}
                     >
                         {
                             this.props.levels.map((level: ILevel, i: number) => {

@@ -2,7 +2,7 @@ import { ILevel } from "../interfaces/Ilearnwithkarel";
 
 export const levels: Array<ILevel> = [
     {
-        code: "move();\npickBeeper();\n//hier drunter weiteren Code einfügen. Ausgegrauter Code macht nichts,\n//Und kann gelöscht werden (muss aber nicht).",
+        code: "function test() {\n\tmove();\n\tmove();\n}\nmove();\npickBeeper();\n//hier drunter weiteren Code einfügen. Ausgegrauter Code macht nichts,\n//Und kann gelöscht werden (muss aber nicht).",
         name: "Bring the trash outside - Basic commands",
         worlds: [
             {
