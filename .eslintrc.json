@@ -25,14 +25,19 @@
         "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-        "@typescript-eslint/consistent-type-imports": "warn",
-        "@typescript-eslint/no-var": "off",
-        "no-var": "off",
+        "@typescript-eslint/consistent-type-imports": 0,
+        "@typescript-eslint/no-var": 0,
+        "no-var": 0,
         "@typescript-eslint/no-unsafe-assignment": 0,
         "@typescript-eslint/unbound-method": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
         "@typescript-eslint/no-unsafe-member-access": 0,
         "@typescript-eslint/no-unused-vars": 0,
-        "@typescript-eslint/no-explicit-any": 0
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/no-extra-semi": 0,
+        "prefer-const": 0,
+        "react-hooks/exhaustive-deps": 0,
+        "@typescript-eslint/no-inferrable-types": 0
     }
 }
