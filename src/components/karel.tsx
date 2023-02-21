@@ -11,16 +11,6 @@ export default class Karel {
         this.direction = direction
         this.isSuper = isSuper
         this.beeperCount = Infinity
-        this.front = this.front;
-        this.commands = this.commands;
-        this.left = this.left;
-        this.move = this.move;
-        this.position = this.position;
-        this.right = this.right;
-        this.turnAround = this.turnAround;
-        this.turnLeft = this.turnLeft;
-        this.turnRight = this.turnRight;
-        this.attributes = this.attributes;
     }
 
     front() {
@@ -78,9 +68,9 @@ export default class Karel {
         };
     }
 
-    commands(): Array<String> {
-        var commands = ["move", "turnLeft", "putBeeper", "pickBeeper"];
-        var superCommands = [
+    commands(): Array<string> {
+        const commands = ["move", "turnLeft", "putBeeper", "pickBeeper"];
+        const superCommands = [
             "turnRight",
             "turnAround",
             "frontIsClear",
@@ -107,4 +97,4 @@ export default class Karel {
             commands.concat(superCommands) :
             commands;
     }
-};
+}

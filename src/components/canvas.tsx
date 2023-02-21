@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import World from './world';
+import type World from './world';
 import styles from "../styles/learnwithkarel.module.css";
 
 interface ICanvasProps {
@@ -9,19 +9,16 @@ interface ICanvasProps {
 
 const Canvas = (props: ICanvasProps) => {
 
-    const canvasRef: any = useRef(null);
-
-    var blockSize = 1
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    let blockSize = 1
 
     const drawWall = (x: number, y: number, side: number) => {
         const canvas = canvasRef.current
-        var minX = x * blockSize
-        var minY = y * blockSize
-        var midX = minX + blockSize * 0.5
-        var midY = minY + blockSize * 0.5
-        var maxX = minX + blockSize
-        var maxY = minY + blockSize
-        var context: any = canvas.getContext("2d")
+        const minX = x * blockSize
+        const minY = y * blockSize
+        const maxX = minX + blockSize
+        const maxY = minY + blockSize
+        const context = canvas.getContext("2d")
 
         context.save()
         context.beginPath()
@@ -50,17 +47,18 @@ const Canvas = (props: ICanvasProps) => {
         context.strokeStyle = "white"
         context.stroke()
         context.restore()
-    };
+    }
+
     const drawBeeper = (x: number, y: number, count: number) => {
         const canvas = canvasRef.current
-        var minX = x * blockSize
-        var minY = y * blockSize
-        var midX = minX + blockSize * 0.5
-        var midY = minY + blockSize * 0.5
-        var maxX = minX + blockSize
-        var maxY = minY + blockSize
+        const minX = x * blockSize
+        const minY = y * blockSize
+        const midX = minX + blockSize * 0.5
+        const midY = minY + blockSize * 0.5
+        const maxX = minX + blockSize
+        const maxY = minY + blockSize
 
-        var context: CanvasRenderingContext2D = canvas.getContext("2d")!;
+        const context = canvas.getContext("2d");
         context.save()
         context.beginPath()
         context.moveTo(midX, minY + 10) // top point
@@ -84,17 +82,18 @@ const Canvas = (props: ICanvasProps) => {
             context.fillText(String(count), midX, midY)
             context.restore()
         }
-    };
+    }
+
     const drawKarel = function () {
         const canvas = canvasRef.current
         const karelImage = document.createElement('img')
         karelImage.src = "/karel.png"
         const karel = props.world.karel
-        var context = canvas.getContext("2d");
-        var minX = karel.x * blockSize
-        var minY = karel.y * blockSize
-        var midX = blockSize * 0.5
-        var midY = blockSize * 0.5
+        const context = canvas.getContext("2d");
+        const minX = karel.x * blockSize
+        const minY = karel.y * blockSize
+        const midX = blockSize * 0.5
+        const midY = blockSize * 0.5
         context.save()
         context.translate(minX, minY)
         context.translate(midX, midY)
@@ -104,50 +103,52 @@ const Canvas = (props: ICanvasProps) => {
     }
 
     useEffect(() => {
+        const clientWidth = (window.innerWidth * 0.33)
+        const walls = props.world.walls
+        let beepers = props.world.beepers
+        if (props.goal) beepers = props.world.solutions;
+        const yCount = walls.length
+        const xCount = walls[0].length
+        let teiler = yCount
+        let canvasHeight = clientWidth / (xCount / yCount)
+        if (walls.length != walls[0].length) {
+            canvasHeight = clientWidth / (8 / yCount)
+        }
+        if (yCount < xCount) teiler = xCount
+        blockSize = clientWidth / teiler
         const canvas = canvasRef.current
-        let animationFrameId: any
+
 
         //Our draw came here
         const render = () => {
-            const clientWidth = (window.innerWidth * 0.33)
-            var context: any = canvas.getContext("2d")
-            let walls = props.world.walls
-            var beepers = props.world.beepers
-            const yCount = props.world.walls.length
-            const xCount = props.world.walls[0].length
-            var teiler = yCount
-            var canvasHeight = clientWidth / (xCount / yCount)
-            if (props.world.walls.length != props.world.walls[0].length) {
-                canvasHeight = clientWidth / (8 / yCount)
-            }
-            if (yCount < xCount) teiler = xCount
-            blockSize = clientWidth / teiler
+            const context = canvas.getContext("2d")
+
             canvas.width = clientWidth
             canvas.height = canvasHeight
 
             // walls
-            for (var y = 0; y < walls.length; y++) {
-                for (var x = 0; x < walls[y].length; x++) {
+            for (let y = 0; y < walls.length; y++) {
+                for (let x = 0; x < walls[y].length; x++) {
                     context.fillStyle = "white"
                     context.fillRect(x * blockSize + blockSize * 0.5, y * blockSize + blockSize * 0.5, 2, 2)
                     drawWall(x, y, walls[y][x])
                 }
             }
-            if (props.goal) beepers = props.world.solutions;
+
             // beepers
-            for (var i = 0; i < beepers.length; i++) {
-                var beeper = beepers[i]
+            for (let i = 0; i < beepers.length; i++) {
+                const beeper = beepers[i]
                 drawBeeper(beeper.x, beeper.y, beeper.count)
             }
             if (!props.goal) drawKarel()
-            animationFrameId = window.requestAnimationFrame(render)
+            window.requestAnimationFrame(render)
         }
         render()
 
-        return () => {
-            window.cancelAnimationFrame(animationFrameId)
-        }
-    }, [drawBeeper, drawWall])
+        // return () => {
+        //     window.cancelAnimationFrame(animationFrameId)
+        // }
+    })
 
     return <div className={styles.canvasContainer}><canvas ref={canvasRef} /></div>
 }

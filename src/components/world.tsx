@@ -1,12 +1,13 @@
-import { Beeper, Solution } from "../interfaces/Ilearnwithkarel";
-import Karel from "./karel";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Beeper } from "../interfaces/Ilearnwithkarel";
+import type Karel from "./karel";
 
 export default class World {
     karel: Karel;
     beepers: Array<Beeper>;
-    solutions: Array<Solution>;
+    solutions: Array<Beeper>;
     walls: Array<Array<number>>;
-    isExecutingCode: boolean = false;
+    isExecutingCode = false;
     topWall = 8
     rightWall = 4
     bottomWall = 2
@@ -18,7 +19,7 @@ export default class World {
     constructor(
         karel: Karel,
         beepers: Array<Beeper>,
-        solutions: Array<Solution>,
+        solutions: Array<Beeper>,
         walls: Array<Array<number>>,
         isExecutingCode?: boolean
     ) {
@@ -33,39 +34,6 @@ export default class World {
         if (isExecutingCode) {
             this.isExecutingCode = JSON.parse(JSON.stringify(isExecutingCode))
         }
-        this.topWall = this.topWall
-        this.rightWall = this.rightWall
-        this.bottomWall = this.bottomWall
-        this.leftWall = this.leftWall
-        this.canMove = this.canMove
-        this.canMoveLeft = this.canMoveLeft
-        this.canMoveRight = this.canMoveRight
-        this.canMoveUp = this.canMoveUp
-        this.canMoveDown = this.canMoveDown
-        this.executeCommand = this.executeCommand
-        this.executeCode = this.executeCode
-        /* Commands */
-        this.move = this.move
-        this.turnLeft = this.turnLeft
-        this.putBeeper = this.putBeeper
-        this.pickBeeper = this.pickBeeper
-        /* Super Commands */
-        this.beepersInBag = this.beepersInBag
-        this.beepersPresent = this.beepersPresent
-        this.facingEast = this.facingEast
-        this.facingNorth = this.facingNorth
-        this.facingWest = this.facingWest
-        this.frontIsBlocked = this.frontIsBlocked
-        this.frontIsClear = this.frontIsClear
-        this.leftIsBlocked = this.leftIsBlocked
-        this.leftIsClear = this.leftIsClear
-        this.noBeepersInBag = this.noBeepersInBag
-        this.noBeepersPresent = this.noBeepersPresent
-        this.notFacingEast = this.notFacingEast
-        this.rightIsBlocked = this.rightIsBlocked
-        this.rightIsClear = this.rightIsClear
-        this.turnAround = this.turnAround
-        this.turnRight = this.turnRight
     }
 
     canMove(direction: number, x: number, y: number) {
@@ -84,38 +52,38 @@ export default class World {
 
     canMoveLeft(x: number, y: number) {
         if (x <= 0) return false;
-        var currentWall = this.walls![y][x];
-        var nextWall = this.walls![y][x - 1];
-        var noLeftWall = (currentWall & this.leftWall) == 0;
-        var noRightWall = (nextWall & this.rightWall) == 0;
+        const currentWall = this.walls[y][x];
+        const nextWall = this.walls[y][x - 1];
+        const noLeftWall = (currentWall & this.leftWall) == 0;
+        const noRightWall = (nextWall & this.rightWall) == 0;
         return noLeftWall && noRightWall;
     }
 
     canMoveRight(x: number, y: number) {
 
-        if (x >= (this.walls![0].length) - 1) return false;
-        var currentWall = this.walls[y][x];
-        var nextWall = this.walls[y][x + 1];
-        var noRightWall = (currentWall & this.rightWall) == 0;
-        var noLeftWall = (nextWall & this.leftWall) == 0;
+        if (x >= (this.walls[0].length) - 1) return false;
+        const currentWall = this.walls[y][x];
+        const nextWall = this.walls[y][x + 1];
+        const noRightWall = (currentWall & this.rightWall) == 0;
+        const noLeftWall = (nextWall & this.leftWall) == 0;
         return noRightWall && noLeftWall;
     }
 
     canMoveUp(x: number, y: number) {
         if (y <= 0) return false;
-        var currentWall = this.walls[y][x];
-        var nextWall = this.walls[y - 1][x];
-        var noTopWall = (currentWall & this.topWall) == 0;
-        var noBottomWall = (nextWall & this.bottomWall) == 0;
+        const currentWall = this.walls[y][x];
+        const nextWall = this.walls[y - 1][x];
+        const noTopWall = (currentWall & this.topWall) == 0;
+        const noBottomWall = (nextWall & this.bottomWall) == 0;
         return noTopWall && noBottomWall;
     }
 
     canMoveDown(x: number, y: number) {
-        if (y >= (this.walls!.length) - 1) return false;
-        var currentWall = this.walls[y][x];
-        var nextWall = this.walls[y + 1][x];
-        var noBottomWall = (currentWall & this.bottomWall) == 0;
-        var noTopWall = (nextWall & this.topWall) == 0;
+        if (y >= (this.walls.length) - 1) return false;
+        const currentWall = this.walls[y][x];
+        const nextWall = this.walls[y + 1][x];
+        const noBottomWall = (currentWall & this.bottomWall) == 0;
+        const noTopWall = (nextWall & this.topWall) == 0;
         return noBottomWall && noTopWall;
     }
 
@@ -123,6 +91,7 @@ export default class World {
         this.commandCounter++;
         setTimeout(() => {
             //Execute
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             this[command](this)
             this.commandCounter--
             // All commands are executed
@@ -142,28 +111,28 @@ export default class World {
         }
         this.isExecutingCode = true;
         // Commands
-        var move = () => this.executeCommand("move")
-        var turnLeft = () => this.executeCommand("turnLeft")
-        var pickBeeper = () => this.executeCommand("pickBeeper")
-        var putBeeper = () => this.executeCommand("putBeeper")
+        const move = () => this.executeCommand("move")
+        const turnLeft = () => this.executeCommand("turnLeft")
+        const pickBeeper = () => this.executeCommand("pickBeeper")
+        const putBeeper = () => this.executeCommand("putBeeper")
         // Super Commands
         if (this.karel.isSuper) {
-            var beepersInBag = () => this.executeCommand("beepersInBag")
-            var beepersPresent = () => this.executeCommand("beepersPresent")
-            var facingEast = () => this.executeCommand("facingEast")
-            var facingNorth = () => this.executeCommand("facingNorth")
-            var facingWest = () => this.executeCommand("facingWest")
-            var frontIsBlocked = () => this.executeCommand("frontIsBlocked")
-            var frontIsClear = () => this.executeCommand("frontIsClear")
-            var leftIsBlocked = () => this.executeCommand("leftIsBlocked")
-            var leftIsClear = () => this.executeCommand("leftIsClear")
-            var noBeepersInBag = () => this.executeCommand("noBeepersInBag")
-            var noBeepersPresent = () => this.executeCommand("noBeepersPresent")
-            var notFacingEast = () => this.executeCommand("notFacingEast")
-            var rightIsBlocked = () => this.executeCommand("rightIsBlocked")
-            var rightIsClear = () => this.executeCommand("rightIsClear")
-            var turnAround = () => this.executeCommand("turnAround")
-            var turnRight = () => this.executeCommand("turnRight")
+            const beepersInBag = () => this.executeCommand("beepersInBag")
+            const beepersPresent = () => this.executeCommand("beepersPresent")
+            const facingEast = () => this.executeCommand("facingEast")
+            const facingNorth = () => this.executeCommand("facingNorth")
+            const facingWest = () => this.executeCommand("facingWest")
+            const frontIsBlocked = () => this.executeCommand("frontIsBlocked")
+            const frontIsClear = () => this.executeCommand("frontIsClear")
+            const leftIsBlocked = () => this.executeCommand("leftIsBlocked")
+            const leftIsClear = () => this.executeCommand("leftIsClear")
+            const noBeepersInBag = () => this.executeCommand("noBeepersInBag")
+            const noBeepersPresent = () => this.executeCommand("noBeepersPresent")
+            const notFacingEast = () => this.executeCommand("notFacingEast")
+            const rightIsBlocked = () => this.executeCommand("rightIsBlocked")
+            const rightIsClear = () => this.executeCommand("rightIsClear")
+            const turnAround = () => this.executeCommand("turnAround")
+            const turnRight = () => this.executeCommand("turnRight")
         }
         //Execute code
         eval(code);
@@ -174,16 +143,16 @@ export default class World {
     }
 
     checkSolution() {
-        const compareBeeper = (a, b) => {
+        const compareBeeper = (a: Beeper, b: Beeper) => {
             return a.x === b.x && a.y === b.y && a.count === b.count;
         };
-        var found = false;
+        let found = false;
 
         if (this.beepers.length !== this.solutions.length) return false;
 
-        for (var j = 0; j < this.beepers.length; j++) {
+        for (let j = 0; j < this.beepers.length; j++) {
             found = false;
-            for (var k = 0; k < this.solutions.length; k++) {
+            for (let k = 0; k < this.solutions.length; k++) {
                 if (compareBeeper(this.beepers[j], this.solutions[k])) {
                     found = true;
                 }
@@ -202,9 +171,9 @@ export default class World {
             this.karel.beeperCount--;
             const x = this.karel.x;
             const y = this.karel.y;
-            var beeper: Beeper;
-            for (var i = 0; i < this.beepers.length; i++) {
-                beeper = this.beepers[i]!;
+            let beeper: Beeper;
+            for (let i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i];
                 if (beeper.x === x && beeper.y === y) {
                     beeper.count++;
                     return;
@@ -217,16 +186,16 @@ export default class World {
     pickBeeper() {
         if (this.beepersPresent()) {
             this.karel.beeperCount++;
-            var beeper: Beeper;
+            let beeper: Beeper;
             const x = this.karel.x;
             const y = this.karel.y;
-            for (var i = 0; i < this.beepers.length; i++) {
-                beeper = this.beepers[i]!;
+            for (let i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i];
                 if (beeper.x === x && beeper.y === y) {
                     beeper.count--;
                     if (beeper.count <= 0) {
-                        var i = this.beepers.indexOf(beeper);
-                        this.beepers.splice(i, 1);
+                        const index = this.beepers.indexOf(beeper);
+                        this.beepers.splice(index, 1);
                     }
                     return;
                 }
@@ -251,9 +220,9 @@ export default class World {
     }
 
     beepersPresent() {
-        var x = this.karel.x;
-        var y = this.karel.y;
-        var result = false;
+        const x = this.karel.x;
+        const y = this.karel.y;
+        let result = false;
         this.beepers.forEach(function (beeper) {
             if (beeper.x === x && beeper.y === y) {
                 result = true;

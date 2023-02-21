@@ -1,12 +1,12 @@
 import { type NextPage } from "next";
 import LearnWithKarelComp from "../components/learnwithkarel";
 import levels from "../data/levels"
-import { ILevel } from "../interfaces/Ilearnwithkarel";
+import type { ILevel } from "../interfaces/Ilearnwithkarel";
 import Head from "next/head";
 import styles from "../styles/learnwithkarel.module.css";
 
 const LearnWithKarel: NextPage = () => {
-    var lvls: Array<ILevel> = levels;
+    const lvls: Array<ILevel> = levels;
     return (
         <>
             <Head>

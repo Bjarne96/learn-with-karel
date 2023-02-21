@@ -5,7 +5,7 @@ import Code from "../components/code";
 import Canvas from "../components/canvas";
 import Karel from "../components/karel";
 import World from "../components/world";
-import { ILearnWithKarelProps, ILearnWithKarelState, ILevel } from "../interfaces/Ilearnwithkarel";
+import type { ILearnWithKarelProps, ILearnWithKarelState, ILevel } from "../interfaces/Ilearnwithkarel";
 
 
 export default class LearnWithKarelComp extends React.Component<ILearnWithKarelProps, ILearnWithKarelState> {
@@ -13,59 +13,57 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
     constructor(props) {
         super(props);
         const begin = 0;
-        var karel = new Karel(
-            this.props.levels[begin].worlds[0].karel.x,
-            this.props.levels[begin].worlds[0].karel.y,
-            this.props.levels[begin].worlds[0].karel.direction,
-            this.props.levels[begin].worlds[0].karel.isSuper
-        )
-        var world = new World(
-            karel,
-            this.props.levels[begin].worlds[0].beepers,
-            this.props.levels[begin].worlds[0].solutions,
-            this.props.levels[begin].worlds[0].walls,
-        )
+        const karel = this.initKarel(begin)
+        const world = this.initWorld(begin, karel)
         this.state = {
             currentLevel: begin,
             karel: karel,
             world: world,
             code: this.props.levels[begin].code,
             goal: false
-        };
-
-        this.onCodeChange = this.onCodeChange
+        }
     }
 
-    onCodeChange(code) {
+    onCodeChange(code: string) {
         this.setState({
             code: code
         })
     }
-
-    setLevel(level?: number, code?: boolean) {
-        if (level == undefined) level = this.state.currentLevel
-        let defaultKarel = new Karel(
+    initKarel(level: number) {
+        const karel: Karel = new Karel(
             this.props.levels[level].worlds[0].karel.x,
             this.props.levels[level].worlds[0].karel.y,
             this.props.levels[level].worlds[0].karel.direction,
             this.props.levels[level].worlds[0].karel.isSuper
         )
-        let defaultWorld = new World(
-            defaultKarel,
+        return karel;
+    }
+    initWorld(level: number, karel: Karel) {
+        const world = new World(
+            karel,
             this.props.levels[level].worlds[0].beepers,
             this.props.levels[level].worlds[0].solutions,
             this.props.levels[level].worlds[0].walls,
         )
+        return world;
+    }
+
+    setLevel(level?: number, code?: boolean, goal?: boolean) {
+        if (level == undefined) level = this.state.currentLevel
+        const karel: Karel = this.initKarel(level)
+        const world = this.initWorld(level, karel)
+
         // deep copy (' ' + this.props.levels[level].code).slice(1)
-        var codeString = this.state.code
+        let codeString = this.state.code
         if (code) {
             codeString = (' ' + this.props.levels[level].code).slice(1)
         }
         this.setState({
             currentLevel: level,
-            karel: defaultKarel,
-            world: defaultWorld,
-            code: codeString
+            karel: karel,
+            world: world,
+            code: codeString,
+            goal: goal
         })
     }
 

@@ -1,11 +1,11 @@
 import React from "react";
-import { ICommandProps } from "../interfaces/Ilearnwithkarel";
+import type { ICommandProps } from "../interfaces/Ilearnwithkarel";
 import styles from "../styles/commands.module.css";
 
 export default class Commands extends React.Component<ICommandProps> {
 
     render() {
-        var commands = this.props.karel.commands();
+        const commands = this.props.karel.commands();
         return <div className={styles.commandContainer}>
             <p> Available Commands </p>
             <ul className={styles.helperCommands}>

@@ -1,13 +1,15 @@
-import Karel from "../components/karel";
-import World from "../components/world";
+import type Karel from "../components/karel";
+import type World from "../components/world";
 
-
-export default interface IKarel {
+interface Coords {
     x: number;
     y: number;
+}
+
+export default interface IKarel extends Coords {
     direction: number;
     isSuper: boolean;
-    beeperCount: number;
+    beeperCount?: number;
 }
 export interface ILearnWithKarelState {
     currentLevel: number
@@ -26,38 +28,19 @@ export interface ILevel {
 }
 export interface IWorld {
     beepers: Array<Beeper>,
-    karel: KarelAttributes,
-    solutions: Array<Solution>,
+    karel: IKarel,
+    solutions: Array<Beeper>,
     walls: Array<Array<number>>,
 }
 
-export interface Beeper {
-    x: number,
-    y: number,
+export interface Beeper extends Coords {
     count: number
-}
-
-export interface Solution {
-    x: number,
-    y: number,
-    count: number
-}
-
-export interface KarelAttributes {
-    x: number;
-    y: number;
-    direction: number;
-    isSuper: boolean;
-    beeperCount?: number;
 }
 
 export interface ICode {
     code: string;
-    onCodeChange;
+    onCodeChange(code: string): void;
 }
-export interface ICommandProps {
-    // world: any,
+export interface ICommandProps extends ICode {
     karel: Karel,
-    onCodeChange;
-    code: string;
 }

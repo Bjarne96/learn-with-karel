@@ -1,5 +1,5 @@
-import { ILevel } from "../interfaces/Ilearnwithkarel";
-
+import type { ILevel } from "../interfaces/Ilearnwithkarel";
+// TODO Change to map ?
 export const levels: Array<ILevel> = [
     {
         code: "function test() {\n\tmove();\n\tmove();\n}\nmove();\ntest();\npickBeeper();\n//hier drunter weiteren Code einfügen. Ausgegrauter Code macht nichts,\n//Und kann gelöscht werden (muss aber nicht).",
