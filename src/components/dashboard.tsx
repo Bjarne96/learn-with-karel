@@ -1,14 +1,15 @@
 import React from "react";
 import styles from "../styles/learnwithkarel.module.css";
-import Commands from "../components/commands";
-import Code from "../components/code";
-import Canvas from "../components/canvas";
-import Karel from "../components/karel";
-import World from "../components/world";
-import type { ILearnWithKarelProps, ILearnWithKarelState, ILevel } from "../interfaces/Ilearnwithkarel";
+import Commands from "./commands";
+import Code from "./code";
+import Canvas from "./canvas";
+import Karel from "./karel";
+import World from "./world";
+import type { DashboardState, ILevel } from "../interfaces/interfaces";
+import levels from "../data/levels"
 
 
-export default class LearnWithKarelComp extends React.Component<ILearnWithKarelProps, ILearnWithKarelState> {
+export default class Dashboard extends React.Component<object, DashboardState> {
 
     constructor(props) {
         super(props);
@@ -19,7 +20,7 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
             currentLevel: begin,
             karel: karel,
             world: world,
-            code: this.props.levels[begin].code,
+            code: levels[begin].code,
             goal: false
         }
     }
@@ -31,19 +32,19 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
     }
     initKarel(level: number) {
         const karel: Karel = new Karel(
-            this.props.levels[level].worlds[0].karel.x,
-            this.props.levels[level].worlds[0].karel.y,
-            this.props.levels[level].worlds[0].karel.direction,
-            this.props.levels[level].worlds[0].karel.isSuper
+            levels[level].worlds[0].karel.x,
+            levels[level].worlds[0].karel.y,
+            levels[level].worlds[0].karel.direction,
+            levels[level].worlds[0].karel.isSuper
         )
         return karel;
     }
     initWorld(level: number, karel: Karel) {
         const world = new World(
             karel,
-            this.props.levels[level].worlds[0].beepers,
-            this.props.levels[level].worlds[0].solutions,
-            this.props.levels[level].worlds[0].walls,
+            levels[level].worlds[0].beepers,
+            levels[level].worlds[0].solutions,
+            levels[level].worlds[0].walls,
         )
         return world;
     }
@@ -53,10 +54,10 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
         const karel: Karel = this.initKarel(level)
         const world = this.initWorld(level, karel)
 
-        // deep copy (' ' + this.props.levels[level].code).slice(1)
+        // deep copy (' ' + levels[level].code).slice(1)
         let codeString = this.state.code
         if (code) {
-            codeString = (' ' + this.props.levels[level].code).slice(1)
+            codeString = (' ' + levels[level].code).slice(1)
         }
         this.setState({
             currentLevel: level,
@@ -80,7 +81,11 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
                             <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
                             <div>
                                 <div className={styles.btnContainer}>
-                                    <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
+                                    {this.state.goal ?
+                                        <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
+                                        :
+                                        <button className={styles.btn} onClick={() => this.setLevel()}>Reset Map</button>
+                                    }
                                     <button className={styles.btn} onClick={() => this.toggleGoal()}>See Goal</button>
                                 </div>
                                 <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
@@ -94,7 +99,7 @@ export default class LearnWithKarelComp extends React.Component<ILearnWithKarelP
                                         onChange={(e) => this.setLevel(Number(e.target.value), true)}
                                     >
                                         {
-                                            this.props.levels.map((level: ILevel, i: number) => {
+                                            levels.map((level: ILevel, i: number) => {
                                                 return <option value={i} key={i}>{level.name}</option>;
                                             })
                                         }

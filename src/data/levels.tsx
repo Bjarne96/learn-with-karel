@@ -1,4 +1,4 @@
-import type { ILevel } from "../interfaces/Ilearnwithkarel";
+import type { ILevel } from "../interfaces/interfaces";
 // TODO Change to map ?
 export const levels: Array<ILevel> = [
     {
@@ -339,5 +339,4 @@ export const levels: Array<ILevel> = [
         ]
     }
 ];
-
 export default levels;

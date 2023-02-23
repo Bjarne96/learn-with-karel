@@ -5,21 +5,17 @@ interface Coords {
     x: number;
     y: number;
 }
-
 export default interface IKarel extends Coords {
     direction: number;
     isSuper: boolean;
     beeperCount?: number;
 }
-export interface ILearnWithKarelState {
+export interface DashboardState {
     currentLevel: number
     code: string
     karel: Karel
     world: World
     goal: boolean
-}
-export interface ILearnWithKarelProps {
-    levels: Array<ILevel>
 }
 export interface ILevel {
     code: string,
@@ -32,11 +28,9 @@ export interface IWorld {
     solutions: Array<Beeper>,
     walls: Array<Array<number>>,
 }
-
 export interface Beeper extends Coords {
     count: number
 }
-
 export interface ICode {
     code: string;
     onCodeChange(code: string): void;

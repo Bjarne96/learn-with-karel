@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Beeper } from "../interfaces/Ilearnwithkarel";
+import type { Beeper } from "../interfaces/interfaces";
 import type Karel from "./karel";
 
 export default class World {
