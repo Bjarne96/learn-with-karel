@@ -65,3 +65,7 @@
 .btnContainer * {
     margin-right: 1rem;
 }
+
+.btnContainer span {
+    color: white;
+}

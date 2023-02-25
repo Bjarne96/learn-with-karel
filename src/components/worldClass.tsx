@@ -60,7 +60,6 @@ export default class World {
     }
 
     canMoveRight(x: number, y: number) {
-
         if (x >= (this.walls[0].length) - 1) return false;
         const currentWall = this.walls[y][x];
         const nextWall = this.walls[y][x + 1];
@@ -98,6 +97,7 @@ export default class World {
             if (this.commandCounter == 0) {
                 if (this.checkSolution) this.levelCompleted();
                 this.isExecutingCode = false
+                console.log('this.isExecutingCode', this.isExecutingCode);
             }
         }, this.timer)
         //Increase timer for each command
@@ -110,6 +110,7 @@ export default class World {
             return
         }
         this.isExecutingCode = true;
+        console.log('this.isExecutingCode', this.isExecutingCode);
         // Commands
         const move = () => this.executeCommand("move")
         const turnLeft = () => this.executeCommand("turnLeft")

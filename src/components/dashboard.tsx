@@ -4,7 +4,7 @@ import Commands from "./commands";
 import Code from "./code";
 import Canvas from "./canvas";
 import Karel from "./karel";
-import World from "./world";
+import World from "./worldClass";
 import type { DashboardState, ILevel } from "../interfaces/interfaces";
 import levels from "../data/levels"
 
@@ -21,7 +21,8 @@ export default class Dashboard extends React.Component<object, DashboardState> {
             karel: karel,
             world: world,
             code: levels[begin].code,
-            goal: false
+            runningCode: false,
+            test: [{ a: true, b: 0 }, { a: false, b: 1 }]
         }
     }
 
@@ -49,7 +50,7 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         return world;
     }
 
-    setLevel(level?: number, code?: boolean, goal?: boolean) {
+    setLevel(level?: number, code?: boolean, runningCode?: boolean) {
         if (level == undefined) level = this.state.currentLevel
         const karel: Karel = this.initKarel(level)
         const world = this.initWorld(level, karel)
@@ -64,35 +65,49 @@ export default class Dashboard extends React.Component<object, DashboardState> {
             karel: karel,
             world: world,
             code: codeString,
-            goal: goal
+            runningCode: runningCode
         })
     }
 
-    toggleGoal() {
-        this.setState({ goal: !this.state.goal })
+    setRunningCode(runningCode) {
+        this.setState({ runningCode: runningCode })
     }
 
     render() {
         return <>
             <main className={styles.main}>
                 <div className={styles.container}>
-                    <div >
+                    <div>
+                        <div>
+                            {this.state.test.map((temp, i) => {
+                                return <div key={i}>
+                                    <span>{temp.a.toString()}</span>
+                                    <span>{temp.b}</span>
+                                    <button className={styles.btn} onClick={() => {
+                                        const temp = this.state.test;
+                                        temp[i].b = temp[i].b + 1;
+                                        this.setState({
+                                            test: temp
+                                        })
+                                    }}>++</button>
+                                </div>
+                            })}
+                        </div>
                         <div className={styles.components}>
                             <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
                             <div>
                                 <div className={styles.btnContainer}>
-                                    {this.state.goal ?
+                                    {this.state.world.isExecutingCode.toString()}
+                                    {this.state.world.isExecutingCode != true ?
                                         <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
                                         :
-                                        <button className={styles.btn} onClick={() => this.setLevel()}>Reset Map</button>
-                                    }
-                                    <button className={styles.btn} onClick={() => this.toggleGoal()}>See Goal</button>
+                                        <button className={styles.btn} onClick={() => this.setLevel()}>Reset Karel</button>}
                                 </div>
                                 <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
                             </div>
                             <div>
                                 <div className={styles.btnContainer}>
-                                    <button className={styles.btn} onClick={() => this.setLevel()}>Reset Map</button>
+                                    <span>Level:</span>
                                     <select
                                         value={this.state.currentLevel}
                                         className={styles.btn}
@@ -105,7 +120,7 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                                         }
                                     </select>
                                 </div>
-                                <Canvas goal={this.state.goal ? 1 : 0} world={this.state.world}></Canvas>
+                                <Canvas world={this.state.world}></Canvas>
                             </div>
                         </div>
                     </div>

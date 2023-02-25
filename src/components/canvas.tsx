@@ -1,10 +1,9 @@
 import React, { useRef, useEffect } from 'react'
-import type World from './world';
+import type World from './worldClass';
 import styles from "../styles/learnwithkarel.module.css";
 
 interface ICanvasProps {
-    world: World,
-    goal: number
+    world: World
 }
 
 const Canvas = (props: ICanvasProps) => {
@@ -105,8 +104,7 @@ const Canvas = (props: ICanvasProps) => {
     useEffect(() => {
         const clientWidth = (window.innerWidth * 0.33)
         const walls = props.world.walls
-        let beepers = props.world.beepers
-        if (props.goal) beepers = props.world.solutions;
+        const beepers = props.world.beepers
         const yCount = walls.length
         const xCount = walls[0].length
         let teiler = yCount
@@ -121,6 +119,7 @@ const Canvas = (props: ICanvasProps) => {
 
         //Our draw came here
         const render = () => {
+            console.log('render');
             const context = canvas.getContext("2d")
 
             canvas.width = clientWidth
@@ -140,14 +139,10 @@ const Canvas = (props: ICanvasProps) => {
                 const beeper = beepers[i]
                 drawBeeper(beeper.x, beeper.y, beeper.count)
             }
-            if (!props.goal) drawKarel()
+            drawKarel()
             window.requestAnimationFrame(render)
         }
         render()
-
-        // return () => {
-        //     window.cancelAnimationFrame(animationFrameId)
-        // }
     })
 
     return <div className={styles.canvasContainer}><canvas ref={canvasRef} /></div>

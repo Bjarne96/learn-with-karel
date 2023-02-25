@@ -1,5 +1,5 @@
 import type Karel from "../components/karel";
-import type World from "../components/world";
+import type World from "../components/worldClass";
 
 interface Coords {
     x: number;
@@ -15,7 +15,8 @@ export interface DashboardState {
     code: string
     karel: Karel
     world: World
-    goal: boolean
+    runningCode: boolean
+    test: Array<{ a: boolean, b: number }>
 }
 export interface ILevel {
     code: string,
