@@ -2,27 +2,29 @@ import React from "react";
 import styles from "../styles/learnwithkarel.module.css";
 import Commands from "./commands";
 import Code from "./code";
-import Canvas from "./canvas";
 import Karel from "./karel";
-import World from "./worldClass";
+// import World from "./world"
+import Canvas from "./canvasEffect"
+import World from "./worldClass"
 import type { DashboardState, ILevel } from "../interfaces/interfaces";
 import levels from "../data/levels"
 
 
 export default class Dashboard extends React.Component<object, DashboardState> {
 
+    world;
+
     constructor(props) {
         super(props);
         const begin = 0;
         const karel = this.initKarel(begin)
-        const world = this.initWorld(begin, karel)
+        this.world = this.initWorld(begin, karel)
+        // const world = this.initWorld(begin, karel)
         this.state = {
             currentLevel: begin,
             karel: karel,
-            world: world,
             code: levels[begin].code,
-            runningCode: false,
-            test: [{ a: true, b: 0 }, { a: false, b: 1 }]
+            runningCode: false
         }
     }
 
@@ -53,7 +55,6 @@ export default class Dashboard extends React.Component<object, DashboardState> {
     setLevel(level?: number, code?: boolean, runningCode?: boolean) {
         if (level == undefined) level = this.state.currentLevel
         const karel: Karel = this.initKarel(level)
-        const world = this.initWorld(level, karel)
 
         // deep copy (' ' + levels[level].code).slice(1)
         let codeString = this.state.code
@@ -63,7 +64,6 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         this.setState({
             currentLevel: level,
             karel: karel,
-            world: world,
             code: codeString,
             runningCode: runningCode
         })
@@ -78,28 +78,12 @@ export default class Dashboard extends React.Component<object, DashboardState> {
             <main className={styles.main}>
                 <div className={styles.container}>
                     <div>
-                        <div>
-                            {this.state.test.map((temp, i) => {
-                                return <div key={i}>
-                                    <span>{temp.a.toString()}</span>
-                                    <span>{temp.b}</span>
-                                    <button className={styles.btn} onClick={() => {
-                                        const temp = this.state.test;
-                                        temp[i].b = temp[i].b + 1;
-                                        this.setState({
-                                            test: temp
-                                        })
-                                    }}>++</button>
-                                </div>
-                            })}
-                        </div>
                         <div className={styles.components}>
                             <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
                             <div>
                                 <div className={styles.btnContainer}>
-                                    {this.state.world.isExecutingCode.toString()}
-                                    {this.state.world.isExecutingCode != true ?
-                                        <button className={styles.btn} onClick={() => this.state.world.executeCode(this.state.code)}>Run Code</button>
+                                    {this.state.runningCode != true ?
+                                        <button className={styles.btn} onClick={() => console.log('execute')}>Run Code</button>
                                         :
                                         <button className={styles.btn} onClick={() => this.setLevel()}>Reset Karel</button>}
                                 </div>
@@ -112,15 +96,14 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                                         value={this.state.currentLevel}
                                         className={styles.btn}
                                         onChange={(e) => this.setLevel(Number(e.target.value), true)}
-                                    >
-                                        {
+                                    >{
                                             levels.map((level: ILevel, i: number) => {
                                                 return <option value={i} key={i}>{level.name}</option>;
                                             })
-                                        }
-                                    </select>
+                                        }</select>
                                 </div>
-                                <Canvas world={this.state.world}></Canvas>
+                                <Canvas world={this.world} />
+                                {/* <World runningCode={this.state.runningCode} karel={this.state.karel} level={levels[this.state.currentLevel]}></World> */}
                             </div>
                         </div>
                     </div>

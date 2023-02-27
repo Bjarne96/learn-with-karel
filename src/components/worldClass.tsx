@@ -2,7 +2,7 @@
 import type { Beeper } from "../interfaces/interfaces";
 import type Karel from "./karel";
 
-export default class World {
+export default class WorldClass {
     karel: Karel;
     beepers: Array<Beeper>;
     solutions: Array<Beeper>;

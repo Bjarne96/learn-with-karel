@@ -1,5 +1,4 @@
 import type Karel from "../components/karel";
-import type World from "../components/worldClass";
 
 interface Coords {
     x: number;
@@ -14,9 +13,7 @@ export interface DashboardState {
     currentLevel: number
     code: string
     karel: Karel
-    world: World
     runningCode: boolean
-    test: Array<{ a: boolean, b: number }>
 }
 export interface ILevel {
     code: string,
@@ -38,4 +35,22 @@ export interface ICode {
 }
 export interface ICommandProps extends ICode {
     karel: Karel,
+}
+export interface IWorldState {
+    karel: IKarel
+    runningCode: boolean,
+    beepers: Array<Beeper>,
+    solutions: Array<Beeper>
+}
+export interface IWorldProps {
+    karel: Karel,
+    level: ILevel,
+    runningCode: boolean
+}
+
+export interface ICanvasProps {
+    karel: IKarel,
+    beepers: Array<Beeper>,
+    solutions: Array<Beeper>,
+    walls: Array<Array<number>>,
 }
