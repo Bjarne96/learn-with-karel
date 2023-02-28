@@ -1,10 +1,8 @@
-import type Karel from "../components/karel";
-
 interface Coords {
     x: number;
     y: number;
 }
-export default interface IKarel extends Coords {
+export interface IKarel extends Coords {
     direction: number;
     isSuper: boolean;
     beeperCount?: number;
@@ -12,7 +10,7 @@ export default interface IKarel extends Coords {
 export interface DashboardState {
     currentLevel: number
     code: string
-    karel: Karel
+    karel: IKarel
     runningCode: boolean
 }
 export interface ILevel {
@@ -34,7 +32,7 @@ export interface ICode {
     onCodeChange(code: string): void;
 }
 export interface ICommandProps extends ICode {
-    karel: Karel,
+    isKarelSuper: boolean,
 }
 export interface IWorldState {
     karel: IKarel
@@ -43,9 +41,10 @@ export interface IWorldState {
     solutions: Array<Beeper>
 }
 export interface IWorldProps {
-    karel: Karel,
+    karel: IKarel,
     level: ILevel,
-    runningCode: boolean
+    runningCode: boolean,
+    code: string
 }
 
 export interface ICanvasProps {

@@ -1,28 +1,25 @@
 import React from "react";
-import styles from "../styles/learnwithkarel.module.css";
 import Commands from "./commands";
 import Code from "./code";
-import Karel from "./karel";
-// import World from "./world"
-import Canvas from "./canvasEffect"
-import World from "./worldClass"
-import type { DashboardState, ILevel } from "../interfaces/interfaces";
+import World from "./world"
+//Interfaces
+import type { DashboardState, ILevel, IKarel } from "../interfaces/interfaces";
+//Styles
 import levels from "../data/levels"
+//Data
+import styles from "../styles/learnwithkarel.module.css";
+
 
 
 export default class Dashboard extends React.Component<object, DashboardState> {
 
-    world;
-
     constructor(props) {
         super(props);
         const begin = 0;
-        const karel = this.initKarel(begin)
-        this.world = this.initWorld(begin, karel)
-        // const world = this.initWorld(begin, karel)
+
         this.state = {
             currentLevel: begin,
-            karel: karel,
+            karel: levels[begin].worlds[0].karel,
             code: levels[begin].code,
             runningCode: false
         }
@@ -33,34 +30,13 @@ export default class Dashboard extends React.Component<object, DashboardState> {
             code: code
         })
     }
-    initKarel(level: number) {
-        const karel: Karel = new Karel(
-            levels[level].worlds[0].karel.x,
-            levels[level].worlds[0].karel.y,
-            levels[level].worlds[0].karel.direction,
-            levels[level].worlds[0].karel.isSuper
-        )
-        return karel;
-    }
-    initWorld(level: number, karel: Karel) {
-        const world = new World(
-            karel,
-            levels[level].worlds[0].beepers,
-            levels[level].worlds[0].solutions,
-            levels[level].worlds[0].walls,
-        )
-        return world;
-    }
 
     setLevel(level?: number, code?: boolean, runningCode?: boolean) {
         if (level == undefined) level = this.state.currentLevel
-        const karel: Karel = this.initKarel(level)
-
+        const karel: IKarel = levels[level].worlds[0].karel
         // deep copy (' ' + levels[level].code).slice(1)
         let codeString = this.state.code
-        if (code) {
-            codeString = (' ' + levels[level].code).slice(1)
-        }
+        if (code) codeString = (' ' + levels[level].code).slice(1)
         this.setState({
             currentLevel: level,
             karel: karel,
@@ -79,13 +55,13 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                 <div className={styles.container}>
                     <div>
                         <div className={styles.components}>
-                            <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} karel={this.state.karel}></Commands>
+                            <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper}></Commands>
                             <div>
                                 <div className={styles.btnContainer}>
                                     {this.state.runningCode != true ?
-                                        <button className={styles.btn} onClick={() => console.log('execute')}>Run Code</button>
+                                        <button className={styles.btn} onClick={() => this.setRunningCode(true)}>Run Code</button>
                                         :
-                                        <button className={styles.btn} onClick={() => this.setLevel()}>Reset Karel</button>}
+                                        <button className={styles.btn} onClick={() => this.setLevel(this.state.currentLevel, false, false)}>Reset Karel</button>}
                                 </div>
                                 <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
                             </div>
@@ -102,8 +78,7 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                                             })
                                         }</select>
                                 </div>
-                                <Canvas world={this.world} />
-                                {/* <World runningCode={this.state.runningCode} karel={this.state.karel} level={levels[this.state.currentLevel]}></World> */}
+                                <World code={this.state.code} runningCode={this.state.runningCode} karel={this.state.karel} level={levels[this.state.currentLevel]}></World>
                             </div>
                         </div>
                     </div>

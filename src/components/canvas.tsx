@@ -1,40 +1,35 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { createRef } from "react";
-import type { ICanvasProps } from "../interfaces/interfaces";
+import type { Beeper, ICanvasProps } from "../interfaces/interfaces";
 import styles from "../styles/canvas.module.css";
 
 export default class Canvas extends React.Component<ICanvasProps> {
     canvasRef;
     blockSize = 1
     clientWidth = 300
-    walls;
-    beepers;
-    yCount;
-    xCount;
-    teiler;
-    canvasHeight;
-    karel;
+    walls: Array<Array<number>>
+    beepers: Array<Beeper>
+    yCount
+    xCount
+    teiler
+    canvasHeight
+    karel
 
     constructor(props) {
         super(props);
         this.canvasRef = createRef<HTMLCanvasElement>();
+        this.state = {}
     }
 
     componentDidUpdate(): void {
-        // console.log('this.props.karel', this.props.karel);
-        // console.log('this.props.beepers[0]', this.props.beepers[0]);
-        console.log('update');
         this.draw()
     }
 
     componentDidMount(): void {
-        console.log('update');
         this.draw()
     }
 
     draw() {
-        console.log('draw');
-        console.log('this.props.karel.x', this.props.karel.x);
-        console.log('this.props.karel.y', this.props.karel.y);
         this.walls = this.props.walls
         this.karel = this.props.karel
         this.beepers = this.props.beepers
@@ -69,12 +64,11 @@ export default class Canvas extends React.Component<ICanvasProps> {
             const beeper = this.beepers[i]
             this.drawBeeper(beeper.x, beeper.y, beeper.count)
         }
-        this.drawKarel()
+        this.drawKarel();
         this.render();
     }
 
     drawWall(x: number, y: number, side: number) {
-        console.log('drawWall');
         const canvas = this.canvasRef.current
         const minX = x * this.blockSize
         const minY = y * this.blockSize
@@ -112,7 +106,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     drawBeeper(x: number, y: number, count: number) {
-        console.log('drawBeeper');
         const canvas = this.canvasRef.current
         const minX = x * this.blockSize
         const minY = y * this.blockSize
@@ -146,27 +139,59 @@ export default class Canvas extends React.Component<ICanvasProps> {
             context.restore()
         }
     }
+    //TODO Draw Images that actually display
+    // async drawKarel() {
+    //     console.log('drawKarel', this.props.karel);
+    //     const canvas = this.canvasRef.current
+    //     const karelImage = await document.createElement('img')
+    //     console.log('karelImage', karelImage);
+    //     // const karelImageRef = createRef<HTMLImageElement>();
+    //     setTimeout(() => {
+    //         karelImage.src = "/karel.png"
+    //         const context = canvas.getContext("2d");
+    //         const minX = this.props.karel.x * this.blockSize
+    //         const minY = this.props.karel.y * this.blockSize
+    //         const midX = this.blockSize * 0.5
+    //         const midY = this.blockSize * 0.5
+    //         context.save()
+    //         context.translate(minX, minY)
+    //         context.translate(midX, midY)
+    //         context.rotate(-90 * this.props.karel.direction * (Math.PI / 180))
+    //         context.drawImage(karelImage, midX, midY, -this.blockSize, -this.blockSize)
+    //         context.restore()
+    //         console.log('end drawKarel');
+    //     }, 100);
+
+    // }
 
     drawKarel() {
-        console.log('drawKarel');
         const canvas = this.canvasRef.current
-        const karelImage = document.createElement('img')
-        karelImage.src = "/karel.png"
-        const context = canvas.getContext("2d");
         const minX = this.props.karel.x * this.blockSize
         const minY = this.props.karel.y * this.blockSize
-        const midX = this.blockSize * 0.5
-        const midY = this.blockSize * 0.5
+        const midX = minX + this.blockSize * 0.5
+        const midY = minY + this.blockSize * 0.5
+        const maxX = minX + this.blockSize
+        const maxY = minY + this.blockSize
+
+        const context = canvas.getContext("2d");
         context.save()
-        context.translate(minX, minY)
-        context.translate(midX, midY)
-        context.rotate(-90 * this.props.karel.direction * (Math.PI / 180))
-        context.drawImage(karelImage, midX, midY, -this.blockSize, -this.blockSize)
+        context.beginPath()
+        context.moveTo(midX, minY + 10) // top point
+        context.lineTo(maxX - 10, midY) // right point
+        context.lineTo(midX, maxY - 10) // bottom point
+        context.lineTo(minX + 10, midY) // left point
+
+        context.lineWidth = 2
+        context.fillStyle = "hsl(217, 100%, 50%)"
+        context.strokeStyle = "white"
+
+        context.closePath()
+        context.fill()
+        context.stroke()
         context.restore()
     }
 
     render() {
-        console.log('render');
         return <div className={styles.canvasContainer}><canvas ref={this.canvasRef} /></div>;
     }
 }
