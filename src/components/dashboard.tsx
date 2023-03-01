@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, SelectHTMLAttributes } from "react";
 import Commands from "./commands";
 import Code from "./code";
 import World from "./world"
@@ -39,16 +39,37 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         // deep copy (' ' + levels[level].code).slice(1)
         let codeString = this.state.code
         if (code) codeString = (' ' + levels[level].code).slice(1)
+        let updateRunningCode = this.state.runningCode
+        if (runningCode) updateRunningCode = runningCode
+        console.log('runningCode', runningCode);
         this.setState({
             currentLevel: level,
             karel: karel,
             code: codeString,
-            runningCode: runningCode
+            runningCode: updateRunningCode
         })
     }
 
     setRunningCode(runningCode) {
         this.setState({ runningCode: runningCode })
+    }
+
+    handleRunningCode() {
+        if (this.debounceRunningCode) return
+        this.debounceRunningCode = true;
+        setTimeout(() => {
+            this.debounceRunningCode = false
+        }, 1000);
+        this.setRunningCode(true)
+    }
+    // TODO MAKE THIS WORK (split up setlevel functionm set running code, set code)
+    handleResetCode() {
+        this.setLevel(this.state.currentLevel, false, false)
+    }
+
+    handleLevelChange(e: ChangeEvent<HTMLSelectElement>) {
+        if (this.state.runningCode) return
+        this.setLevel(Number(e.target.value), true)
     }
 
     render() {
@@ -61,16 +82,9 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                             <div>
                                 <div className={styles.btnContainer}>
                                     {this.state.runningCode != true ?
-                                        <button className={styles.btn} onClick={() => {
-                                            if (this.debounceRunningCode) return
-                                            this.debounceRunningCode = true;
-                                            setTimeout(() => {
-                                                this.debounceRunningCode = false
-                                            }, 1000);
-                                            this.setRunningCode(true)
-                                        }}>Run Code</button>
+                                        <button className={styles.btn} onClick={() => this.handleRunningCode()}>Run Code</button>
                                         :
-                                        <button className={styles.btn} onClick={() => this.setLevel(this.state.currentLevel, false, false)}>Reset Karel</button>}
+                                        <button className={styles.btn} onClick={() => this.handleResetCode()}>Reset Karel</button>}
                                 </div>
                                 <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
                             </div>
@@ -80,14 +94,18 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                                     <select
                                         value={this.state.currentLevel}
                                         className={styles.btn}
-                                        onChange={(e) => this.setLevel(Number(e.target.value), true)}
-                                    >{
-                                            levels.map((level: ILevel, i: number) => {
-                                                return <option value={i} key={i}>{level.name}</option>;
-                                            })
-                                        }</select>
+                                        onChange={(e) => this.handleLevelChange(e)}
+                                    >{levels.map((level: ILevel, i: number) => {
+                                        return <option value={i} key={i}>{level.name}</option>;
+                                    })}</select>
                                 </div>
-                                <World code={this.state.code} runningCode={this.state.runningCode} karel={this.state.karel} level={levels[this.state.currentLevel]}></World>
+                                <World
+                                    currentLevel={this.state.currentLevel}
+                                    code={this.state.code}
+                                    runningCode={this.state.runningCode}
+                                    karel={this.state.karel}
+                                    level={levels[this.state.currentLevel]}
+                                ></World>
                             </div>
                         </div>
                     </div>

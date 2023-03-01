@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import type { Beeper, IWorldProps, IWorldState, IKarel, IWorldUpdate } from "../interfaces/interfaces";
+import type { Beeper, IWorldProps, IWorldState, IKarel } from "../interfaces/interfaces";
 import styles from "../styles/world.module.css";
 import Canvas from "./canvas";
 
@@ -16,22 +16,25 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     commandCounter = 0
     finishedCode = false
     startedCode = false
-    walls: number[][] = []
 
     constructor(props) {
         super(props);
         const stateFromProps = this.getUpdateFromProps()
-        this.walls = stateFromProps.walls
+
         this.state = {
             karel: stateFromProps.karel,
             beepers: stateFromProps.beepers,
-            solutions: stateFromProps.solutions
+            solutions: stateFromProps.solutions,
+            walls: stateFromProps.walls,
+            currentLevel: stateFromProps.currentLevel
+
         }
     }
 
     /* REACT FUNCTIONS */
 
     componentDidUpdate(): void {
+        console.log('updateWorld');
         //Run Code Button was pressed
         if (this.props.runningCode && this.finishedCode == false && this.startedCode == false) {
             this.startedCode = true
@@ -53,12 +56,18 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.timer = 500
             this.setLevel()
         }
+        if (this.props.currentLevel != this.state.currentLevel
+            && this.props.runningCode == false
+            && this.finishedCode == false
+            && this.startedCode == false) {
+            this.setLevel()
+        }
     }
 
     render() {
         return <Canvas
             karel={this.state.karel}
-            walls={this.props.level.worlds[0].walls}
+            walls={this.state.walls}
             beepers={this.state.beepers}
             solutions={this.state.solutions}
         />
@@ -69,9 +78,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.setState({
             karel: update.karel,
             beepers: update.beepers,
-            solutions: update.solutions
+            solutions: update.solutions,
+            walls: update.walls,
+            currentLevel: update.currentLevel
         })
-        this.walls = update.walls
     }
     // Deep copies all the props and returns them
     getUpdateFromProps() {
@@ -79,11 +89,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const beepers: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].beepers))
         const solutions: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].solutions))
         const walls: Array<Array<number>> = JSON.parse(JSON.stringify(this.props.level.worlds[0].walls))
-        const stateFromProps: IWorldUpdate = {
+        const currentLevel: number = JSON.parse(JSON.stringify(this.props.currentLevel))
+        const stateFromProps: IWorldState = {
             karel: karel,
             beepers: beepers,
             solutions: solutions,
-            walls: walls
+            walls: walls,
+            currentLevel: currentLevel
         }
         return stateFromProps;
     }
@@ -197,17 +209,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     canMoveLeft(x: number, y: number) {
         if (x <= 0) return false
-        const currentWall = this.walls[y][x]
-        const nextWall = this.walls[y][x - 1]
+        const currentWall = this.state.walls[y][x]
+        const nextWall = this.state.walls[y][x - 1]
         const noLeftWall = (currentWall & this.leftWall) == 0
         const noRightWall = (nextWall & this.rightWall) == 0
         return noLeftWall && noRightWall
     }
 
     canMoveRight(x: number, y: number) {
-        if (x >= (this.walls[0].length) - 1) return false
-        const currentWall = this.walls[y][x]
-        const nextWall = this.walls[y][x + 1]
+        if (x >= (this.state.walls[0].length) - 1) return false
+        const currentWall = this.state.walls[y][x]
+        const nextWall = this.state.walls[y][x + 1]
         const noRightWall = (currentWall & this.rightWall) == 0
         const noLeftWall = (nextWall & this.leftWall) == 0
         return noRightWall && noLeftWall
@@ -215,17 +227,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     canMoveUp(x: number, y: number) {
         if (y <= 0) return false
-        const currentWall = this.walls[y][x]
-        const nextWall = this.walls[y - 1][x]
+        const currentWall = this.state.walls[y][x]
+        const nextWall = this.state.walls[y - 1][x]
         const noTopWall = (currentWall & this.topWall) == 0
         const noBottomWall = (nextWall & this.bottomWall) == 0
         return noTopWall && noBottomWall
     }
 
     canMoveDown(x: number, y: number) {
-        if (y >= (this.walls.length) - 1) return false;
-        const currentWall = this.walls[y][x];
-        const nextWall = this.walls[y + 1][x];
+        if (y >= (this.state.walls.length) - 1) return false;
+        const currentWall = this.state.walls[y][x];
+        const nextWall = this.state.walls[y + 1][x];
         const noBottomWall = (currentWall & this.bottomWall) == 0;
         const noTopWall = (nextWall & this.topWall) == 0;
         return noBottomWall && noTopWall;

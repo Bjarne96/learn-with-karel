@@ -24,17 +24,14 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     componentDidUpdate(): void {
-        console.log('update');
         this.draw()
     }
 
     componentDidMount(): void {
-        console.log('mount');
         this.draw()
     }
 
     draw() {
-        console.log('draw');
         this.walls = this.props.walls
         this.karel = this.props.karel
         this.beepers = this.props.beepers
