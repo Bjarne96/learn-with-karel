@@ -36,10 +36,17 @@ export interface ICommandProps extends ICode {
 }
 export interface IWorldState {
     karel: IKarel
-    runningCode: boolean,
     beepers: Array<Beeper>,
     solutions: Array<Beeper>
 }
+
+export interface IWorldUpdate {
+    karel: IKarel
+    beepers: Array<Beeper>,
+    solutions: Array<Beeper>,
+    walls: Array<Array<number>>
+}
+
 export interface IWorldProps {
     karel: IKarel,
     level: ILevel,
