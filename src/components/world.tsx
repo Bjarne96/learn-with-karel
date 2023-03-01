@@ -11,6 +11,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     bottomWall = 2
     leftWall = 1
     timer = 500
+    allTimer = []
     interval = 1000
     commandCounter = 0
     finishedCode = false
@@ -21,7 +22,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         super(props);
         const stateFromProps = this.getUpdateFromProps()
         this.walls = stateFromProps.walls
-
         this.state = {
             karel: stateFromProps.karel,
             beepers: stateFromProps.beepers,
@@ -37,8 +37,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.startedCode = true
             this.executeCode()
         }
-        // Reset Button was pressed
-        if (this.props.runningCode == false && this.finishedCode == true && this.startedCode == true) {
+        // Reset Button was pressed, while executing code
+        if (this.props.runningCode == false && this.finishedCode == false && this.startedCode == true) {
+            //Clears all timers, so no code gets executed
+            for (let i = 0; i < this.allTimer.length; i++) {
+                clearTimeout(this.allTimer[i])
+            }
+            this.allTimer = []
+        }
+        // Reset Button was pressed, while and after executing code
+        if (this.props.runningCode == false && this.startedCode == true) {
+            //Resets all variables that are needed to manage the state in the code execution
             this.finishedCode = false
             this.startedCode = false
             this.timer = 500
@@ -46,6 +55,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
     }
 
+    render() {
+        return <Canvas
+            karel={this.state.karel}
+            walls={this.props.level.worlds[0].walls}
+            beepers={this.state.beepers}
+            solutions={this.state.solutions}
+        />
+    }
+    //Updates the state to the level depeding on the props
     setLevel() {
         const update = this.getUpdateFromProps();
         this.setState({
@@ -55,9 +73,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         })
         this.walls = update.walls
     }
-
+    // Deep copies all the props and returns them
     getUpdateFromProps() {
-        //deep copy => JSON.parse(JSON.stringify(value))
         const karel: IKarel = JSON.parse(JSON.stringify(this.props.level.worlds[0].karel))
         const beepers: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].beepers))
         const solutions: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].solutions))
@@ -72,20 +89,12 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     updateKarel(key: string, value) {
+        // Updates a specific karel key
         const updateKarel = this.state.karel
         updateKarel[key] = value
         this.setState({
             karel: updateKarel
         })
-    }
-
-    render() {
-        return <Canvas
-            karel={this.state.karel}
-            walls={this.props.level.worlds[0].walls}
-            beepers={this.state.beepers}
-            solutions={this.state.solutions}
-        />
     }
     /* END REACT FUNCTIONS */
 
@@ -93,7 +102,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     executeCommand(command) {
         this.commandCounter++;
-        setTimeout(() => {
+        this.allTimer.push(setTimeout(() => {
             //Execute
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             this[command](this)
@@ -103,7 +112,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 this.finishedCode = true
                 if (this.checkSolution) this.levelCompleted();
             }
-        }, this.timer)
+        }, this.timer));
         //Increase timer for each command
         this.timer += this.interval
     }

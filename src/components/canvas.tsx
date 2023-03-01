@@ -6,7 +6,7 @@ import type { Beeper, ICanvasProps } from "../interfaces/interfaces";
 import styles from "../styles/canvas.module.css";
 
 export default class Canvas extends React.Component<ICanvasProps> {
-    canvasRef;
+    canvasRef
     blockSize = 1
     clientWidth = 300
     walls: Array<Array<number>>
@@ -111,7 +111,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     drawBeeper(x: number, y: number, count: number) {
-        console.log('drawbeeper');
         const canvas = this.canvasRef.current
         const minX = x * this.blockSize
         const minY = y * this.blockSize
@@ -145,14 +144,10 @@ export default class Canvas extends React.Component<ICanvasProps> {
             context.restore()
         }
     }
-    // TODO Draw Images that actually display
-    async drawKarel() {
-        console.log('drawKarel');
+
+    drawKarel() {
         const canvas = this.canvasRef.current
-        // const karelImage = document.createElement('img')
         const karelImage = document.getElementById('img')
-        // // const karelImageRef = createRef<HTMLImageElement>();
-        // karelImage.src = "/karel.png"
         const context = canvas.getContext("2d");
         const minX = this.props.karel.x * this.blockSize
         const minY = this.props.karel.y * this.blockSize
@@ -167,7 +162,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     render() {
-        console.log('render');
         return <div className={styles.canvasContainer}><img className={styles.hide} id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></div>;
     }
 }
