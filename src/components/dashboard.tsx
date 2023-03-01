@@ -13,6 +13,8 @@ import styles from "../styles/learnwithkarel.module.css";
 
 export default class Dashboard extends React.Component<object, DashboardState> {
 
+    debounceRunningCode = false
+
     constructor(props) {
         super(props);
         const begin = 0;
@@ -59,7 +61,14 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                             <div>
                                 <div className={styles.btnContainer}>
                                     {this.state.runningCode != true ?
-                                        <button className={styles.btn} onClick={() => this.setRunningCode(true)}>Run Code</button>
+                                        <button className={styles.btn} onClick={() => {
+                                            if (this.debounceRunningCode) return
+                                            this.debounceRunningCode = true;
+                                            setTimeout(() => {
+                                                this.debounceRunningCode = false
+                                            }, 1000);
+                                            this.setRunningCode(true)
+                                        }}>Run Code</button>
                                         :
                                         <button className={styles.btn} onClick={() => this.setLevel(this.state.currentLevel, false, false)}>Reset Karel</button>}
                                 </div>
