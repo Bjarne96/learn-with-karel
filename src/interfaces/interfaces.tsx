@@ -34,6 +34,12 @@ export interface ICode {
 export interface ICommandProps extends ICode {
     isKarelSuper: boolean,
 }
+export interface ISelectLevelProps {
+    levels: Array<ILevel>
+    currentLevel: number
+    handleLevelChange(code: number): void;
+}
+
 export interface IWorldState {
     karel: IKarel
     beepers: Array<Beeper>,

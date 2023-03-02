@@ -1,13 +1,15 @@
-import React, { ChangeEvent, SelectHTMLAttributes } from "react";
+import React from "react";
+// Components
 import Commands from "./commands";
 import Code from "./code";
 import World from "./world"
+import SelectLevel from "./select_level";
 //Interfaces
-import type { DashboardState, ILevel, IKarel } from "../interfaces/interfaces";
+import type { DashboardState, IKarel } from "../interfaces/interfaces";
 //Styles
-import levels from "../data/levels"
-//Data
 import styles from "../styles/learnwithkarel.module.css";
+//Data
+import levels from "../data/levels"
 
 
 
@@ -33,24 +35,28 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         })
     }
 
-    setLevel(level?: number, code?: boolean, runningCode?: boolean) {
-        if (level == undefined) level = this.state.currentLevel
-        const karel: IKarel = levels[level].worlds[0].karel
-        // deep copy (' ' + levels[level].code).slice(1)
-        let codeString = this.state.code
-        if (code) codeString = (' ' + levels[level].code).slice(1)
-        let updateRunningCode = this.state.runningCode
-        if (runningCode) updateRunningCode = runningCode
-        console.log('runningCode', runningCode);
+    setLevel(level: number) {
+        const karel: IKarel = JSON.parse(JSON.stringify(levels[level].worlds[0].karel)) //Deep Copy
+        const code: string = (' ' + levels[level].code).slice(1) //Deep Copy
         this.setState({
             currentLevel: level,
             karel: karel,
-            code: codeString,
-            runningCode: updateRunningCode
+            code: code
         })
     }
 
-    setRunningCode(runningCode) {
+    resetLevel() {
+        this.setLevel(this.state.currentLevel)
+    }
+
+    resetKarel() {
+        const karel: IKarel = JSON.parse(JSON.stringify(levels[this.state.currentLevel].worlds[0].karel)) //Deep Copy
+        this.setState({
+            karel: karel
+        })
+    }
+
+    setRunningCode(runningCode: boolean) {
         this.setState({ runningCode: runningCode })
     }
 
@@ -62,14 +68,14 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         }, 1000);
         this.setRunningCode(true)
     }
-    // TODO MAKE THIS WORK (split up setlevel functionm set running code, set code)
+
     handleResetCode() {
-        this.setLevel(this.state.currentLevel, false, false)
+        this.setRunningCode(false)
     }
 
-    handleLevelChange(e: ChangeEvent<HTMLSelectElement>) {
+    handleLevelChange(level: number) {
         if (this.state.runningCode) return
-        this.setLevel(Number(e.target.value), true)
+        this.setLevel(level)
     }
 
     render() {
@@ -80,32 +86,31 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                         <div className={styles.components}>
                             <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper}></Commands>
                             <div>
+                                {/* TODO put into component */}
                                 <div className={styles.btnContainer}>
                                     {this.state.runningCode != true ?
                                         <button className={styles.btn} onClick={() => this.handleRunningCode()}>Run Code</button>
                                         :
                                         <button className={styles.btn} onClick={() => this.handleResetCode()}>Reset Karel</button>}
                                 </div>
-                                <Code code={this.state.code} onCodeChange={this.onCodeChange.bind(this)}></Code>
+                                <Code
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                />
                             </div>
                             <div>
-                                <div className={styles.btnContainer}>
-                                    <span>Level:</span>
-                                    <select
-                                        value={this.state.currentLevel}
-                                        className={styles.btn}
-                                        onChange={(e) => this.handleLevelChange(e)}
-                                    >{levels.map((level: ILevel, i: number) => {
-                                        return <option value={i} key={i}>{level.name}</option>;
-                                    })}</select>
-                                </div>
+                                <SelectLevel
+                                    levels={levels}
+                                    handleLevelChange={this.handleLevelChange.bind(this)}
+                                    currentLevel={this.state.currentLevel}
+                                />
                                 <World
                                     currentLevel={this.state.currentLevel}
                                     code={this.state.code}
                                     runningCode={this.state.runningCode}
                                     karel={this.state.karel}
                                     level={levels[this.state.currentLevel]}
-                                ></World>
+                                />
                             </div>
                         </div>
                     </div>
