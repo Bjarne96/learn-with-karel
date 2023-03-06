@@ -35,7 +35,6 @@ export interface ICommandProps extends ICode {
     isKarelSuper: boolean,
 }
 export interface ISelectLevelProps {
-    levels: Array<ILevel>
     currentLevel: number
     handleLevelChange(code: number): void;
 }
@@ -61,4 +60,12 @@ export interface ICanvasProps {
     beepers: Array<Beeper>,
     solutions: Array<Beeper>,
     walls: Array<Array<number>>,
+}
+
+export interface ITopbar {
+    handleLevelChange(code: number): void;
+    handleRunningCode(): void;
+    handleResetCode(): void;
+    currentLevel: number;
+    runningCode: boolean;
 }

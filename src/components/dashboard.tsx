@@ -3,13 +3,13 @@ import React from "react";
 import Commands from "./commands";
 import Code from "./code";
 import World from "./world"
-import SelectLevel from "./select_level";
 //Interfaces
 import type { DashboardState, IKarel } from "../interfaces/interfaces";
 //Styles
 import styles from "../styles/learnwithkarel.module.css";
 //Data
 import levels from "../data/levels"
+import Topbar from "./topbar";
 
 
 
@@ -81,29 +81,24 @@ export default class Dashboard extends React.Component<object, DashboardState> {
     render() {
         return <>
             <main className={styles.main}>
+                <Topbar
+                    currentLevel={this.state.currentLevel}
+                    runningCode={this.state.runningCode}
+                    handleLevelChange={this.handleLevelChange.bind(this)}
+                    handleRunningCode={this.handleRunningCode.bind(this)}
+                    handleResetCode={this.handleResetCode.bind(this)}
+                />
                 <div className={styles.container}>
                     <div>
                         <div className={styles.components}>
                             <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper}></Commands>
                             <div>
-                                {/* TODO put into component */}
-                                <div className={styles.btnContainer}>
-                                    {this.state.runningCode != true ?
-                                        <button className={styles.btn} onClick={() => this.handleRunningCode()}>Run Code</button>
-                                        :
-                                        <button className={styles.btn} onClick={() => this.handleResetCode()}>Reset Karel</button>}
-                                </div>
                                 <Code
                                     code={this.state.code}
                                     onCodeChange={this.onCodeChange.bind(this)}
                                 />
                             </div>
                             <div>
-                                <SelectLevel
-                                    levels={levels}
-                                    handleLevelChange={this.handleLevelChange.bind(this)}
-                                    currentLevel={this.state.currentLevel}
-                                />
                                 <World
                                     currentLevel={this.state.currentLevel}
                                     code={this.state.code}
