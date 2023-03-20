@@ -11,6 +11,7 @@ export default class Canvas extends React.Component<ICanvasProps> {
     clientWidth = 300
     walls: Array<Array<number>>
     beepers: Array<Beeper>
+    solutions: Array<Beeper>
     yCount
     xCount
     teiler
@@ -35,6 +36,7 @@ export default class Canvas extends React.Component<ICanvasProps> {
         this.walls = this.props.walls
         this.karel = this.props.karel
         this.beepers = this.props.beepers
+        this.solutions = this.props.solutions
         this.yCount = this.walls.length
         this.xCount = this.walls[0].length
         this.teiler = this.yCount
@@ -65,6 +67,10 @@ export default class Canvas extends React.Component<ICanvasProps> {
         for (let i = 0; i < this.beepers.length; i++) {
             const beeper = this.beepers[i]
             this.drawBeeper(beeper.x, beeper.y, beeper.count)
+        }
+        for (let i = 0; i < this.solutions.length; i++) {
+            const solution = this.solutions[i]
+            this.drawSolutions(solution.x, solution.y, solution.count)
         }
         this.drawKarel();
         this.render();
@@ -133,6 +139,38 @@ export default class Canvas extends React.Component<ICanvasProps> {
         context.stroke()
         context.restore()
 
+        if (count && count != 1) {
+            context.save()
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillText(String(count), midX, midY)
+            context.restore()
+        }
+    }
+
+    drawSolutions(x: number, y: number, count: number) {
+        const canvas = this.canvasRef.current
+        const minX = x * this.blockSize
+        const minY = y * this.blockSize
+        const midX = minX + this.blockSize * 0.5
+        const midY = minY + this.blockSize * 0.5
+        const maxX = minX + this.blockSize
+        const maxY = minY + this.blockSize
+
+        const context = canvas.getContext("2d");
+        context.save()
+        context.beginPath()
+        context.moveTo(midX, minY + 10) // top point
+        context.lineTo(maxX - 10, midY) // right point
+        context.lineTo(midX, maxY - 10) // bottom point
+        context.lineTo(minX + 10, midY) // left point
+
+        context.lineWidth = 2
+        context.strokeStyle = "white"
+
+        context.closePath()
+        context.stroke()
+        context.restore()
         if (count && count != 1) {
             context.save()
             context.textAlign = "center"
