@@ -9,6 +9,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@uiw/react-codemirror": "^4.19.9",
     "next": "^13.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
