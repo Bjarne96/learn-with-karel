@@ -34,7 +34,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* REACT FUNCTIONS */
 
     componentDidUpdate(): void {
-        console.log('updateWorld');
         //Run Code Button was pressed
         if (this.props.runningCode && this.finishedCode == false && this.startedCode == false) {
             this.startedCode = true
@@ -117,12 +116,27 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.allTimer.push(setTimeout(() => {
             //Execute
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            this[command](this)
+            try {
+                if (typeof this[command] == undefined) {
+                    console.log('command', command);
+                } else {
+                    try {
+                        this[command](this)
+                        this.props.writeInLog((command + " ();"))
+                    } catch (e) {
+                        console.log('eeeee', e);
+                    }
+
+                }
+            } catch (e) {
+                console.log('fffff', e);
+            }
+
             this.commandCounter--
             // All commands are executed
             if (this.commandCounter == 0) {
                 this.finishedCode = true
-                if (this.checkSolution) this.levelCompleted();
+                if (this.checkSolution()) this.props.setLevelCompleted(true);
             }
         }, this.timer));
         //Increase timer for each command
@@ -158,12 +172,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         try {
             eval(this.props.code);
         } catch (e) {
-            console.log("You tried to run that has errors in it.", e)
+            this.props.writeInLog("An error occurred.")
+            console.log("You tried to run code that has errors in it.")
         }
-    }
-
-    levelCompleted() {
-        console.log('completed')
     }
 
     checkSolution() {

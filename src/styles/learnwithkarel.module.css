@@ -15,15 +15,6 @@
     align-items: center;
     justify-content: center;
     gap: 3rem;
-    padding: 4rem 1rem;
-}
-
-.components {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    padding: 1rem;
-    margin: 1rem;
 }
 
 .btns {
@@ -56,6 +47,8 @@
 .codeContainer {
     border: 1rem solid #282c34;
     border-radius: 4px;
+    max-height: 33vw;
+    overflow-y: hidden;
 }
 
 .btnContainer {

@@ -16,7 +16,7 @@ export default class Code extends React.Component<ICode> {
                 <CodeMirror
                     value={this.props.code}
                     height="33vw"
-                    minWidth="33vw"
+                    width="33vw"
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                     extensions={[javascript({ jsx: true })]}
                     onChange={(value: string) => {

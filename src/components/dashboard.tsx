@@ -10,6 +10,8 @@ import styles from "../styles/learnwithkarel.module.css";
 //Data
 import levels from "../data/levels"
 import Topbar from "./topbar";
+import LevelModal from "./modal";
+import Log from "./log";
 
 
 
@@ -25,7 +27,9 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                 currentLevel: begin,
                 karel: levels[begin].worlds[0].karel,
                 code: levels[begin].code,
-                runningCode: false
+                runningCode: false,
+                isLevelCompleted: false,
+                log: ""
             }
         }
 
@@ -72,6 +76,9 @@ export default class Dashboard extends React.Component<object, DashboardState> {
     }
 
     handleResetCode() {
+        this.setState({
+            log: ""
+        });
         this.setRunningCode(false)
     }
 
@@ -80,20 +87,37 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         this.setLevel(level)
     }
 
+    setLevelCompleted(completed: boolean) {
+        console.log('completed level ', this.state.currentLevel);
+        this.setState({
+            isLevelCompleted: completed
+        })
+    }
+
+    writeInLog(entry: string) {
+        this.setState({
+            log: this.state.log + entry + "\n"
+        })
+    }
+
     render() {
         return <>
-            <main className={styles.main}>
-                <Topbar
-                    currentLevel={this.state.currentLevel}
-                    runningCode={this.state.runningCode}
-                    handleLevelChange={this.handleLevelChange.bind(this)}
-                    handleRunningCode={this.handleRunningCode.bind(this)}
-                    handleResetCode={this.handleResetCode.bind(this)}
-                />
-                <div className={styles.container}>
-                    <div>
-                        <div className={styles.components}>
-                            <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper}></Commands>
+            <main className="flex justify-center content-center min-h-[100vh] bg-gradient-to-t from-custom-darkblue to-custom-blue">
+                <div className="flex flex-col justify-center content-center">
+                    <Topbar
+                        currentLevel={this.state.currentLevel}
+                        runningCode={this.state.runningCode}
+                        handleLevelChange={this.handleLevelChange.bind(this)}
+                        handleRunningCode={this.handleRunningCode.bind(this)}
+                        handleResetCode={this.handleResetCode.bind(this)}
+                    />
+                    <div className={styles.container}>
+                        <div className="flex flex-row gap-4 mt-4">
+                            {this.state.runningCode ?
+                                <Log log={this.state.log} />
+                                :
+                                <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper} />
+                            }
                             <div>
                                 <Code
                                     code={this.state.code}
@@ -107,12 +131,20 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                                     runningCode={this.state.runningCode}
                                     karel={this.state.karel}
                                     level={levels[this.state.currentLevel]}
+                                    setLevelCompleted={this.setLevelCompleted.bind(this)}
+                                    writeInLog={this.writeInLog.bind(this)}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
+            {this.state.isLevelCompleted ? <LevelModal
+                currentlevel={this.state.currentLevel}
+                setLevel={this.setLevel.bind(this)}
+                handleResetCode={this.handleResetCode.bind(this)}
+                setLevelCompleted={this.setLevelCompleted.bind(this)}
+            /> : <></>}
         </>
     }
 }

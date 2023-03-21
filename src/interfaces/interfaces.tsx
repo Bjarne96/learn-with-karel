@@ -12,6 +12,8 @@ export interface DashboardState {
     code: string
     karel: IKarel
     runningCode: boolean
+    isLevelCompleted: boolean
+    log: string
 }
 export interface ILevel {
     code: string,
@@ -48,18 +50,20 @@ export interface IWorldState {
 }
 
 export interface IWorldProps {
-    karel: IKarel,
-    level: ILevel,
-    runningCode: boolean,
-    code: string,
-    currentLevel: number
+    karel: IKarel;
+    level: ILevel;
+    runningCode: boolean;
+    code: string;
+    currentLevel: number;
+    setLevelCompleted(completed: boolean): void;
+    writeInLog(log: string): void;
 }
 
 export interface ICanvasProps {
-    karel: IKarel,
-    beepers: Array<Beeper>,
-    solutions: Array<Beeper>,
-    walls: Array<Array<number>>,
+    karel: IKarel;
+    beepers: Array<Beeper>;
+    solutions: Array<Beeper>;
+    walls: Array<Array<number>>;
 }
 
 export interface ITopbar {
@@ -68,4 +72,8 @@ export interface ITopbar {
     handleResetCode(): void;
     currentLevel: number;
     runningCode: boolean;
+}
+
+export interface ILogProps {
+    log: string
 }

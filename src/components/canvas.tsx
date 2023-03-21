@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { createRef } from "react";
 import type { ICanvasProps } from "../interfaces/interfaces";
-import styles from "../styles/canvas.module.css";
 
 export default class Canvas extends React.Component<ICanvasProps> {
     canvasRef
@@ -48,7 +47,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
         // walls
         for (let y = 0; y < this.props.walls.length; y++) {
             if (this.props.walls == null && this.props.walls[y] == null) return
-            console.log('this.props.walls[y]', this.props.walls[y]);
             for (let x = 0; x < this.props.walls[y].length; x++) {
                 if (this.props.walls[y][x] == null) break
                 context.fillStyle = "white"
@@ -199,6 +197,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     render() {
-        return <div className={styles.canvasContainer}><img className={styles.hide} id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></div>;
+        return <div className="block rounded bg-code-grey"><img className="hidden" id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></div>;
     }
 }
