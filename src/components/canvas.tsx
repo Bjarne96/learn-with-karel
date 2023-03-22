@@ -59,7 +59,15 @@ export default class Canvas extends React.Component<ICanvasProps> {
         for (let i = 0; i < this.props.beepers.length; i++) {
             const beeper = this.props.beepers[i]
             if (beeper == null) return
-            this.drawBeeper(beeper.x, beeper.y, beeper.count)
+            let solved = false
+            for (let i = 0; i < this.props.solutions.length; i++) {
+                const solution = this.props.solutions[i]
+                if (solution.x == beeper.x && solution.y == beeper.y && solution.count == beeper.count) {
+                    solved = true
+                    break;
+                }
+            }
+            this.drawBeeper(beeper.x, beeper.y, beeper.count, solved)
         }
         for (let i = 0; i < this.props.solutions.length; i++) {
             const solution = this.props.solutions[i]
@@ -109,7 +117,7 @@ export default class Canvas extends React.Component<ICanvasProps> {
         context.restore()
     }
 
-    drawBeeper(x: number, y: number, count: number) {
+    drawBeeper(x: number, y: number, count: number, solved: boolean) {
         const canvas = this.canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
@@ -128,9 +136,12 @@ export default class Canvas extends React.Component<ICanvasProps> {
         context.lineTo(minX + 10, midY) // left point
 
         context.lineWidth = 2
-        context.fillStyle = "hsl(90, 80%, 40%)"
+        if (solved) {
+            context.fillStyle = "hsl(90, 80%, 40%)"
+        } else {
+            context.fillStyle = "hsl(0, 100%, 40%)"
+        }
         context.strokeStyle = "white"
-
         context.closePath()
         context.fill()
         context.stroke()
