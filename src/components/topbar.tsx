@@ -24,6 +24,7 @@ export default class Topbar extends React.Component<ITopbar> {
                 </button>
             }
             <SelectLevel
+                runningCode={this.props.runningCode}
                 handleLevelChange={this.props.handleLevelChange.bind(this)}
                 currentLevel={this.props.currentLevel}
             />

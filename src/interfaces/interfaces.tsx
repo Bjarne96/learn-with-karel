@@ -38,6 +38,7 @@ export interface ICommandProps extends ICode {
 }
 export interface ISelectLevelProps {
     currentLevel: number
+    runningCode: boolean
     handleLevelChange(code: number): void;
 }
 
