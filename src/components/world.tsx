@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import type { Beeper, IWorldProps, IWorldState, IKarel } from "../interfaces/interfaces";
-import styles from "../styles/world.module.css";
 import Canvas from "./canvas";
+import ErrorString from "../interfaces/enums"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
 
@@ -27,7 +27,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             solutions: stateFromProps.solutions,
             walls: stateFromProps.walls,
             currentLevel: stateFromProps.currentLevel
-
         }
     }
 
@@ -113,23 +112,23 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     executeCommand(command) {
         this.commandCounter++;
-        this.allTimer.push(setTimeout(() => {
+        this.addTimer(() => {
             //Execute
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             try {
                 if (typeof this[command] == undefined) {
-                    console.log('command', command);
+                    console.log('Unknown Command', command);
                 } else {
                     try {
                         this[command](this)
                         this.props.writeInLog((command + " ();"))
                     } catch (e) {
-                        console.log('eeeee', e);
+                        console.log('Could not execute command', e);
                     }
 
                 }
             } catch (e) {
-                console.log('fffff', e);
+                console.log('World executes command error.', e);
             }
 
             this.commandCounter--
@@ -138,9 +137,35 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 this.finishedCode = true
                 if (this.checkSolution()) this.props.setLevelCompleted(true);
             }
-        }, this.timer));
+        })
         //Increase timer for each command
         this.timer += this.interval
+    }
+
+    writeErrorLog(error) {
+        this.commandCounter++;
+        this.addTimer(() => {
+            //Execute
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            try {
+                this.props.writeInLog((error))
+            } catch (e) {
+                console.log('Could not write Error log.', e);
+            }
+
+            this.commandCounter--
+            // All commands are executed
+            if (this.commandCounter == 0) {
+                this.finishedCode = true
+                if (this.checkSolution()) this.props.setLevelCompleted(true);
+            }
+        })
+        //Increase timer for each command
+        this.timer += this.interval
+    }
+
+    addTimer(timeoutFunction) {
+        this.allTimer.push(setTimeout(timeoutFunction, this.timer));
     }
 
     executeCode() {
@@ -172,8 +197,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         try {
             eval(this.props.code);
         } catch (e) {
-            this.props.writeInLog("An error occurred.")
-            console.log("You tried to run code that has errors in it.")
+            this.props.writeInLog(ErrorString)
+            this.writeErrorLog(e);
         }
     }
 
