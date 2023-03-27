@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React, { useState } from 'react';
 
-export default function Submit() {
+export default function CreateUser() {
 
     const [error, setError] = useState("");
 
@@ -12,9 +12,9 @@ export default function Submit() {
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(async r => {
-                    console.log(await r.json())
-                    if (r.status == 200 && r["id"].length) {
-                        window.location.replace(window.location.origin + '/user?id=' + r["id"])
+                    const response = await r.json()
+                    if (response["status"] == 200 && response["id"]) {
+                        // window.location.replace(window.location.origin + '/user?id=' + response["id"])
                     } else {
                         setError(r["msg"])
                     }
@@ -25,7 +25,7 @@ export default function Submit() {
     }
     let title = "Create new User and start learning."
     let button = <button className="" onClick={handleSubmit}><strong>Create</strong></button>
-    if (error.length) {
+    if (error != "") {
         title = error
         button = <></>
     }
