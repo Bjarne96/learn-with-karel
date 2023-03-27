@@ -1,7 +1,7 @@
 import React from 'react';
 import SelectLevel from './select_level';
 //Styles
-import type { ITopbar } from "./../interfaces/interfaces"
+import type { ITopbar } from "../types/karel"
 
 export default class Topbar extends React.Component<ITopbar> {
     constructor(props: ITopbar) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import type { ICode } from '../interfaces/interfaces';
+import type { ICode } from '../types/karel';
 import styles from "../styles/learnwithkarel.module.css";
 
 export default class Code extends React.Component<ICode> {

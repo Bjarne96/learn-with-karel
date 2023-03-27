@@ -1,5 +1,5 @@
 import React from "react";
-import type { ICommandProps } from "../interfaces/interfaces";
+import type { ICommandProps } from "../types/karel";
 import styles from "../styles/commands.module.css";
 
 export default class Commands extends React.Component<ICommandProps> {

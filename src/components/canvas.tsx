@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { createRef } from "react";
-import type { ICanvasProps } from "../interfaces/interfaces";
+import type { ICanvasProps } from "../types/karel";
 
 export default class Canvas extends React.Component<ICanvasProps> {
     canvasRef

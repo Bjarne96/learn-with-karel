@@ -1,6 +1,6 @@
 import React from "react";
-import type { ILogProps } from "../interfaces/interfaces";
-import { ErrorString, regexPatternNoCommand } from "../interfaces/enums"
+import type { ILogProps } from "../types/karel";
+import { ErrorString, regexPatternNoCommand } from "../types/enums"
 
 export default class Log extends React.Component<ILogProps> {
 

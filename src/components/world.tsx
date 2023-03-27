@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import type { Beeper, IWorldProps, IWorldState, IKarel } from "../interfaces/interfaces";
+import type { Beeper, IWorldProps, IWorldState, IKarel } from "../types/karel";
 import Canvas from "./canvas";
-import ErrorString from "../interfaces/enums"
+import ErrorString from "../types/enums"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
 

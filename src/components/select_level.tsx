@@ -1,5 +1,5 @@
 import React from "react";
-import type { ISelectLevelProps, ILevel } from "../interfaces/interfaces";
+import type { ISelectLevelProps, ILevel } from "../types/karel";
 //Data
 import levels from "../data/levels"
 

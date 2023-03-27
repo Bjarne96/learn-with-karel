@@ -4,7 +4,7 @@ import Commands from "./commands";
 import Code from "./code";
 import World from "./world"
 //Interfaces
-import type { DashboardState, IKarel } from "../interfaces/interfaces";
+import type { DashboardState, IKarel } from "../types/karel";
 //Styles
 import styles from "../styles/learnwithkarel.module.css";
 //Data
