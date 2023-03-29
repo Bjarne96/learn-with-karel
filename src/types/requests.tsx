@@ -1,60 +1,17 @@
-//Needs code, done is optional
-export const updateUserBody = {
-    id: "642161d67a4a6ac23c5b0fe5",
-    level: {
-        stage: 1,
-        code: "long line of code",
-        done: true
-    }
+export const updateLevelBody = {
+    user_id: "642161d67a4a6ac23c5b0fe5",
+    stage: 1,
+    code: "long line of code",
+    done: true,
+    time: 2000,
+    attempts: [
+        "Wed Mar 29 2023 13:10:09 GMT+0200 (Mitteleuropäische Sommerzeit)"
+    ]
 }
-//Needs code and done
-export const insertUserBody = {
-    id: "642161d67a4a6ac23c5b0fe5",
-    level: {
-        stage: 1,
-        code: "long line of code",
-        done: true
-    }
+export const findLevelBody = {
+    user_id: "642161d67a4a6ac23c5b0fe5",
+    stage: 1
 }
-//Needs level and id
-export const getUserBody = {
-    id: "642161d67a4a6ac23c5b0fe5",
-    level: 1
+export const getLevelBody = {
+    id: "642161d67a4a6ac23c5b0fe5"
 }
-
-export default updateUserBody
-
-// export interface level {
-//     stage: number
-//     code: string
-//     done?: true
-// }
-// export interface updateUserBody {
-//     id: string
-//     level: level
-// }
-// export interface insertUserBody {
-//     id: string
-//     level: level
-// }
-// export interface getUserBody {
-//     id: string
-//     level: number
-// }
-// export default updateUserBody
-
-// export const userInDB = {
-//     "id": "642161d67a4a6ac23c5b0fe5",
-//     "levels": [
-//         {
-//             stage: 1,
-//             code: "long line of code",
-//             done: true
-//         },
-//         {
-//             stage: 2,
-//             code: "longer line of code",
-//             done: false
-//         }
-//     ]
-// }
