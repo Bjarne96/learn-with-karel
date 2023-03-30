@@ -89,6 +89,19 @@ async function handlePut(req, res, db) {
         const level = await findLevel(bodyObject, db)
         if (level == null) return userError(res, "Could not find your level.")
         if (level["_id"]) {
+            //Save into the levellog, when finished the first time
+            if (!level["done"] && bodyObject["done"]) {
+                const response = await db.collection("levellog").insertOne({
+                    "_id": new ObjectId(level["_id"] as string),
+                    "user_id": bodyObject["user_id"],
+                    "code": bodyObject["code"],
+                    "done": bodyObject["done"],
+                    "time": bodyObject["time"],
+                    "stage": bodyObject["stage"],
+                    "attempts": bodyObject["attempts"]
+                });
+                if (!response["insertedId"]) return databaseError(res, "Could not insert Level.")
+            }
             await db.collection("level").updateOne(
                 {
                     _id: level["_id"],
@@ -123,6 +136,7 @@ async function handlePost(req, res, db) {
             "code": bodyObject["code"],
             "done": bodyObject["done"],
             "time": bodyObject["time"],
+            "stage": bodyObject["stage"],
             "attempts": bodyObject["attempts"]
         });
         if (!response["insertedId"]) return databaseError(res, "Could not insert Level.")
