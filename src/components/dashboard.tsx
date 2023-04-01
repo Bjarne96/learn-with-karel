@@ -14,7 +14,6 @@ import LevelModal from "./modal";
 import Log from "./log";
 
 
-
 export default class Dashboard extends React.Component<object, DashboardState> {
 
     debounceRunningCode = false
@@ -32,7 +31,6 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                 log: ""
             }
         }
-
     }
 
     onCodeChange(code: string) {
@@ -83,7 +81,7 @@ export default class Dashboard extends React.Component<object, DashboardState> {
     }
 
     handleLevelChange(level: number) {
-        if (this.state.runningCode) return
+        if (this.state.runningCode) this.handleResetCode()
         this.setLevel(level)
     }
 

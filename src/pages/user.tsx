@@ -33,48 +33,28 @@ export default function User(props) {
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ query: { id } }) {
     try {
         const client = await clientPromise;
         const db = client.db("karel");
-        const id = context.query["id"];
         let user;
-        if (id == undefined) {
-            return {
-                props: {
-                    "error": "Du hast dich nicht registiert."
-                }
-            };
-        }
+
+        if (id == undefined) return errorProps("Du hast dich nicht registiert.")
+
         try {
+
             user = await db
                 .collection("registrations")
                 .findOne({ _id: new ObjectId(id as string) })
-        } catch (e) {
-            console.log('e', e);
-            return {
-                props: {
-                    "error": "Es scheint ein Fehler vorzuliegen."
-                }
-            };
-        }
-        if (user == null) {
-            return {
-                props: {
-                    "error": "Du scheinst dich nicht angemeldet zu haben"
-                }
-            };
-        }
+
+        } catch (e) { return errorProps(JSON.stringify(e)) }
+
+        if (user == null) return errorProps("Du scheinst dich nicht angemeldet zu haben")
 
         const clientUser = JSON.parse(JSON.stringify(user))
 
-        return {
-            props: {
-                "user": clientUser
-            }
-        };
-    } catch (e) {
-        console.error(e);
-        return { props: { "error": JSON.stringify(e) } }
-    }
+        return { props: { "user": clientUser } }
+    } catch (e) { return errorProps(JSON.stringify(e)) }
 }
+
+function errorProps(msg) { return { props: { "error": msg } } }
