@@ -4,25 +4,30 @@ import Commands from "./commands";
 import Code from "./code";
 import World from "./world"
 //Interfaces
-import type { DashboardState, IKarel } from "../types/karel";
+import type { DashboardProps, DashboardState, IKarel } from "../types/karel";
 //Data
 import levels from "../data/levels"
 import Topbar from "./topbar";
 import LevelModal from "./modal";
 
 
-export default class Dashboard extends React.Component<object, DashboardState> {
+export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
     debounceRunningCode = false
+    isLoggedIn = false
+    userId = ""
 
-    constructor(props: object) {
+    constructor(props: DashboardProps) {
         super(props);
-        const begin = 0;
-        if (levels != undefined && levels[begin] != undefined && levels[begin].worlds[0] != undefined) {
+        if (props.id.length) {
+            this.userId = props.id
+            this.isLoggedIn = true
+        }
+        if (levels != undefined && levels[props.lastStage] != undefined && levels[props.lastStage].worlds[0] != undefined) {
             this.state = {
-                currentLevel: begin,
-                karel: levels[begin].worlds[0].karel,
-                code: levels[begin].code,
+                currentLevel: props.lastStage,
+                karel: levels[props.lastStage].worlds[0].karel,
+                code: levels[props.lastStage].code,
                 runningCode: false,
                 showLevelCompletedModal: false,
                 log: ""

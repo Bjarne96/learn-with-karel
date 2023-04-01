@@ -7,6 +7,10 @@ export interface IKarel extends Coords {
     isSuper: boolean;
     beeperCount?: number;
 }
+export interface DashboardProps {
+    id: string
+    lastStage: number
+}
 export interface DashboardState {
     currentLevel: number
     code: string

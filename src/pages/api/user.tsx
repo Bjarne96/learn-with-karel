@@ -31,8 +31,8 @@ function setBodyObject(body) {
 }
 
 async function handleGet(req, res, db) {
-    const bodyObject = setBodyObject(req.body)
     try {
+        const bodyObject = setBodyObject(req.body)
         const user = await db
             .collection("user")
             .findOne({ _id: new ObjectId(bodyObject["id"] as string) })
@@ -44,8 +44,11 @@ async function handleGet(req, res, db) {
 
 async function handlePost(req, res, db) {
     try {
-        const response = await db.collection("user").insertOne({});
-        return res.status(200).json({ "id": response.insertedId, "status": 200 })
+        const response = await db.collection("user").insertOne({
+            lastStage: 1
+        });
+        req["body"] = { id: response.insertedId }
+        return handleGet(req, res, db)
     } catch (e) {
         return databaseError(res, e)
     }
