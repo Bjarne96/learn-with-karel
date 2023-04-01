@@ -5,6 +5,7 @@ const config = {
     extend: {
         colors: {
             'code-grey': '#282c34',
+            'code-lightgrey': '#7d8799',
             'code-blue' : '#61afef',
             'custom-blue' : '#0e3a60',
             'custom-darkblue' : '#082238'

@@ -12,7 +12,7 @@ export default class Code extends React.Component<ICode> {
 
     render() {
         return (
-            <div className={styles.codeContainer}>
+            <div className="border-code-grey border-[1rem] rounded">
                 <CodeMirror
                     value={this.props.code}
                     height="33vw"

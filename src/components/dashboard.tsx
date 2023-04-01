@@ -5,13 +5,10 @@ import Code from "./code";
 import World from "./world"
 //Interfaces
 import type { DashboardState, IKarel } from "../types/karel";
-//Styles
-import styles from "../styles/learnwithkarel.module.css";
 //Data
 import levels from "../data/levels"
 import Topbar from "./topbar";
 import LevelModal from "./modal";
-import Log from "./log";
 
 
 export default class Dashboard extends React.Component<object, DashboardState> {
@@ -27,7 +24,7 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                 karel: levels[begin].worlds[0].karel,
                 code: levels[begin].code,
                 runningCode: false,
-                isLevelCompleted: false,
+                showLevelCompletedModal: false,
                 log: ""
             }
         }
@@ -85,10 +82,9 @@ export default class Dashboard extends React.Component<object, DashboardState> {
         this.setLevel(level)
     }
 
-    setLevelCompleted(completed: boolean) {
-        console.log('completed level ', this.state.currentLevel);
+    toggleLevelCompletedModal(completed: boolean) {
         this.setState({
-            isLevelCompleted: completed
+            showLevelCompletedModal: completed
         })
     }
 
@@ -109,39 +105,37 @@ export default class Dashboard extends React.Component<object, DashboardState> {
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
                     />
-                    <div className={styles.container}>
+                    <div>
                         <div className="flex flex-row gap-4 mt-4">
-                            {this.state.runningCode ?
-                                <Log log={this.state.log} />
-                                :
-                                <Commands code={this.state.code} onCodeChange={this.onCodeChange.bind(this)} isKarelSuper={this.state.karel.isSuper} />
-                            }
-                            <div>
-                                <Code
-                                    code={this.state.code}
-                                    onCodeChange={this.onCodeChange.bind(this)}
-                                />
-                            </div>
-                            <div>
-                                <World
-                                    currentLevel={this.state.currentLevel}
-                                    code={this.state.code}
-                                    runningCode={this.state.runningCode}
-                                    karel={this.state.karel}
-                                    level={levels[this.state.currentLevel]}
-                                    setLevelCompleted={this.setLevelCompleted.bind(this)}
-                                    writeInLog={this.writeInLog.bind(this)}
-                                />
-                            </div>
+                            <Commands
+                                log={this.state.log}
+                                runningCode={this.state.runningCode}
+                                code={this.state.code}
+                                onCodeChange={this.onCodeChange.bind(this)}
+                                isKarelSuper={this.state.karel.isSuper}
+                            />
+                            <Code
+                                code={this.state.code}
+                                onCodeChange={this.onCodeChange.bind(this)}
+                            />
+                            <World
+                                currentLevel={this.state.currentLevel}
+                                code={this.state.code}
+                                runningCode={this.state.runningCode}
+                                karel={this.state.karel}
+                                level={levels[this.state.currentLevel]}
+                                toggleLevelCompletedModal={this.toggleLevelCompletedModal.bind(this)}
+                                writeInLog={this.writeInLog.bind(this)}
+                            />
                         </div>
                     </div>
                 </div>
             </main>
-            {this.state.isLevelCompleted ? <LevelModal
+            {this.state.showLevelCompletedModal ? <LevelModal
                 currentlevel={this.state.currentLevel}
                 setLevel={this.setLevel.bind(this)}
                 handleResetCode={this.handleResetCode.bind(this)}
-                setLevelCompleted={this.setLevelCompleted.bind(this)}
+                toggleLevelCompletedModal={this.toggleLevelCompletedModal.bind(this)}
             /> : <></>}
         </>
     }

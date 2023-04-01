@@ -1,6 +1,6 @@
 import React from "react";
 import type { ICommandProps } from "../types/karel";
-import styles from "../styles/commands.module.css";
+import { ErrorString, regexPatternNoCommand } from "~/types/enums";
 
 export default class Commands extends React.Component<ICommandProps> {
 
@@ -36,13 +36,35 @@ export default class Commands extends React.Component<ICommandProps> {
 
     render() {
         const commands = this.commands();
-        return <div className="m-0 bg-code-grey p-8 min-w-[250px] max-h-[33vw] rounded overflow-auto">
-            <p className="text-white font-semibold border-b-2 pb-2 mb-1"> Available Commands </p>
-            <ul className={styles.helperCommands}>
+        let content = <>
+            <ul className="list-none ">
                 {commands.map((command, i) => {
-                    return <li onClick={() => this.props.onCodeChange(this.props.code + "\n" + command + "();")} key={i}>{command}<span>()</span></li>;
+                    return <li
+                        className="pb-2 cursor-pointer text-code-blue"
+                        onClick={() => this.props.onCodeChange(this.props.code + "\n" + command + "();")}
+                        key={i}
+                    >
+                        {command}<span className="pl-1 text-code-lightgrey">()</span>
+                    </li>;
                 })}
             </ul>
+        </>
+        if (this.props.runningCode) {
+            content = <>{
+                this.props.log.split('\n').map((str, i) => {
+                    if (str == "") return
+                    if (str == ErrorString) {
+                        return <p className="text-yellow-600 font-semibold" key={i}>{str}</p>
+                    }
+                    if (!regexPatternNoCommand.test(str)) {
+                        return <p className="text-red-600 font-semibold" key={i}>{str}</p>
+                    }
+                    return <p className="text-sky-500 font-semibold" key={i}>{str}</p>
+                })
+            }</>
+        }
+        return <div className="m-0 bg-code-grey py-4 px-8 min-w-[250px] rounded overflow-auto max-h-[calc(33vw+2rem)]">
+            {content}
         </div>;
     }
 

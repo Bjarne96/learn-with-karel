@@ -135,7 +135,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             // All commands are executed
             if (this.commandCounter == 0) {
                 this.finishedCode = true
-                if (this.checkSolution()) this.props.setLevelCompleted(true);
+                if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
             }
         })
         //Increase timer for each command
@@ -157,7 +157,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             // All commands are executed
             if (this.commandCounter == 0) {
                 this.finishedCode = true
-                if (this.checkSolution()) this.props.setLevelCompleted(true);
+                if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
             }
         })
         //Increase timer for each command

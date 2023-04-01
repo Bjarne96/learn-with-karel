@@ -12,7 +12,7 @@ export interface DashboardState {
     code: string
     karel: IKarel
     runningCode: boolean
-    isLevelCompleted: boolean
+    showLevelCompletedModal: boolean
     log: string
 }
 export interface ILevel {
@@ -35,6 +35,8 @@ export interface ICode {
 }
 export interface ICommandProps extends ICode {
     isKarelSuper: boolean,
+    runningCode: boolean,
+    log: string
 }
 export interface ISelectLevelProps {
     currentLevel: number
@@ -55,7 +57,7 @@ export interface IWorldProps {
     runningCode: boolean;
     code: string;
     currentLevel: number;
-    setLevelCompleted(completed: boolean): void;
+    toggleLevelCompletedModal(completed: boolean): void;
     writeInLog(log: string): void;
 }
 
@@ -72,8 +74,4 @@ export interface ITopbar {
     handleResetCode(): void;
     currentLevel: number;
     runningCode: boolean;
-}
-
-export interface ILogProps {
-    log: string
 }
