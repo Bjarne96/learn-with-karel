@@ -76,6 +76,7 @@ export interface ITopbar {
     handleLevelChange(code: number): void;
     handleRunningCode(): void;
     handleResetCode(): void;
+    handleSaveCode(): void;
     currentLevel: number;
     runningCode: boolean;
 }

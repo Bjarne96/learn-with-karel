@@ -19,21 +19,34 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     constructor(props: DashboardProps) {
         super(props);
-        if (props.id.length) {
+        let lastStage = 0
+        if (props.id && props.id.length) {
             this.userId = props.id
             this.isLoggedIn = true
+            lastStage = props.lastStage
         }
-        if (levels != undefined && levels[props.lastStage] != undefined && levels[props.lastStage].worlds[0] != undefined) {
+
+        if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
-                currentLevel: props.lastStage,
-                karel: levels[props.lastStage].worlds[0].karel,
-                code: levels[props.lastStage].code,
+                currentLevel: lastStage,
+                karel: levels[lastStage].worlds[0].karel,
+                code: levels[lastStage].code,
                 runningCode: false,
                 showLevelCompletedModal: false,
                 log: ""
             }
         }
     }
+
+    // apiUpdateLevel() {
+
+    // }
+
+    // async apiPostLevel() {
+    //     await fetch("/api/level", {
+    //         method: "POST"
+    //     })
+    // }
 
     onCodeChange(code: string) {
         this.setState({
@@ -49,6 +62,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             karel: karel,
             code: code
         })
+    }
+
+    handleSaveCode() {
+        console.log('save');
     }
 
     resetLevel() {
@@ -109,6 +126,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         handleLevelChange={this.handleLevelChange.bind(this)}
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
+                        handleSaveCode={this.handleSaveCode.bind(this)}
                     />
                     <div>
                         <div className="flex flex-row gap-4 mt-4">

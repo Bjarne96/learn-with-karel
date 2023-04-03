@@ -15,7 +15,7 @@ export default class Topbar extends React.Component<ITopbar> {
                     {this.props.runningCode ? "Command Log" : "Available Commands"}
                 </p>
             </div>
-            <div className="mr-4 bg-code-grey min-w-[33vw] rounded overflow-auto">
+            <div className="flex flex-row gap-4 mr-4 bg-code-grey min-w-[33vw] rounded overflow-auto">
                 {this.props.runningCode != true ?
                     <button
                         className={btnClassName}
@@ -29,6 +29,11 @@ export default class Topbar extends React.Component<ITopbar> {
                     >Reset Karel
                     </button>
                 }
+                <button
+                    className={btnClassName}
+                    onClick={this.props.handleSaveCode.bind(this)}
+                >Save Code
+                </button>
             </div>
             <div className="m-0 bg-code-grey px-4 min-w-[33vw] rounded overflow-auto flex flex-row items-center">
                 <p className="text-white text-lg h-8 font-semibold leading-8 pr-4" >Current Level:</p>
