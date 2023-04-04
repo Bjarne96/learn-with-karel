@@ -1,5 +1,7 @@
 import { ObjectId } from 'mongodb';
 import clientPromise from '../../lib/mongodb'
+import { databaseError, hasSameKeys, setBodyObject, updateUserBody, userError } from '~/types/requests';
+import levels from "../../data/levels"
 
 export default async function handler(req, res) {
     console.log('handler', req.body);
@@ -14,20 +16,12 @@ export default async function handler(req, res) {
     if (req["method"] == "POST") {
         return handlePost(req, res, db)
     }
+    if (req["method"] == "PUT") {
+        return handlePut(req, res, db)
+    }
     if (req["method"] == "GET") {
         return handleGet(req, res, db)
     }
-}
-
-function setBodyObject(body) {
-    let bodyObject = body;
-    try {
-
-        if (typeof body == "string") {
-            bodyObject = JSON.parse(body);
-        }
-    } catch { }
-    return bodyObject
 }
 
 async function handleGet(req, res, db) {
@@ -54,6 +48,24 @@ async function handlePost(req, res, db) {
     }
 }
 
-async function databaseError(res, e) {
-    return res.status(501).json({ "error": "DATABASE ERROR: " + e.toString(), "status": 501 })
+async function handlePut(req, res, db) {
+    try {
+        const bodyObject = setBodyObject(req.body)
+        if (!hasSameKeys(updateUserBody, bodyObject)) return userError(res, "Your request does not meet the specifications.")
+        if (levels[bodyObject["lastStage"] - 1] == null) return userError(res, "Your request stage is invalid.")
+        const response = await db.collection("user").updateOne(
+            {
+                _id: new ObjectId(bodyObject["id"] as string)
+            },
+            {
+                $set: {
+                    "lastStage": bodyObject["lastStage"]
+                }
+            }
+        );
+        if (response["matchedCount"] == 0) return databaseError(res, "The user has not been updated")
+        return res.status(200).json({ status: 200 })
+    } catch (e) {
+        return databaseError(res, e)
+    }
 }
