@@ -7,9 +7,18 @@ export interface IKarel extends Coords {
     isSuper: boolean;
     beeperCount?: number;
 }
+export interface levelData {
+    id: string,
+    user_id: string,
+    stage: number,
+    code: string,
+    default_world: IWorld,
+    done: string
+}
 export interface DashboardProps {
     id: string
     lastStage: number
+    level?: levelData
 }
 export interface DashboardState {
     currentLevel: number
@@ -18,6 +27,7 @@ export interface DashboardState {
     runningCode: boolean
     showLevelCompletedModal: boolean
     log: string
+    world: IWorld
 }
 export interface ILevel {
     code: string,
@@ -77,6 +87,7 @@ export interface ITopbar {
     handleRunningCode(): void;
     handleResetCode(): void;
     handleSaveCode(): void;
+    isLoggedIn: boolean;
     currentLevel: number;
     runningCode: boolean;
 }

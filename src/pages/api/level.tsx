@@ -1,7 +1,19 @@
 import { ObjectId } from 'mongodb';
-import { updateLevelBody, findLevelBody, getLevelBody, postLevelBody, postAttemptBody, hasSameKeys, setBodyObject, userError, databaseError, returnError, hasKeys } from '~/types/requests';
+import {
+    updateLevelBody,
+    postLevelBody,
+    postAttemptBody,
+    hasSameKeys,
+    setBodyObject,
+    userError,
+    databaseError,
+    returnError,
+    hasKeys,
+    getLevel,
+    findLevel,
+    createLevel
+} from '~/types/requests';
 import clientPromise from '../../lib/mongodb'
-import levels from "../../data/levels"
 
 //Sorts the requests by type
 export default async function handler(req, res) {
@@ -24,34 +36,20 @@ export default async function handler(req, res) {
         return handlePut(req, res, db)
     }
 }
-//Finds the level, when given id or user_id and stage
-async function findLevel(bodyObject, db) {
-    try {
-        if (hasKeys(getLevelBody, bodyObject)) {
-            return await db
-                .collection("level")
-                .findOne({
-                    _id: new ObjectId(bodyObject["id"] as string)
-                })
-        } else if (hasKeys(findLevelBody, bodyObject)) {
-            return await db
-                .collection("level")
-                .findOne({
-                    user_id: bodyObject["user_id"],
-                    stage: bodyObject["stage"]
-                })
-        } else {
-            return null;
-        }
-    } catch (e) {
-        console.log('e', e);
-        return null;
-    }
-}
 // Returns a level for a user_id and stage
 // The function creates a level if the user exists, but no level for that stage
 async function handleGet(req, res, db) {
     const bodyObject = setBodyObject(req.body)
+    const response = await getLevel(bodyObject, db)
+    if (response["status"] == 200) {
+        return res.status(200).json(response.level)
+    }
+    if (response["status"] == 300) {
+        return userError(res, response["msg"])
+    }
+    if (response["status"] == 500) {
+        return databaseError(res, response["msg"])
+    }
     try {
         const level = await findLevel(bodyObject, db)
         //Level does not exists
@@ -150,18 +148,4 @@ async function handlePost(req, res, db) {
     } catch (e) {
         return databaseError(res, e)
     }
-}
-
-async function createLevel(user_id, stage, start, db) {
-    if (levels[(stage - 1)] == null) return { insertedId: null }
-    return await db.collection("level").insertOne({
-        "user_id": user_id,
-        "stage": stage,
-        "default_code": levels[(stage - 1)].code,
-        "default_world": levels[(stage - 1)].worlds[0],
-        "code": levels[(stage - 1)].code,
-        "start": start,
-        "done": "",
-        "inactive": 0
-    });
 }
