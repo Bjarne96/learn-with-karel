@@ -1,50 +1,141 @@
 import type { ILevel } from "../interfaces/interfaces";
 export const levels: Array<ILevel> = [
     {
-        code: "function test() {\n\tmove();\n\tmove();\n}\nmove();\ntest();\npickBeeper();\n//hier drunter weiteren Code einfügen. Ausgegrauter Code macht nichts,\n//Und kann gelöscht werden (muss aber nicht).",
-        name: "Bring the trash outside - Basic commands",
+        code: `//Willkommen zu der Learnlab Lernumgebung! Rechts siehst du ein Spielfeld
+//mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst,
+//dann wird Pfeili die Befehle weiter unten ausführen.
+
+//Dein Ziel ist es die roten Beeper aufzusammeln
+//und in die markierten Zielzonen zu bringen. Drücke auf "Run Code" und sieh
+//was passiert.
+
+move();
+pickBeeper();
+turnLeft();
+move();
+putBeeper();`,
+        name: "Move the Beeper - Getting Started",
         worlds: [
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 9, 8, 12, 0, 0, 0],
-                    [0, 0, 1, 0, 0, 0, 0, 0],
-                    [0, 0, 3, 2, 6, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [{ x: 4, y: 3, count: 1 }],
-                solutions: [{ x: 5, y: 3, count: 1 }],
-                karel: { x: 4, y: 2, direction: 3, isSuper: false, beeperCount: 0 }
-            },
-        ],
-    },
-    {
-        code: "function turnRight(){\n  turnLeft();\n  turnLeft();\n  turnLeft();\n}\n\nmove();\npickBeeper();\nturnRight();",
-        name: "Bring the trash outside - Calling Functions",
-        worlds: [
-            {
-                walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 9, 8, 12, 0, 0, 0],
-                    [0, 0, 1, 0, 0, 0, 0, 0],
-                    [0, 0, 3, 2, 6, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [{ x: 4, y: 3, count: 1 }],
-                solutions: [{ x: 5, y: 3, count: 1 }],
+                solutions: [{ x: 3, y: 3, count: 1 }],
                 karel: { x: 4, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
+        code: "//Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben\n//und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle.\n//Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben,\n//oder sie links in der Liste anklicken, um sie direkt einzufügen.\n\nmove();\npickBeeper();\n//hier drunter weiteren Code einfügen...",
+        name: "Move the Beeper - Using commands",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 4, y: 3, count: 1 }],
+                solutions: [{ x: 3, y: 3, count: 1 }],
+                karel: { x: 4, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: "//Manchmal gibt es bestimmte Befehle noch nicht.\n//Hier muss sich Pfeili nach rechts drehen, aber\n//es gibt nur einen Befehl zur Linksdrehung.\n//Kannst du mit den vorhandenen Befehlen trotzdem\n//eine Rechtsdrehung erreichen und das Level abschließen?\n//hier drunter Code einfügen...",
+        name: "Move the Beeper - Combining commands",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 3, y: 3, count: 1 }],
+                solutions: [{ x: 4, y: 3, count: 1 }],
+                karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code:
+            `//Wenn du die Rechtsdrehung häufiger nutzt, dann wird es
+//unübersichtlich und verwirrend im Code, wenn
+//du immer 3x die Linksdrehung ausführen musst.
+//Um das zu vermeiden, kann man sich seine eigenen Befehle schreiben.
+
+//Hier wird der neue Befehl nur definiert und
+//von sich aus passiert noch nichts.
+function turnRight(){
+turnLeft();
+turnLeft();
+turnLeft();
+}
+
+turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
+move();
+pickBeeper();`,
+        name: "Move the Beeper - Using functions",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 4, y: 3, count: 1 }],
+                solutions: [{ x: 4, y: 4, count: 1 }],
+                karel: { x: 3, y: 3, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: "",
+        name: "Move the Beeper - Writing your own functions 1",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 3, y: 3, count: 1 }],
+                solutions: [{ x: 4, y: 3, count: 1 }],
+                karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
         code: "function walkHalfCircle(){\n  move();\n  //unter dieser Zeile weiteren Code einfügen\n}\n\n\nwalkHalfCircle();\npickBeeper();\nwalkHalfCircle();\nputBeeper();",
-        name: "Obtain Artifact - Writing Functions",
+        name: "Obtain Artifact - Writing your own functions 2",
         worlds: [
             {
                 walls: [
