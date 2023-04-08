@@ -113,7 +113,19 @@ pickBeeper();`,
         ],
     },
     {
-        code: "",
+        code:
+            `//Versuche nun die Funktion "turnRight" selbst zu definieren.
+//Zur Erinnerung: so ist eine Funktion aufgebaut:
+//function deinFunktionsName(){
+//dein Code für die Funktion...
+//}
+
+turnRight();
+move();
+pickBeeper();
+turnRight();
+move();
+putBeeper();`,
         name: "Move the Beeper - Writing your own functions 1",
         worlds: [
             {
@@ -127,9 +139,9 @@ pickBeeper();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 3, y: 3, count: 1 }],
-                solutions: [{ x: 4, y: 3, count: 1 }],
-                karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
+                beepers: [{ x: 4, y: 3, count: 1 }],
+                solutions: [{ x: 4, y: 4, count: 1 }],
+                karel: { x: 3, y: 3, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
     },
