@@ -1,13 +1,14 @@
 import type { ILevel } from "../interfaces/interfaces";
 export const levels: Array<ILevel> = [
     {
-        code: `//Willkommen zu der Learnlab Lernumgebung! Rechts siehst du ein Spielfeld
-//mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst,
+        code: `//Willkommen beim Learnlab! Rechts siehst 
+//du ein Spielfeld mit einem blauen Pfeil darin, 
+//das ist Pfeili. Wenn du auf "Run Code" klickst,
 //dann wird Pfeili die Befehle weiter unten ausführen.
 
 //Dein Ziel ist es die roten Beeper aufzusammeln
-//und in die markierten Zielzonen zu bringen. Drücke auf "Run Code" und sieh
-//was passiert.
+//und in den markierten Zielzonen wieder abzulegen. 
+//Drücke auf "Run Code" und sieh was passiert.
 
 move();
 pickBeeper();
@@ -34,7 +35,16 @@ putBeeper();`,
         ],
     },
     {
-        code: "//Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben\n//und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle.\n//Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben,\n//oder sie links in der Liste anklicken, um sie direkt einzufügen.\n\nmove();\npickBeeper();\n//hier drunter weiteren Code einfügen...",
+        code: `//Nun musst du selbst Befehle einfügen, um den 
+//roten Beeper aufzuheben und ihn in der Zielzone
+//abzulegen. Links siehst du die verfügbaren Befehle. 
+//Du kannst diese entweder per Hand weiter unten in
+//dieses Textfeld schreiben, oder sie links in der
+//Liste anklicken, um sie direkt einzufügen.
+        
+move();
+pickBeeper();
+//hier drunter weiteren Code einfügen...`,
         name: "Move the Beeper - Using commands",
         worlds: [
             {
@@ -55,7 +65,13 @@ putBeeper();`,
         ],
     },
     {
-        code: "//Manchmal gibt es bestimmte Befehle noch nicht.\n//Hier muss sich Pfeili nach rechts drehen, aber\n//es gibt nur einen Befehl zur Linksdrehung.\n//Kannst du mit den vorhandenen Befehlen trotzdem\n//eine Rechtsdrehung erreichen und das Level abschließen?\n//hier drunter Code einfügen...",
+        code: `//Manchmal gibt es bestimmte Befehle noch
+//nicht. Hier muss sich Pfeili nach rechts
+//drehen, aber es gibt nur einen Befehl zur 
+//Linksdrehung. Kannst du mit den vorhandenen
+//Befehlen trotzdem eine Rechtsdrehung
+//erreichen und das Level abschließen? 
+//hier drunter Code einfügen...`,
         name: "Move the Beeper - Combining commands",
         worlds: [
             {
@@ -77,17 +93,22 @@ putBeeper();`,
     },
     {
         code:
-            `//Wenn du die Rechtsdrehung häufiger nutzt, dann wird es
-//unübersichtlich und verwirrend im Code, wenn
-//du immer 3x die Linksdrehung ausführen musst.
-//Um das zu vermeiden, kann man sich seine eigenen Befehle schreiben.
+            `//Man kann also eine Rechtsdrehung aus
+//3 Linksdrehungen erzeugen. Wenn du die
+//Rechtsdrehung auf diese Weise häufiger 
+//nutzt, dann wird es allerdings
+//unübersichtlich im Code. Um das zu
+//vermeiden, kann man sich seine eigenen
+//Befehle schreiben. Diese bündeln eine 
+//Reihe bereits vorhandener Befehle unter
+//einem neuen Namen zusammen.
 
 //Hier wird der neue Befehl nur definiert und
 //von sich aus passiert noch nichts.
 function turnRight(){
-turnLeft();
-turnLeft();
-turnLeft();
+    turnLeft();
+    turnLeft();
+    turnLeft();
 }
 
 turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
@@ -114,7 +135,8 @@ pickBeeper();`,
     },
     {
         code:
-            `//Versuche nun die Funktion "turnRight" selbst zu definieren.
+            `//Versuche nun die Funktion "turnRight"
+//selbst zu definieren.
 //Zur Erinnerung: so ist eine Funktion aufgebaut:
 //function deinFunktionsName(){
 //dein Code für die Funktion...
@@ -146,7 +168,17 @@ putBeeper();`,
         ],
     },
     {
-        code: "function walkHalfCircle(){\n  move();\n  //unter dieser Zeile weiteren Code einfügen\n}\n\n\nwalkHalfCircle();\npickBeeper();\nwalkHalfCircle();\nputBeeper();",
+        code: `//Versuche die Funktion zu vervollständigen.
+        
+function walkHalfCircle(){
+    move();
+    //Hier weiteren Code einfügen...
+}
+          
+walkHalfCircle();
+pickBeeper();
+walkHalfCircle();
+putBeeper();`,
         name: "Obtain Artifact - Writing your own functions 2",
         worlds: [
             {
@@ -167,7 +199,20 @@ putBeeper();`,
         ],
     },
     {
-        code: "for (let i = 0; i < 3; i++) {\n  move();\n}\npickBeeper();\nturnLeft();\nturnLeft();",
+        code: `//Manchmal muss man einen Befehl mehrfach
+//hintereinander ausführen. Programmier*innen
+//hassen es allerdings, sich zu wiederholen.
+//Also nutzen sie die sogenannten Schleifen
+//oder auch Loops, um das Problem zu lösen. 
+//Kannst du die Schleife so anpassen, dass 
+//Pfeili zur anderen Seite des Levels läuft?
+
+for (let i = 0; i < 3; i++) {
+    move();
+}
+pickBeeper();
+turnLeft();
+turnLeft();`,
         name: "Get the stick - Basic loop",
         worlds: [
             {

@@ -29,7 +29,7 @@ class LevelModal extends React.Component<Props> {
                         </div>
                         <div className="p-6 space-y-6">
                             <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                You have completed this level. You have learned so much. Ready for the next level?
+                                You have completed this level! Ready for the next level?
                             </p>
                         </div>
                         <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
