@@ -21,5 +21,117 @@ export const levels: Array<ILevel> = [
             },
         ],
     },
+    {
+        code: "",
+        name: "Get two sticks - Reuse code with functions 2",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [
+                    { x: 7, y: 0, count: 1 },
+                    { x: 0, y: 7, count: 1 }
+                ],
+                solutions: [{ x: 0, y: 0, count: 2 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: "",
+        name: "Practice Homerun - Reuse code with functions 3",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [
+                    { x: 7, y: 0, count: 1 },
+                    { x: 7, y: 7, count: 1 },
+                    { x: 0, y: 7, count: 1 },
+                    { x: 0, y: 0, count: 1 }],
+                solutions: [],
+                karel: { x: 0, y: 0, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: `if(rightIsClear())
+{
+    fillHole();
+}
+        
+function fillHole(){
+        
+}`,
+        name: "Pot Holes - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 13, 0, 9, 8, 12, 0, 9]
+                ],
+                beepers: [],
+                solutions: [
+                    { x: 0, y: 7, count: 1 },
+                    { x: 2, y: 7, count: 1 },
+                    { x: 6, y: 7, count: 1 }],
+                karel: { x: 0, y: 6, direction: 0, isSuper: true }
+            }],
+    },
+    {
+        code: "",
+        name: "Repair the street - If/Else 2",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [8, 12, 0, 9, 12, 0, 9, 8]
+                ],
+                beepers: [],
+                solutions: [
+                    { x: 2, y: 3, count: 1 },
+                    { x: 5, y: 3, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [12, 0, 13, 0, 13, 0, 9, 8]
+                ],
+                beepers: [],
+                solutions: [
+                    { x: 1, y: 3, count: 1 },
+                    { x: 3, y: 3, count: 1 },
+                    { x: 5, y: 3, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true }
+            },
+        ],
+    },
 ];
 export default levels;

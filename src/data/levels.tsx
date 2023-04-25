@@ -204,16 +204,15 @@ putBeeper();`,
 //hassen es allerdings, sich zu wiederholen.
 //Also nutzen sie die sogenannten Schleifen
 //oder auch Loops, um das Problem zu lösen. 
-//Kannst du die Schleife so anpassen, dass 
-//Pfeili zur anderen Seite des Levels läuft?
+//Drücke auf "Run Code" und sieh was passiert.
 
-for (let i = 0; i < 3; i++) {
+move();
+pickBeeper();
+for (let i = 0; i < 6; i++) {
     move();
 }
-pickBeeper();
-turnLeft();
-turnLeft();`,
-        name: "Get the stick - Basic loop",
+putBeeper();`,
+        name: "Walk Across - Using Loops",
         worlds: [
             {
                 walls: [
@@ -226,15 +225,27 @@ turnLeft();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 7, y: 2, count: 1 }],
-                solutions: [{ x: 0, y: 2, count: 1 }],
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 7, y: 2, count: 1 }],
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
-        code: "",
-        name: "Get two sticks - Reuse code with functions 2",
+        code: `//Kannst du die Schleife so anpassen, dass 
+//Pfeili zur anderen Seite des Levels läuft?
+//Wenn du dir nicht sicher bist, dann drücke
+//nochmal auf "Run Code" und sieh, ob dir
+//ein Zusammenhang zwischen dem Code und
+//Pfeilis Bewegung auffällt.
+
+move();
+pickBeeper();
+for (let i = 0; i < 3; i++) {
+    move();
+}
+putBeeper();`,
+        name: "Walk Across - Modifying Loops",
         worlds: [
             {
                 walls: [
@@ -247,18 +258,22 @@ turnLeft();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [
-                    { x: 7, y: 0, count: 1 },
-                    { x: 0, y: 7, count: 1 }
-                ],
-                solutions: [{ x: 0, y: 0, count: 2 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: false, beeperCount: 0 }
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 7, y: 2, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
-        code: "",
-        name: "Practice Homerun - Reuse code with functions 3",
+        code: `//Innerhalb der {}-Klammern in der Schleife, kann man
+//auch mehrere Befehle schreiben, die allesamt in 
+//jedem Durchlauf der Schleife ausgeführt werden.
+
+for (let i = 0; i < 3; i++) {
+    pickBeeper();
+    move();
+}`,
+        name: "Walk Across - Writing your own Loops",
         worlds: [
             {
                 walls: [
@@ -271,19 +286,34 @@ turnLeft();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [
-                    { x: 7, y: 0, count: 1 },
-                    { x: 7, y: 7, count: 1 },
-                    { x: 0, y: 7, count: 1 },
-                    { x: 0, y: 0, count: 1 }],
-                solutions: [],
-                karel: { x: 0, y: 0, direction: 0, isSuper: false, beeperCount: 0 }
+                beepers: [{ x: 0, y: 2, count: 1 },
+                { x: 1, y: 2, count: 1 },
+                { x: 2, y: 2, count: 1 },
+                { x: 3, y: 2, count: 1 },
+                { x: 4, y: 2, count: 1 },
+                { x: 5, y: 2, count: 1 },
+                { x: 6, y: 2, count: 1 },],
+                solutions: [{ x: 1, y: 3, count: 1 },
+                { x: 2, y: 3, count: 1 },
+                { x: 3, y: 3, count: 1 },
+                { x: 4, y: 3, count: 1 },
+                { x: 5, y: 3, count: 1 },
+                { x: 6, y: 3, count: 1 },
+                { x: 7, y: 3, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
-        code: "if(rightIsClear())\n{\n  fillHole();\n}\n\nfunction fillHole(){\n\n}",
-        name: "Pot Holes - If/Else",
+        code: `//Manchmal wird es etwas knifflig, wenn man
+//im ersten oder letzten Durchlauf der Schleife
+//an Sonderfälle denken muss.
+
+for (let i = 0; i < 3; i++) {
+    pickBeeper();
+    move();
+}`,
+        name: "Walk Across - Writing your own Loops 2",
         worlds: [
             {
                 walls: [
@@ -294,46 +324,82 @@ turnLeft();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 13, 0, 9, 8, 12, 0, 9]
+                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 0, y: 7, count: 1 },
-                    { x: 2, y: 7, count: 1 },
-                    { x: 6, y: 7, count: 1 }],
-                karel: { x: 0, y: 6, direction: 0, isSuper: true }
-            }],
+                beepers: [{ x: 0, y: 2, count: 1 },
+                { x: 1, y: 2, count: 1 },
+                { x: 2, y: 2, count: 1 },
+                { x: 3, y: 2, count: 1 },
+                { x: 4, y: 2, count: 1 },
+                { x: 5, y: 2, count: 1 },
+                { x: 6, y: 2, count: 1 },
+                { x: 7, y: 2, count: 1 },],
+                solutions: [{ x: 0, y: 3, count: 1 },
+                { x: 1, y: 3, count: 1 },
+                { x: 2, y: 3, count: 1 },
+                { x: 3, y: 3, count: 1 },
+                { x: 4, y: 3, count: 1 },
+                { x: 5, y: 3, count: 1 },
+                { x: 6, y: 3, count: 1 },
+                { x: 7, y: 3, count: 1 },],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: `
+        `,
+        name: "Corner - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 4, 4, 0],
+                    [2, 2, 2, 2, 6, 4, 0],
+                    [2, 2, 2, 2, 2, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `
+        `,
+        name: "Corner 2 - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [8, 8, 8, 8, 8, 12, 0],
+                    [8, 8, 8, 8, 12, 4, 0],
+                    [0, 0, 0, 0, 4, 4, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 3, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
     },
     {
         code: "",
-        name: "Repair the street - If/Else 2",
+        name: "Crossroads - Variables 1",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [8, 12, 0, 9, 12, 0, 9, 8]
+                    [0, 0, 0, 0, 0, 4, 0],
+                    [0, 0, 0, 0, 0, 4, 0],
+                    [2, 2, 2, 2, 2, 6, 0],
+                    [2, 2, 2, 2, 2, 2, 0],
+                    [0, 0, 0, 0, 0, 4, 0],
+                    [0, 0, 0, 0, 0, 4, 0],
+                    [0, 0, 0, 0, 0, 4, 0]
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 2, y: 3, count: 1 },
-                    { x: 5, y: 3, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true }
-            },
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [12, 0, 13, 0, 13, 0, 9, 8]
-                ],
-                beepers: [],
-                solutions: [
-                    { x: 1, y: 3, count: 1 },
-                    { x: 3, y: 3, count: 1 },
-                    { x: 5, y: 3, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true }
+                beepers: [{ x: 1, y: 3, count: 1 }],
+                solutions: [{ x: 1, y: 3, count: 1 }, { x: 6, y: 6, count: 1 }],
+                karel: { x: 0, y: 3, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
@@ -374,26 +440,7 @@ turnLeft();`,
             },
         ],
     },
-    {
-        code: "",
-        name: "Crossroads - Variables 1",
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [2, 2, 2, 2, 2, 6, 0],
-                    [2, 2, 2, 2, 2, 2, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0]
-                ],
-                beepers: [{ x: 1, y: 3, count: 1 }],
-                solutions: [{ x: 1, y: 3, count: 1 }, { x: 6, y: 6, count: 1 }],
-                karel: { x: 0, y: 3, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-        ],
-    },
+
     {
         code: "",
         name: "Checkerboard",
