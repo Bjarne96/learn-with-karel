@@ -384,6 +384,25 @@ for (let i = 0; i < 3; i++) {
         ],
     },
     {
+        code: `
+        `,
+        name: "Zig-Zag - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [2, 2, 2, 2, 2, 2, 2],
+                    [1, 0, 0, 15, 0, 0, 4],
+                    [15, 15, 0, 0, 0, 15, 4],
+                    [8, 8, 8, 8, 8, 8, 8,],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 }],
+                solutions: [{ x: 6, y: 2, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
         code: "",
         name: "Crossroads - Variables 1",
         worlds: [
