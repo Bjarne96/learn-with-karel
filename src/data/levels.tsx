@@ -384,6 +384,41 @@ for (let i = 0; i < 3; i++) {
         ],
     },
     {
+        code: `for (let i = 0; i < 7; i++) {
+    if(rightIsClear())
+    {
+        fillHole();
+    }
+    move();
+}
+            
+function fillHole(){
+    turnRight();
+    move();
+    putBeeper();
+    turnRight();
+    turnRight();
+    move();
+    turnRight();
+}`,
+        name: "Repair the street - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 13, 0, 9, 8, 12, 0, 9]
+                ],
+                beepers: [],
+                solutions: [
+                    { x: 0, y: 3, count: 1 },
+                    { x: 2, y: 3, count: 1 },
+                    { x: 6, y: 3, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true }
+            }],
+    },
+    {
         code: `
         `,
         name: "Zig-Zag - If/Else",

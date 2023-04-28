@@ -79,7 +79,7 @@ export const levels: Array<ILevel> = [
 function fillHole(){
         
 }`,
-        name: "Pot Holes - If/Else",
+        name: "Repair the street 1 - If/Else",
         worlds: [
             {
                 walls: [
@@ -102,7 +102,7 @@ function fillHole(){
     },
     {
         code: "",
-        name: "Repair the street - If/Else 2",
+        name: "Repair the street 2 - If/Else",
         worlds: [
             {
                 walls: [
