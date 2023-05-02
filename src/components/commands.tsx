@@ -5,7 +5,7 @@ import styles from "../styles/commands.module.css";
 export default class Commands extends React.Component<ICommandProps> {
 
     commands() {
-        const commands = ["move", "turnLeft", "putBeeper", "pickBeeper", "turnRight", "rightIsClear"];
+        const commands = ["move", "turnLeft", "putBeeper", "pickBeeper"];
         const superCommands = [
             "turnRight",
             "turnAround",
