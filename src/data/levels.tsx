@@ -349,36 +349,35 @@ for (let i = 0; i < 3; i++) {
     {
         code: `
         `,
-        name: "Corner - If/Else",
+        name: "T-Crossing 1 - If/Else",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 4, 4, 0],
-                    [2, 2, 2, 2, 6, 4, 0],
-                    [2, 2, 2, 2, 2, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 1, y: 2, count: 1 }],
-                solutions: [{ x: 5, y: 0, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 5, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
         code: `
         `,
-        name: "Corner 2 - If/Else",
+        name: "T-Crossing 2 - If/Else",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [8, 8, 8, 8, 8, 12, 0],
-                    [8, 8, 8, 8, 12, 4, 0],
-                    [0, 0, 0, 0, 4, 4, 0],
-                    [0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 1, y: 1, count: 1 }],
-                solutions: [{ x: 5, y: 3, count: 1 }],
+                beepers: [],
+                solutions: [{ x: 5, y: 2, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
@@ -419,41 +418,75 @@ function fillHole(){
             }],
     },
     {
-        code: `
-        `,
-        name: "Zig-Zag - If/Else",
+        code: `for (let i = 0; i < 7; i++) {
+    if(rightIsClear())
+    {
+        fillHole();
+    }
+    move();
+}
+            
+function fillHole(){
+    turnRight();
+    move();
+    putBeeper();
+    turnRight();
+    turnRight();
+    move();
+    turnRight();
+}`,
+        name: "Repair the street 2 - If/Else",
         worlds: [
             {
                 walls: [
-                    [2, 2, 2, 2, 2, 2, 2],
-                    [1, 0, 0, 15, 0, 0, 4],
-                    [15, 15, 0, 0, 0, 15, 4],
-                    [8, 8, 8, 8, 8, 8, 8,],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [12, 0, 9, 8, 12, 0, 13, 0]
+                ],
+                beepers: [],
+                solutions: [
+                    { x: 1, y: 3, count: 1 },
+                    { x: 5, y: 3, count: 1 },
+                    { x: 7, y: 3, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true }
+            }],
+    },
+    {
+        code: `
+        `,
+        name: "Zig-Zag 1 - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [11, 10, 12, 0, 9, 10, 12],
+                    [0, 0, 3, 10, 6, 0, 7],
+                    [0, 0, 0, 0, 0, 0, 0,],
                     [0, 0, 0, 0, 0, 0, 0],
                 ],
-                beepers: [{ x: 1, y: 1, count: 1 }],
+                beepers: [],
                 solutions: [{ x: 6, y: 2, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        code: "",
-        name: "Crossroads - Variables 1",
+        code: `
+        `,
+        name: "Zig-Zag 2 - If/Else",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [2, 2, 2, 2, 2, 6, 0],
-                    [2, 2, 2, 2, 2, 2, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0],
-                    [0, 0, 0, 0, 0, 4, 0]
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [2, 6, 8, 8, 8, 7, 12],
+                    [3, 2, 2, 13, 2, 2, 6],
+                    [0, 0, 0, 0, 0, 0, 0,],
+                    [0, 0, 0, 0, 0, 0, 0],
                 ],
-                beepers: [{ x: 1, y: 3, count: 1 }],
-                solutions: [{ x: 1, y: 3, count: 1 }, { x: 6, y: 6, count: 1 }],
-                karel: { x: 0, y: 3, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [],
+                solutions: [{ x: 6, y: 1, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
@@ -494,29 +527,81 @@ function fillHole(){
             },
         ],
     },
-
     {
-        code: "",
-        name: "Checkerboard",
+        code: `
+        `,
+        name: "T-Crossing 1 - Variables",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0]
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }, { x: 1, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `
+        `,
+        name: "T-Crossing 2 - Variables",
+        worlds: [
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [],
-                solutions: [
-                    { x: 1, y: 0, count: 1 },
-                    { x: 3, y: 0, count: 1 },
-                    { x: 0, y: 1, count: 1 },
-                    { x: 2, y: 1, count: 1 },
-                    { x: 4, y: 1, count: 1 },
-                    { x: 1, y: 2, count: 1 },
-                    { x: 3, y: 2, count: 1 },
-                ],
-                karel: { x: 0, y: 0, direction: 0, isSuper: false }
-            }],
+                solutions: [{ x: 5, y: 2, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: "",
+        name: "Midpoint 1 - Variables",
+        worlds: [
+            {
+                walls: [[0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0]],
+                beepers: [],
+                solutions: [{ x: 3, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true }
+            },
+            {
+                walls: [[0, 0, 0, 0, 0]],
+                beepers: [],
+                solutions: [{ x: 2, y: 0, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+            },
+        ],
+    },
+    {
+        code: "",
+        name: "Midpoint 2 - Variables",
+        worlds: [
+            {
+                walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0]],
+                beepers: [],
+                solutions: [{ x: 4, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true }
+            },
+            {
+                walls: [[0, 0, 0, 0, 0]],
+                beepers: [],
+                solutions: [{ x: 2, y: 0, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+            },
+        ],
     },
     {
         code: "",
@@ -532,24 +617,6 @@ function fillHole(){
                 walls: [[0, 0, 0, 0, 0, 0, 0]],
                 beepers: [{ x: 3, y: 0, count: 4 }],
                 solutions: [{ x: 3, y: 0, count: 8 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
-            },
-        ],
-    },
-    {
-        code: "",
-        name: "Midpoint",
-        worlds: [
-            {
-                walls: [[0, 0, 0, 0, 0, 0, 0]],
-                beepers: [],
-                solutions: [{ x: 3, y: 0, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
-            },
-            {
-                walls: [[0, 0, 0, 0, 0]],
-                beepers: [],
-                solutions: [{ x: 2, y: 0, count: 1 }],
                 karel: { x: 0, y: 0, direction: 0, isSuper: true }
             },
         ],
