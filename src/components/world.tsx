@@ -174,23 +174,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const turnLeft = () => this.executeCommand("turnLeft")
         const pickBeeper = () => this.executeCommand("pickBeeper")
         const putBeeper = () => this.executeCommand("putBeeper")
-
-        const beepersInBag = () => this.executeCommand("beepersInBag")
-        const beepersPresent = () => this.executeCommand("beepersPresent")
-        const facingEast = () => this.executeCommand("facingEast")
-        const facingNorth = () => this.executeCommand("facingNorth")
-        const facingWest = () => this.executeCommand("facingWest")
-        const frontIsBlocked = () => this.executeCommand("frontIsBlocked")
-        const frontIsClear = () => this.executeCommand("frontIsClear")
-        const leftIsBlocked = () => this.executeCommand("leftIsBlocked")
-        const leftIsClear = () => this.executeCommand("leftIsClear")
-        const noBeepersInBag = () => this.executeCommand("noBeepersInBag")
-        const noBeepersPresent = () => this.executeCommand("noBeepersPresent")
-        const notFacingEast = () => this.executeCommand("notFacingEast")
-        const rightIsBlocked = () => this.executeCommand("rightIsBlocked")
-        const rightIsClear = () => this.executeCommand("rightIsClear")
-        const turnAround = () => this.executeCommand("turnAround")
-        const turnRight = () => this.executeCommand("turnRight")
         // Super Commands
         if (this.state.karel.isSuper) {
             const beepersInBag = () => this.executeCommand("beepersInBag")
