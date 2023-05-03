@@ -25,12 +25,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let karel = levels[lastStage].worlds[0].karel
         let code = levels[lastStage].code
         let world = levels[lastStage].worlds[0]
+        let done = ""
 
         if (props.id && props.id.length) {
             this.userId = props.id
             this.isLoggedIn = true
             lastStage = props.stage
             code = props.code
+            done = props.done
             world = levels[lastStage].worlds[0]
             karel = levels[lastStage].worlds[0].karel
         }
@@ -43,7 +45,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 code: code,
                 runningCode: false,
                 showLevelCompletedModal: false,
-                log: ""
+                log: "",
+                done: done
             }
         }
     }
@@ -57,14 +60,17 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     async setLevel(level: number) {
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
         let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
+        let done = ""
         if (this.userId) {
             const res = await this.getLevel(level)
             if (res["code"]) code = res["code"]
+            if (res["done"]) done = res["done"]
         }
         this.setState({
             currentLevel: level,
             karel: karel,
-            code: code
+            code: code,
+            done: done
         })
     }
 
@@ -117,16 +123,15 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         });
     }
 
-    async handleSaveLevel(level) {
-        console.log('level', level);
+    async handleSaveLevel(level, attempt?) {
         if (this.debounceSaveCode) return
         this.debounceSaveCode = true
         const body = {
             user_id: this.userId,
             stage: this.state.currentLevel,
             level: level
-
         }
+        if (attempt) body["attempt"] = { "timestamp": new Date().toString() }
         const res = await this.requestLevel(body, "PUT")
         if (res) this.debounceSaveCode = false
     }
@@ -155,7 +160,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.debounceRunningCode = true;
         setTimeout(() => {
             this.debounceRunningCode = false
-        }, 1000);
+        }, 3000);
+        if (this.state.done == "") {
+            this.handleSaveLevel({ code: this.state.code }, true)
+        }
         this.setRunningCode(true)
     }
 
@@ -172,15 +180,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     toggleLevelCompletedModal(completed: boolean) {
-        console.log('completed', completed);
+        let done = this.state.done
         if (completed) {
+            done = new Date().toString()
             this.handleSaveLevel({
                 done: new Date().toString(),
                 code: this.state.code
             })
+
         }
         this.setState({
-            showLevelCompletedModal: completed
+            showLevelCompletedModal: completed,
+            done: done
         })
     }
 
@@ -196,6 +207,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 <div className="flex flex-col justify-center content-center">
                     <Topbar
                         isLoggedIn={this.isLoggedIn}
+                        done={this.state.done}
                         currentLevel={this.state.currentLevel}
                         runningCode={this.state.runningCode}
                         handleLevelChange={this.handleLevelChange.bind(this)}

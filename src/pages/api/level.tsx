@@ -84,8 +84,8 @@ async function handlePut(req, res, db) {
             if (bodyObject.hasOwnProperty('attempt') && hasKeys(bodyObject["attempt"], postAttemptBody) && bodyLevel["code"]) {
                 const response = await db.collection("attempts").insertOne({
                     "level_id": level["id"],
-                    "user_id": bodyLevel["user_id"],
-                    "stage": bodyLevel["stage"],
+                    "user_id": bodyObject["user_id"],
+                    "stage": bodyObject["stage"],
                     "timestamp": bodyObject["attempt"]["timestamp"],
                     "code": bodyLevel["code"],
                 });
@@ -118,7 +118,7 @@ async function handlePut(req, res, db) {
                 }
             );
             if (response["matchedCount"] == 0) return databaseError(res, "Could not update the level.")
-            return res.status(200).json({ "id": level["_id"] as string, status: 200 })
+            return res.status(200).json({ "id": level["id"] as string, status: 200 })
         } else {
             return userError(res, "We could not find the level you want to update. user_id: " + bodyLevel["user_id"] + " stage: " + bodyLevel["stage"])
         }

@@ -69,6 +69,9 @@ export async function findLevel(bodyObject, db) {
             level["code"] = dbLevel.code
             level["done"] = dbLevel.done
             level["stage"] = dbLevel.stage
+            level["start"] = dbLevel.start
+            level["default_world"] = dbLevel.default_world
+            level["default_code"] = dbLevel.default_code
             return level
         } else {
             return null;
