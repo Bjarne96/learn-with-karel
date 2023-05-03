@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb"
 import type { DashboardProps } from "~/types/karel";
 import { getLevel } from "~/types/requests";
 
-const Home: NextPage = ({ id: id, lastStage: lastStage, level: level }: DashboardProps) => {
+const Home: NextPage = ({ id: id, stage: stage, code: code, done: done, user_id: user_id }: DashboardProps) => {
     return (
         <>
             <Head>
@@ -14,34 +14,41 @@ const Home: NextPage = ({ id: id, lastStage: lastStage, level: level }: Dashboar
                 <meta name="description" content="Learn how to code with Karel." />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Dashboard id={id} lastStage={lastStage} level={level} />
+            <Dashboard id={id} stage={stage} code={code} done={done} user_id={user_id} />
         </>
     );
 };
 
 export async function getServerSideProps({ query: { id } }) {
-    if (id == "") return { props: { id: "", lastStage: 1 } }
+    if (id == "" || id == null) return { props: { id: "" } }
     try {
         const client = await clientPromise;
         const db = client.db("karel");
         const user = await db
             .collection("user")
             .findOne({ _id: new ObjectId(id as string) })
-        if (user == null) return { props: { id: "", lastStage: 1 } }
+        if (user == null) return { props: { id: "" } }
         const response = await getLevel({ user_id: id, stage: user.lastStage }, db)
-        const level = {};
-        level["id"] = response.level._id.toString()
-        level["user_id"] = response.level.user_id
-        level["code"] = response.level.code
-        level["default_world"] = response.level.default_world
-        level["done"] = response.level.done
+        if (response.level == undefined) return { props: { id: "" } }
+        const level = response.level
         if (response["status"] == 200) {
-            return { props: { id: id, lastStage: response.level.stage, level } }
+            return {
+                props: {
+                    id: id,
+                    stage: level.stage,
+                    code: level.code,
+                    done: level.done,
+                    user_id: level.user_id
+                }
+            }
         } else {
-            return { props: { id: "", lastStage: 1 } }
+            return { props: { id: "" } }
         }
 
-    } catch (e) { return { props: { id: "", lastStage: 1 } } }
+    } catch (e) {
+        console.log('e1', e);
+        return { props: { id: "" } }
+    }
 }
 
 export default Home;

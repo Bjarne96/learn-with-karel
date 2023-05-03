@@ -32,13 +32,13 @@ export const getLevelBody = {
 }
 
 export async function createLevel(user_id, stage, start, db) {
-    if (levels[(stage - 1)] == null) return { insertedId: null }
+    if (levels[(stage)] == null) return { insertedId: null }
     return await db.collection("level").insertOne({
         "user_id": user_id,
-        "stage": stage,
-        "default_code": levels[(stage - 1)].code,
-        "default_world": levels[(stage - 1)].worlds[0],
-        "code": levels[(stage - 1)].code,
+        "stage": Number(stage),
+        "default_code": levels[stage].code,
+        "default_world": levels[stage].worlds[0],
+        "code": levels[stage].code,
         "start": start,
         "done": "",
         "inactive": 0
@@ -48,31 +48,40 @@ export async function createLevel(user_id, stage, start, db) {
 //Finds the level, when given id or user_id and stage
 export async function findLevel(bodyObject, db) {
     try {
+        if (bodyObject["stage"]) bodyObject["stage"] = Number(bodyObject["stage"])
         if (hasKeys(getLevelBody, bodyObject)) {
             return await db
                 .collection("level")
                 .findOne({
                     _id: new ObjectId(bodyObject["id"] as string)
                 })
+            //TODO: Filter fields -> This doesnt work -> , { default_world: 0, default_code: 0 })
         } else if (hasKeys(findLevelBody, bodyObject)) {
-            return await db
+            const dbLevel = await db
                 .collection("level")
                 .findOne({
                     user_id: bodyObject["user_id"],
-                    stage: bodyObject["stage"]
+                    stage: Number(bodyObject["stage"])
                 })
+            const level = {};
+            level["id"] = dbLevel._id.toString()
+            level["user_id"] = dbLevel.user_id
+            level["code"] = dbLevel.code
+            level["done"] = dbLevel.done
+            level["stage"] = dbLevel.stage
+            return level
         } else {
             return null;
         }
     } catch (e) {
-        console.log('e', e);
+        console.log('e2', e);
         return null;
     }
 }
 
 export async function getLevel(body, db) {
     try {
-        const level = await findLevel(body, db)
+        let level = await findLevel(body, db)
         //Level does not exists
         if (level == null && body["id"]) return { status: 300, msg: "Could not find your Level." }
         //Level has to be created, when user_id exists
@@ -83,9 +92,19 @@ export async function getLevel(body, db) {
             if (user == null) return { status: 300, msg: "You are not registered or you have not used your user specific link." }
             const response = await createLevel(body["user_id"], body["stage"], new Date().toString(), db)
             if (!response["insertedId"]) return { status: 500, msg: "Could not insert Level." }
-            const newLevel = await findLevel({ id: response.insertedId.toString() }, db)
-            return { status: 200, level: newLevel }
+            const levelRes = await findLevel({ id: response.insertedId.toString() }, db)
+            level = levelRes
         }
+        await db.collection("user").updateOne(
+            {
+                _id: new ObjectId(body["user_id"] as string)
+            },
+            {
+                $set: {
+                    "lastStage": Number(body["stage"])
+                }
+            }
+        );
         return { status: 200, level: level }
     } catch (e) {
         return { status: 500, msg: e.toString() }

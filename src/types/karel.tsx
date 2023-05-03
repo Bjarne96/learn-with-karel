@@ -16,9 +16,11 @@ export interface levelData {
     done: string
 }
 export interface DashboardProps {
-    id: string
-    lastStage: number
-    level?: levelData
+    id: string,
+    user_id: string,
+    stage: number,
+    code: string,
+    done: string
 }
 export interface DashboardState {
     currentLevel: number
