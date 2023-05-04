@@ -347,9 +347,9 @@ for (let i = 0; i < 3; i++) {
         ],
     },
     {
-        code: `
+        code: `move();\nmove();\nmove();\nmove();\nmove();\nif(beepersPresent() == true) {\n  turnLeft();\n} else {\n  turnRight();\n}\nmove();\nputBeeper();
         `,
-        name: "T-Crossing 1 - If/Else",
+        name: "T-Crossing - If/Else",
         worlds: [
             {
                 walls: [
@@ -362,13 +362,6 @@ for (let i = 0; i < 3; i++) {
                 solutions: [{ x: 5, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
-        ],
-    },
-    {
-        code: `
-        `,
-        name: "T-Crossing 2 - If/Else",
-        worlds: [
             {
                 walls: [
                     [2, 2, 2, 2, 6, 12, 0],

@@ -4,7 +4,7 @@ interface Props {
     currentlevel: number;
     setLevel(level: number): void;
     handleResetCode(): void;
-    toggleLevelCompletedModal(level: boolean): void;
+    toggleModal(level: boolean): void;
 
 }
 
@@ -21,7 +21,7 @@ class LevelModal extends React.Component<Props> {
     }
 
     hideModal() {
-        this.props.toggleLevelCompletedModal(false)
+        this.props.toggleModal(false)
     }
 
     render() {

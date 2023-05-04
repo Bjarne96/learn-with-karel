@@ -90,10 +90,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
     // Deep copies all the props and returns them
     getUpdateFromProps() {
-        const karel: IKarel = JSON.parse(JSON.stringify(this.props.level.worlds[0].karel))
-        const beepers: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].beepers))
-        const solutions: Array<Beeper> = JSON.parse(JSON.stringify(this.props.level.worlds[0].solutions))
-        const walls: Array<Array<number>> = JSON.parse(JSON.stringify(this.props.level.worlds[0].walls))
+        const karel: IKarel = JSON.parse(JSON.stringify(this.props.world.karel))
+        const beepers: Array<Beeper> = JSON.parse(JSON.stringify(this.props.world.beepers))
+        const solutions: Array<Beeper> = JSON.parse(JSON.stringify(this.props.world.solutions))
+        const walls: Array<Array<number>> = JSON.parse(JSON.stringify(this.props.world.walls))
         const currentLevel: number = JSON.parse(JSON.stringify(this.props.currentLevel))
         const stateFromProps: IWorldState = {
             karel: karel,
@@ -107,15 +107,36 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    async executeCommand(command) {
+    executeCommand(command) {
+        const valueCommands = [
+            "beepersInBag",
+            "beepersPresent",
+            "facingEast",
+            "facingNorth",
+            "facingWest",
+            "frontIsBlocked",
+            "frontIsClear",
+            "leftIsBlocked",
+            "leftIsClear",
+            "noBeepersInBag",
+            "noBeepersPresent",
+            "notFacingEast",
+            "rightIsBlocked",
+            "rightIsClear",
+        ]
         try {
             if (typeof this[command] == undefined) {
                 console.log('Unknown Command', command);
+            } else if (valueCommands.includes(command)) {
+                const val = this[command](this)
+                this.addSnapshot(this.karel, this.beepers)
+                this.addLog(command + " (); (" + val + ")")
+                return val;
             } else {
                 try {
                     this[command](this)
                     this.addSnapshot(this.karel, this.beepers)
-                    this.addLog(command)
+                    this.addLog(command + " ();")
                 } catch (e) {
                     console.log('Could not execute command', e);
                 }
@@ -125,8 +146,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
     }
 
-    addLog(command) {
-        this.logs.push((command + " ();"))
+    addLog(log) {
+        this.logs.push((log))
     }
     clearLog() {
         this.logs = []
@@ -162,24 +183,39 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const turnLeft = () => this.executeCommand("turnLeft")
         const pickBeeper = () => this.executeCommand("pickBeeper")
         const putBeeper = () => this.executeCommand("putBeeper")
-        // Super Commands
+        let beepersInBag
+        let beepersPresent
+        let facingEast
+        let facingNorth
+        let facingWest
+        let frontIsBlocked
+        let frontIsClear
+        let leftIsBlocked
+        let leftIsClear
+        let noBeepersInBag
+        let noBeepersPresent
+        let notFacingEast
+        let rightIsBlocked
+        let rightIsClear
+        let turnAround
+        let turnRight
         if (this.state.karel.isSuper) {
-            const beepersInBag = () => this.executeCommand("beepersInBag")
-            const beepersPresent = () => this.executeCommand("beepersPresent")
-            const facingEast = () => this.executeCommand("facingEast")
-            const facingNorth = () => this.executeCommand("facingNorth")
-            const facingWest = () => this.executeCommand("facingWest")
-            const frontIsBlocked = () => this.executeCommand("frontIsBlocked")
-            const frontIsClear = () => this.executeCommand("frontIsClear")
-            const leftIsBlocked = () => this.executeCommand("leftIsBlocked")
-            const leftIsClear = () => this.executeCommand("leftIsClear")
-            const noBeepersInBag = () => this.executeCommand("noBeepersInBag")
-            const noBeepersPresent = () => this.executeCommand("noBeepersPresent")
-            const notFacingEast = () => this.executeCommand("notFacingEast")
-            const rightIsBlocked = () => this.executeCommand("rightIsBlocked")
-            const rightIsClear = () => this.executeCommand("rightIsClear")
-            const turnAround = () => this.executeCommand("turnAround")
-            const turnRight = () => this.executeCommand("turnRight")
+            beepersInBag = () => this.executeCommand("beepersInBag")
+            beepersPresent = () => this.executeCommand("beepersPresent")
+            facingEast = () => this.executeCommand("facingEast")
+            facingNorth = () => this.executeCommand("facingNorth")
+            facingWest = () => this.executeCommand("facingWest")
+            frontIsBlocked = () => this.executeCommand("frontIsBlocked")
+            frontIsClear = () => this.executeCommand("frontIsClear")
+            leftIsBlocked = () => this.executeCommand("leftIsBlocked")
+            leftIsClear = () => this.executeCommand("leftIsClear")
+            noBeepersInBag = () => this.executeCommand("noBeepersInBag")
+            noBeepersPresent = () => this.executeCommand("noBeepersPresent")
+            notFacingEast = () => this.executeCommand("notFacingEast")
+            rightIsBlocked = () => this.executeCommand("rightIsBlocked")
+            rightIsClear = () => this.executeCommand("rightIsClear")
+            turnAround = () => this.executeCommand("turnAround")
+            turnRight = () => this.executeCommand("turnRight")
         }
         try {
             //Execute user code from string
@@ -197,7 +233,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                     if (this.snapshotIndex >= this.snapshots.length) {
                         clearInterval(this.intervalRef)
                         this.clearLog();
-                        if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
+                        if (this.checkSolution()) this.props.completedLevel(true);
                         return
                     }
                     this.props.writeInLog(this.logs[this.snapshotIndex])

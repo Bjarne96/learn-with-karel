@@ -208,6 +208,6 @@ export default class Canvas extends React.Component<ICanvasProps> {
     }
 
     render() {
-        return <div className="block rounded bg-code-grey"><img className="hidden" id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></div>;
+        return <><img className="hidden" id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></>;
     }
 }

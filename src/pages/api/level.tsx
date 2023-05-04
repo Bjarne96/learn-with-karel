@@ -91,9 +91,6 @@ async function handlePut(req, res, db) {
                 });
                 if (!response["insertedId"]) return databaseError(res, "Could not insert Attempt.")
             }
-            //Update only necessary keys
-            // const updateObject = {}
-            // Object.keys(bodyLevel).forEach(k => { updateObject[k] = bodyLevel[k] })
             //Save into the levellog, when finished the first time
             if (level["done"] == "" && bodyLevel["done"] != null && bodyLevel["done"] != "") {
                 const response = await db.collection("levellog").insertOne({

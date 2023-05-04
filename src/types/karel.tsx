@@ -29,7 +29,7 @@ export interface DashboardState {
     runningCode: boolean
     showLevelCompletedModal: boolean
     log: string
-    world: IWorld
+    worldCounter: number
     done: string
 }
 export interface ILevel {
@@ -79,11 +79,11 @@ export interface ISnapshots extends Array<ISnapshot> { }
 
 export interface IWorldProps {
     karel: IKarel;
-    level: ILevel;
+    world: IWorld;
     runningCode: boolean;
     code: string;
     currentLevel: number;
-    toggleLevelCompletedModal(completed: boolean): void;
+    completedLevel(completed: boolean): void;
     writeInLog(log: string): void;
 }
 
