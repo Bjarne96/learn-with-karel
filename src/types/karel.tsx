@@ -16,9 +16,11 @@ export interface levelData {
     done: string
 }
 export interface DashboardProps {
-    id: string
-    lastStage: number
-    level?: levelData
+    id: string,
+    user_id: string,
+    stage: number,
+    code: string,
+    done: string
 }
 export interface DashboardState {
     currentLevel: number
@@ -28,6 +30,7 @@ export interface DashboardState {
     showLevelCompletedModal: boolean
     log: string
     world: IWorld
+    done: string
 }
 export interface ILevel {
     code: string,
@@ -88,6 +91,7 @@ export interface ITopbar {
     handleResetCode(): void;
     handleSaveCode(): void;
     isLoggedIn: boolean;
+    done: string;
     currentLevel: number;
     runningCode: boolean;
 }

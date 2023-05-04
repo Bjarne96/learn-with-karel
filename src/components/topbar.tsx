@@ -9,6 +9,8 @@ export default class Topbar extends React.Component<ITopbar> {
     }
     render() {
         const btnClassName = "w-32 text-white bg-sky-700 hover:bg-gray-400 font-semibold text-base py-2 px-4 rounded items-center"
+        const completedClassName = "w-32 text-white bg-green-700 font-semibold text-base py-2 px-4 rounded items-center"
+        const uncompletedClassName = "w-32 text-white bg-red-600 font-semibold text-base py-2 px-4 rounded items-center"
         return <div className="flex flex-row gap-4 mt-4 items-center justify-start bg-code-grey rounded py-4">
             <div className="m-0 bg-code-grey pl-8 min-w-[250px] rounded overflow-auto">
                 <p className="text-white text-lg h-8 font-semibold leading-8" >
@@ -29,11 +31,25 @@ export default class Topbar extends React.Component<ITopbar> {
                     >Reset Karel
                     </button>
                 }
-                <button
-                    className={btnClassName}
-                    onClick={this.props.handleSaveCode.bind(this)}
-                >Save Code
-                </button>
+                {
+                    this.props.isLoggedIn ?
+                        <button
+                            className={btnClassName}
+                            onClick={this.props.handleSaveCode.bind(this)}
+                        >Save Code
+                        </button> : ""
+                }
+                {this.props.done == "" ? <button
+                    className={uncompletedClassName}
+                    disabled
+                >Uncompleted
+                </button> :
+                    <button
+                        className={completedClassName}
+                        disabled
+                    >Completed
+                    </button>
+                }
             </div>
             <div className="m-0 bg-code-grey px-4 min-w-[33vw] rounded overflow-auto flex flex-row items-center">
                 <p className="text-white text-lg h-8 font-semibold leading-8 pr-4" >Current Level:</p>

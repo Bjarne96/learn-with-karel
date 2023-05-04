@@ -4,7 +4,7 @@ import { databaseError, hasSameKeys, setBodyObject, updateUserBody, userError } 
 import levels from "../../data/levels"
 
 export default async function handler(req, res) {
-    console.log('handler', req.body);
+    console.log('handler', req.query);
     let db;
     let client;
     try {
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
 async function handleGet(req, res, db) {
     try {
-        const bodyObject = setBodyObject(req.body)
+        const bodyObject = setBodyObject(req.query)
         const user = await db
             .collection("user")
             .findOne({ _id: new ObjectId(bodyObject["id"] as string) })
@@ -59,7 +59,7 @@ async function handlePut(req, res, db) {
             },
             {
                 $set: {
-                    "lastStage": bodyObject["lastStage"]
+                    "lastStage": Number(bodyObject["lastStage"])
                 }
             }
         );

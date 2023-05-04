@@ -14,39 +14,42 @@ import LevelModal from "./modal";
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
 
     debounceRunningCode = false
+    debounceSaveCode = false
     isLoggedIn = false
     userId = ""
+    //Add Code + Level Map
 
     constructor(props: DashboardProps) {
         super(props);
         let lastStage = 0
+        let karel = levels[lastStage].worlds[0].karel
+        let code = levels[lastStage].code
+        let world = levels[lastStage].worlds[0]
+        let done = ""
+
         if (props.id && props.id.length) {
             this.userId = props.id
             this.isLoggedIn = true
-            lastStage = props.lastStage
+            lastStage = props.stage
+            code = props.code
+            done = props.done
+            world = levels[lastStage].worlds[0]
+            karel = levels[lastStage].worlds[0].karel
         }
 
         if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
                 currentLevel: lastStage,
-                karel: levels[lastStage].worlds[0].karel,
-                code: levels[lastStage].code,
+                world: world,
+                karel: karel,
+                code: code,
                 runningCode: false,
                 showLevelCompletedModal: false,
-                log: ""
+                log: "",
+                done: done
             }
         }
     }
-
-    // apiUpdateLevel() {
-
-    // }
-
-    // async apiPostLevel() {
-    //     await fetch("/api/level", {
-    //         method: "POST"
-    //     })
-    // }
 
     onCodeChange(code: string) {
         this.setState({
@@ -54,18 +57,87 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         })
     }
 
-    setLevel(level: number) {
+    async setLevel(level: number) {
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
-        const code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
+        let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
+        let done = ""
+        if (this.userId) {
+            const res = await this.getLevel(level)
+            if (res["code"]) code = res["code"]
+            if (res["done"]) done = res["done"]
+        }
         this.setState({
             currentLevel: level,
             karel: karel,
-            code: code
+            code: code,
+            done: done
         })
     }
 
-    handleSaveCode() {
-        console.log('save');
+    async getLevel(level: number) {
+        const body = {
+            level: {
+                stage: level,
+                user_id: this.userId
+            }
+        }
+        const res = await this.requestLevel(body, "GET")
+        return res;
+    }
+    objectToParams(obj) {
+        const keys = Object.keys(obj)
+        let params = ""
+        for (let i = 0; i < keys.length; i++) {
+            const element = keys[i];
+            if (i != 0) {
+                params = params + "&"
+            }
+            params = params + element.toString() + "=" + obj[keys[i]].toString();
+        }
+        return params;
+    }
+
+    async requestLevel(body, method) {
+        return new Promise((resolve, reject) => {
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let url = "/api/level"
+            const requestOptions = {
+                method: method,
+                headers: myHeaders
+            };
+            try {
+                if (method == "GET") {
+                    const params = this.objectToParams(body.level)
+                    url = url + "?" + params;
+                } else {
+                    requestOptions["body"] = JSON.stringify(JSON.stringify(body))
+                }
+                fetch(url, requestOptions)
+                    .then(response => response.text())
+                    .then(result => resolve(JSON.parse(result)))
+                    .catch(error => reject(error));
+            } catch (e) {
+                reject(e)
+            }
+        });
+    }
+
+    async handleSaveLevel(level, attempt?) {
+        if (this.debounceSaveCode) return
+        this.debounceSaveCode = true
+        const body = {
+            user_id: this.userId,
+            stage: this.state.currentLevel,
+            level: level
+        }
+        if (attempt) body["attempt"] = { "timestamp": new Date().toString() }
+        const res = await this.requestLevel(body, "PUT")
+        if (res) this.debounceSaveCode = false
+    }
+
+    async handleSaveCode() {
+        this.handleSaveLevel({ code: this.state.code })
     }
 
     resetLevel() {
@@ -88,7 +160,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.debounceRunningCode = true;
         setTimeout(() => {
             this.debounceRunningCode = false
-        }, 1000);
+        }, 3000);
+        if (this.state.done == "") {
+            this.handleSaveLevel({ code: this.state.code }, true)
+        }
         this.setRunningCode(true)
     }
 
@@ -105,8 +180,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     toggleLevelCompletedModal(completed: boolean) {
+        let done = this.state.done
+        if (completed) {
+            done = new Date().toString()
+            this.handleSaveLevel({
+                done: new Date().toString(),
+                code: this.state.code
+            })
+
+        }
         this.setState({
-            showLevelCompletedModal: completed
+            showLevelCompletedModal: completed,
+            done: done
         })
     }
 
@@ -121,6 +206,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             <main className="flex justify-center content-center min-h-[100vh] bg-gradient-to-t from-custom-darkblue to-custom-blue">
                 <div className="flex flex-col justify-center content-center">
                     <Topbar
+                        isLoggedIn={this.isLoggedIn}
+                        done={this.state.done}
                         currentLevel={this.state.currentLevel}
                         runningCode={this.state.runningCode}
                         handleLevelChange={this.handleLevelChange.bind(this)}

@@ -15,14 +15,12 @@ class LevelModal extends React.Component<Props> {
     }
 
     nextLevel() {
-        console.log('nextLevel');
         this.props.setLevel(this.props.currentlevel + 1)
         this.hideModal()
         this.props.handleResetCode()
     }
 
     hideModal() {
-        console.log('hide');
         this.props.toggleLevelCompletedModal(false)
     }
 

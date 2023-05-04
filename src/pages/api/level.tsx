@@ -17,10 +17,11 @@ import clientPromise from '../../lib/mongodb'
 
 //Sorts the requests by type
 export default async function handler(req, res) {
-    console.log('handler', req.body);
+
     let db;
     let client;
     try {
+        console.log('req["method"]', req["method"]);
         client = await clientPromise;
         db = client.db("karel");
     } catch (e) {
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
 // Returns a level for a user_id and stage
 // The function creates a level if the user exists, but no level for that stage
 async function handleGet(req, res, db) {
-    const bodyObject = setBodyObject(req.body)
+    const bodyObject = setBodyObject(req.query)
     const response = await getLevel(bodyObject, db)
     if (response["status"] == 200) {
         return res.status(200).json(response.level)
@@ -76,26 +77,23 @@ async function handlePut(req, res, db) {
     try {
         const bodyLevel = bodyObject["level"]
         if (!hasKeys(bodyLevel, updateLevelBody)) return userError(res, "Your request does not meet the specifications.")
-        const level = await findLevel(bodyLevel, db)
+        const level = await findLevel(bodyObject, db)
         if (level == null) return userError(res, "Could not find your level.")
-        if (level["_id"]) {
+        if (level["id"]) {
             //Adds attempt, when attempt object is given 
             if (bodyObject.hasOwnProperty('attempt') && hasKeys(bodyObject["attempt"], postAttemptBody) && bodyLevel["code"]) {
                 const response = await db.collection("attempts").insertOne({
-                    "level_id": level["_id"].toString(),
-                    "user_id": bodyLevel["user_id"],
-                    "stage": bodyLevel["stage"],
+                    "level_id": level["id"],
+                    "user_id": bodyObject["user_id"],
+                    "stage": bodyObject["stage"],
                     "timestamp": bodyObject["attempt"]["timestamp"],
                     "code": bodyLevel["code"],
                 });
                 if (!response["insertedId"]) return databaseError(res, "Could not insert Attempt.")
             }
             //Update only necessary keys
-            const updateObject = {}
-            delete bodyLevel.stage
-            delete bodyLevel.user_id
-            Object.keys(bodyLevel).forEach(k => { updateObject[k] = bodyLevel[k] })
-            console.log('updateObject', updateObject);
+            // const updateObject = {}
+            // Object.keys(bodyLevel).forEach(k => { updateObject[k] = bodyLevel[k] })
             //Save into the levellog, when finished the first time
             if (level["done"] == "" && bodyLevel["done"] != null && bodyLevel["done"] != "") {
                 const response = await db.collection("levellog").insertOne({
@@ -106,21 +104,21 @@ async function handlePut(req, res, db) {
                     "default_world": level["default_world"],
                     "start": level["start"],
                     "code": bodyLevel["code"],
-                    "done": bodyLevel["done"],
-                    "inactive": bodyLevel["inactive"]
+                    "done": bodyLevel["done"]
+                    // "inactive": bodyLevel["inactive"]
                 });
                 if (!response["insertedId"]) return databaseError(res, "Could not insert Level.")
             }
             const response = await db.collection("level").updateOne(
                 {
-                    _id: level["_id"],
+                    _id: new ObjectId(level["id"]),
                 },
                 {
-                    $set: updateObject
+                    $set: bodyLevel
                 }
             );
             if (response["matchedCount"] == 0) return databaseError(res, "Could not update the level.")
-            return res.status(200).json({ "id": level["_id"] as string, status: 200 })
+            return res.status(200).json({ "id": level["id"] as string, status: 200 })
         } else {
             return userError(res, "We could not find the level you want to update. user_id: " + bodyLevel["user_id"] + " stage: " + bodyLevel["stage"])
         }
