@@ -1,4 +1,4 @@
-import type { ILevel } from "../interfaces/interfaces";
+import type { ILevel } from "../types/karel";
 export const levels: Array<ILevel> = [
     {
         code: "",
