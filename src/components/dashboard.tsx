@@ -180,20 +180,16 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (this.state.done != "") return
         let done = ""
         //Check if all worlds have completed
-        console.log('this.state.worldCounter', this.state.worldCounter);
         if (this.state.worldCounter > 1) {
             this.worldCompletedCounter++
-            console.log('this.worldCompletedCounter', this.worldCompletedCounter);
             if (this.state.worldCounter == this.worldCompletedCounter) {
                 this.resetworldCompletedCounter()
             } else {
-                console.log('else');
                 completed = false
             }
         }
         //Handle Completed
         if (completed) {
-            console.log('handle');
             done = new Date().toString()
             this.handleSaveLevel({
                 done: done,
