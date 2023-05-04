@@ -38,14 +38,16 @@ export interface ILevel {
     worlds: Array<IWorld>
 }
 export interface IWorld {
-    beepers: Array<Beeper>,
+    beepers: Beepers,
     karel: IKarel,
-    solutions: Array<Beeper>,
+    solutions: Beepers,
     walls: Array<Array<number>>,
 }
 export interface Beeper extends Coords {
     count: number
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Beepers extends Array<Beeper> { }
 export interface ICode {
     code: string;
     onCodeChange(code: string): void;
@@ -62,11 +64,18 @@ export interface ISelectLevelProps {
 
 export interface IWorldState {
     karel: IKarel
-    beepers: Array<Beeper>,
-    solutions: Array<Beeper>,
+    beepers: Beepers,
+    solutions: Beepers,
     walls: Array<Array<number>>,
     currentLevel: number
 }
+
+export interface ISnapshot {
+    karel: IKarel
+    beepers: Beepers,
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ISnapshots extends Array<ISnapshot> { }
 
 export interface IWorldProps {
     karel: IKarel;
@@ -80,8 +89,8 @@ export interface IWorldProps {
 
 export interface ICanvasProps {
     karel: IKarel;
-    beepers: Array<Beeper>;
-    solutions: Array<Beeper>;
+    beepers: Beepers;
+    solutions: Beepers;
     walls: Array<Array<number>>;
 }
 

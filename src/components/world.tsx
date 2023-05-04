@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
-import type { Beeper, IWorldProps, IWorldState, IKarel } from "../types/karel";
-import Canvas from "./canvas";
+import React from "react"
+import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshot, ISnapshots } from "../types/karel"
+import Canvas from "./canvas"
 import ErrorString from "../types/enums"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
@@ -10,23 +10,29 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     rightWall = 4
     bottomWall = 2
     leftWall = 1
-    timer = 500
-    allTimer = []
-    interval = 1000
+    intervalRef
+    interval = 500
     commandCounter = 0
     finishedCode = false
     startedCode = false
+    snapshotIndex = 0
+    snapshots: ISnapshots = []
+    logs: Array<string> = []
+    karel: IKarel
+    beepers: Beepers
 
     constructor(props) {
-        super(props);
+        super(props)
         const stateFromProps = this.getUpdateFromProps()
+        this.karel = JSON.parse(JSON.stringify(stateFromProps.karel))
+        this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers))
 
         this.state = {
-            karel: stateFromProps.karel,
-            beepers: stateFromProps.beepers,
-            solutions: stateFromProps.solutions,
-            walls: stateFromProps.walls,
-            currentLevel: stateFromProps.currentLevel
+            karel: JSON.parse(JSON.stringify(stateFromProps.karel)),
+            beepers: JSON.parse(JSON.stringify(stateFromProps.beepers)),
+            solutions: JSON.parse(JSON.stringify(stateFromProps.solutions)),
+            walls: JSON.parse(JSON.stringify(stateFromProps.walls)),
+            currentLevel: JSON.parse(JSON.stringify(stateFromProps.currentLevel))
         }
     }
 
@@ -40,24 +46,25 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
         // Reset Button was pressed, while executing code
         if (this.props.runningCode == false && this.finishedCode == false && this.startedCode == true) {
-            //Clears all timers, so no code gets executed
-            for (let i = 0; i < this.allTimer.length; i++) {
-                clearTimeout(this.allTimer[i])
-            }
-            this.allTimer = []
-        }
-        // Reset Button was pressed, while and after executing code
-        if (this.props.runningCode == false && this.startedCode == true) {
-            //Resets all variables that are needed to manage the state in the code execution
-            this.finishedCode = false
-            this.startedCode = false
-            this.timer = 500
+            //Clears snapshots and the interval
+            this.clearSnapshotsAndVariables()
             this.setLevel()
         }
+        // Reset Button was pressed, after executing code
+        if (this.props.runningCode == false && this.startedCode == true) {
+            //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
+            this.finishedCode = false
+            this.startedCode = false
+            this.clearSnapshotsAndVariables()
+            this.setLevel()
+        }
+        // Level changed
         if (this.props.currentLevel != this.state.currentLevel
             && this.props.runningCode == false
             && this.finishedCode == false
             && this.startedCode == false) {
+            //clears snapshots and the interval
+            this.clearSnapshotsAndVariables()
             this.setLevel()
         }
     }
@@ -97,75 +104,56 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
         return stateFromProps;
     }
-
-    updateKarel(key: string, value) {
-        // Updates a specific karel key
-        const updateKarel = this.state.karel
-        updateKarel[key] = value
-        this.setState({
-            karel: updateKarel
-        })
-    }
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-
-    executeCommand(command) {
-        this.commandCounter++;
-        this.addTimer(() => {
-            //Execute
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            try {
-                if (typeof this[command] == undefined) {
-                    console.log('Unknown Command', command);
-                } else {
-                    try {
-                        this[command](this)
-                        this.props.writeInLog((command + " ();"))
-                    } catch (e) {
-                        console.log('Could not execute command', e);
-                    }
-
+    async executeCommand(command) {
+        try {
+            if (typeof this[command] == undefined) {
+                console.log('Unknown Command', command);
+            } else {
+                try {
+                    this[command](this)
+                    this.addSnapshot(this.karel, this.beepers)
+                    this.addLog(command)
+                } catch (e) {
+                    console.log('Could not execute command', e);
                 }
-            } catch (e) {
-                console.log('World executes command error.', e);
             }
-
-            this.commandCounter--
-            // All commands are executed
-            if (this.commandCounter == 0) {
-                this.finishedCode = true
-                if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
-            }
-        })
-        //Increase timer for each command
-        this.timer += this.interval
+        } catch (e) {
+            console.log('World executes command error.', e);
+        }
     }
 
-    writeErrorLog(error) {
-        this.commandCounter++;
-        this.addTimer(() => {
-            //Execute
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            try {
-                this.props.writeInLog((error))
-            } catch (e) {
-                console.log('Could not write Error log.', e);
-            }
-
-            this.commandCounter--
-            // All commands are executed
-            if (this.commandCounter == 0) {
-                this.finishedCode = true
-                if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
-            }
-        })
-        //Increase timer for each command
-        this.timer += this.interval
+    addLog(command) {
+        this.logs.push((command + " ();"))
+    }
+    clearLog() {
+        this.logs = []
     }
 
-    addTimer(timeoutFunction) {
-        this.allTimer.push(setTimeout(timeoutFunction, this.timer));
+    getLastSnapshot() {
+        return this.snapshots[(this.snapshots.length - 1)]
+    }
+
+    getSnapshot(snapNumber: number) {
+        return this.snapshots[snapNumber]
+    }
+
+    addSnapshot(karel: IKarel, beepers: Beepers) {
+        const karelClone: IKarel = JSON.parse(JSON.stringify(karel))
+        const beepersClone: Beepers = JSON.parse(JSON.stringify(beepers))
+        this.snapshots.push({ karel: karelClone, beepers: beepersClone })
+    }
+
+    clearSnapshotsAndVariables() {
+        clearInterval(this.intervalRef)
+        this.clearLog()
+        this.snapshots = []
+        this.snapshotIndex = 0
+        const update = this.getUpdateFromProps();
+        this.karel = update.karel
+        this.beepers = update.beepers
     }
 
     executeCode() {
@@ -193,12 +181,35 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             const turnAround = () => this.executeCommand("turnAround")
             const turnRight = () => this.executeCommand("turnRight")
         }
-        //Execute code
         try {
-            eval(this.props.code);
+            //Execute user code from string
+            eval(this.props.code)
         } catch (e) {
-            this.props.writeInLog(ErrorString)
-            this.writeErrorLog(e);
+            this.props.writeInLog(ErrorString + e)
+        }
+        this.executeSnapshots()
+    }
+
+    executeSnapshots() {
+        try {
+            if (this.snapshots.length) {
+                this.intervalRef = setInterval(() => {
+                    if (this.snapshotIndex >= this.snapshots.length) {
+                        clearInterval(this.intervalRef)
+                        this.clearLog();
+                        if (this.checkSolution()) this.props.toggleLevelCompletedModal(true);
+                        return
+                    }
+                    this.props.writeInLog(this.logs[this.snapshotIndex])
+                    this.setState({
+                        karel: this.snapshots[this.snapshotIndex].karel,
+                        beepers: this.snapshots[this.snapshotIndex].beepers
+                    })
+                    this.snapshotIndex++
+                }, this.interval)
+            }
+        } catch (e) {
+            this.props.writeInLog(ErrorString + e)
         }
     }
 
@@ -213,16 +224,11 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         for (let j = 0; j < this.state.beepers.length; j++) {
             found = false
             for (let k = 0; k < this.state.solutions.length; k++) {
-                if (compareBeeper(this.state.beepers[j], this.state.solutions[k])) {
-                    found = true;
-                }
+                if (compareBeeper(this.state.beepers[j], this.state.solutions[k])) found = true;
             }
-
-            if (!found) {
-                return false
-            }
+            if (!found) return false
         }
-        return true;
+        return true
     }
 
     /* END WORLD FUNCTIONS */
@@ -240,7 +246,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             case 3: // down
                 return this.canMoveDown(x, y)
         }
-        return false;
+        return false
     }
 
     canMoveLeft(x: number, y: number) {
@@ -271,46 +277,46 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     canMoveDown(x: number, y: number) {
-        if (y >= (this.state.walls.length) - 1) return false;
-        const currentWall = this.state.walls[y][x];
-        const nextWall = this.state.walls[y + 1][x];
-        const noBottomWall = (currentWall & this.bottomWall) == 0;
-        const noTopWall = (nextWall & this.topWall) == 0;
-        return noBottomWall && noTopWall;
+        if (y >= (this.state.walls.length) - 1) return false
+        const currentWall = this.state.walls[y][x]
+        const nextWall = this.state.walls[y + 1][x]
+        const noBottomWall = (currentWall & this.bottomWall) == 0
+        const noTopWall = (nextWall & this.topWall) == 0
+        return noBottomWall && noTopWall
     }
 
     /* Commands */
 
     putBeeper() {
-        if (this.state.karel.beeperCount > 0) {
-            this.updateKarel("beeperCount", (this.state.karel.beeperCount - 1))
-            const x = this.state.karel.x
-            const y = this.state.karel.y
+        if (this.karel.beeperCount > 0) {
+            this.karel["beeperCount"] = (this.karel.beeperCount - 1)
+            const x = this.karel.x
+            const y = this.karel.y
             let beeper: Beeper
-            for (let i = 0; i < this.state.beepers.length; i++) {
-                beeper = this.state.beepers[i]
+            for (let i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i]
                 if (beeper.x === x && beeper.y === y) {
                     beeper.count++
                     return
                 }
             }
-            this.state.beepers.push({ x: x, y: y, count: 1 })
+            this.beepers.push({ x: x, y: y, count: 1 })
         }
     }
 
     pickBeeper() {
         if (this.beepersPresent()) {
-            this.updateKarel("beeperCount", (this.state.karel.beeperCount + 1))
+            this.karel["beeperCount"] = (this.karel.beeperCount + 1)
             let beeper: Beeper
-            const x = this.state.karel.x
-            const y = this.state.karel.y
-            for (let i = 0; i < this.state.beepers.length; i++) {
-                beeper = this.state.beepers[i]
+            const x = this.karel.x
+            const y = this.karel.y
+            for (let i = 0; i < this.beepers.length; i++) {
+                beeper = this.beepers[i]
                 if (beeper.x === x && beeper.y === y) {
                     beeper.count--
                     if (beeper.count <= 0) {
-                        const index = this.state.beepers.indexOf(beeper)
-                        this.state.beepers.splice(index, 1)
+                        const index = this.beepers.indexOf(beeper)
+                        this.beepers.splice(index, 1)
                     }
                     return
                 }
@@ -319,7 +325,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     move() {
-        if (this.canMove(this.state.karel.direction, this.state.karel.x, this.state.karel.y)) {
+        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y)) {
             this.karelMove()
         }
     }
@@ -331,35 +337,35 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* Super Commands */
 
     beepersInBag() {
-        return !!this.state.karel.beeperCount
+        return !!this.karel.beeperCount
     }
 
     beepersPresent() {
-        const x = this.state.karel.x;
-        const y = this.state.karel.y
+        const x = this.karel.x
+        const y = this.karel.y
         let result = false
-        this.state.beepers.forEach(function (beeper) {
+        this.beepers.forEach(function (beeper) {
             if (beeper.x === x && beeper.y === y) {
                 result = true
             }
-        });
+        })
         return result
     }
 
     facingEast() {
-        return this.state.karel.direction === 2
+        return this.karel.direction === 2
     }
 
     facingNorth() {
-        return this.state.karel.direction === 1
+        return this.karel.direction === 1
     }
 
     facingSouth() {
-        return this.state.karel.direction === 3
+        return this.karel.direction === 3
     }
 
     facingWest() {
-        return this.state.karel.direction === 0
+        return this.karel.direction === 0
     }
 
     frontIsBlocked() {
@@ -367,7 +373,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     frontIsClear() {
-        return this.canMove(this.karelFront(), this.state.karel.x, this.state.karel.y)
+        return this.canMove(this.karelFront(), this.karel.x, this.karel.y)
     }
 
     leftIsBlocked() {
@@ -375,7 +381,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     leftIsClear() {
-        return this.canMove(this.karelLeft(), this.state.karel.x, this.state.karel.y)
+        return this.canMove(this.karelLeft(), this.karel.x, this.karel.y)
     }
 
     noBeepersInBag() {
@@ -407,7 +413,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     rightIsClear() {
-        return this.canMove(this.karelRight(), this.state.karel.x, this.state.karel.y)
+        return this.canMove(this.karelRight(), this.karel.x, this.karel.y)
     }
 
     turnAround() {
@@ -423,36 +429,36 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* KAREL COMMANDS */
 
     karelFront() {
-        return this.state.karel.direction
+        return this.karel.direction
     }
 
     karelLeft() {
-        return (this.state.karel.direction + 1) % 4
+        return (this.karel.direction + 1) % 4
     }
 
     karelMove() {
-        switch (this.state.karel.direction) {
+        switch (this.karel.direction) {
             case 0: // right
-                this.updateKarel("x", this.state.karel.x + 1)
+                this.karel["x"] = (this.karel.x + 1)
                 break;
             case 1: // up
-                this.updateKarel("y", this.state.karel.y - 1)
+                this.karel["y"] = (this.karel.y - 1)
                 break;
             case 2: // left
-                this.updateKarel("x", this.state.karel.x - 1)
+                this.karel["x"] = (this.karel.x - 1)
                 break;
             case 3: // down
-                this.updateKarel("y", this.state.karel.y + 1)
+                this.karel["y"] = (this.karel.y + 1)
                 break;
         }
     }
 
     karelPosition() {
-        return { x: this.state.karel.x, y: this.state.karel.y }
+        return { x: this.karel.x, y: this.karel.y }
     }
 
     karelRight() {
-        return (this.state.karel.direction + 3) % 4
+        return (this.karel.direction + 3) % 4
     }
 
     karelTurnAround() {
@@ -461,19 +467,19 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     karelTurnLeft() {
-        this.updateKarel("direction", this.karelLeft())
+        this.karel["direction"] = (this.karelLeft())
     }
 
     karelTurnRight() {
-        this.updateKarel("direction", this.karelRight())
+        this.karel["direction"] = (this.karelRight())
     }
 
     attributes() {
         return {
-            direction: this.state.karel.direction,
-            x: this.state.karel.x,
-            y: this.state.karel.y,
-            isSuper: this.state.karel.isSuper
+            direction: this.karel.direction,
+            x: this.karel.x,
+            y: this.karel.y,
+            isSuper: this.karel.isSuper
         }
     }
     /* END KAREL COMMANDS */
