@@ -221,7 +221,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Execute user code from string
             eval(this.props.code)
         } catch (e) {
-            this.props.writeInLog(ErrorString + e)
+            this.props.writeInLog(ErrorString + e, this.props.worldNumber)
         }
         this.executeSnapshots()
     }
@@ -236,7 +236,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                         if (this.checkSolution()) this.props.completedLevel(true);
                         return
                     }
-                    this.props.writeInLog(this.logs[this.snapshotIndex])
+                    this.props.writeInLog(this.logs[this.snapshotIndex], this.props.worldNumber)
                     this.setState({
                         karel: this.snapshots[this.snapshotIndex].karel,
                         beepers: this.snapshots[this.snapshotIndex].beepers
@@ -245,7 +245,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }, this.interval)
             }
         } catch (e) {
-            this.props.writeInLog(ErrorString + e)
+            this.props.writeInLog(ErrorString + e, this.props.worldNumber)
         }
     }
 

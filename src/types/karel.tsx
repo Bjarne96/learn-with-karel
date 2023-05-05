@@ -28,7 +28,8 @@ export interface DashboardState {
     karel: IKarel
     runningCode: boolean
     showLevelCompletedModal: boolean
-    log: string
+    firstLog: string
+    secondLog: string
     worldCounter: number
     done: string
 }
@@ -55,7 +56,9 @@ export interface ICode {
 export interface ICommandProps extends ICode {
     isKarelSuper: boolean,
     runningCode: boolean,
-    log: string
+    firstLog: string,
+    secondLog: string,
+    worldCounter: number
 }
 export interface ISelectLevelProps {
     currentLevel: number
@@ -83,8 +86,9 @@ export interface IWorldProps {
     runningCode: boolean;
     code: string;
     currentLevel: number;
+    worldNumber: number;
     completedLevel(completed: boolean): void;
-    writeInLog(log: string): void;
+    writeInLog(log: string, worldNumber: number): void;
 }
 
 export interface ICanvasProps {

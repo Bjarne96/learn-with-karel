@@ -39,7 +39,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 code: code,
                 runningCode: false,
                 showLevelCompletedModal: false,
-                log: "",
+                firstLog: "",
+                secondLog: "",
                 done: done
             }
         }
@@ -66,7 +67,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             karel: karel,
             code: code,
             done: done,
-            worldCounter: worldCounter
+            worldCounter: worldCounter,
+            firstLog: "",
+            secondLog: ""
         })
     }
 
@@ -162,7 +165,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     handleResetCode() {
         this.resetworldCompletedCounter();
         this.setState({
-            log: ""
+            firstLog: "",
+            secondLog: ""
         });
         this.setRunningCode(false)
     }
@@ -205,11 +209,17 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     toggleModal(toggle: boolean) {
         this.setState({ showLevelCompletedModal: toggle })
     }
-    //TODO: Mutiple logs for worlds
-    writeInLog(entry: string) {
-        this.setState({
-            log: this.state.log + entry + "\n"
-        })
+    writeInLog(entry: string, worldNumber: number) {
+        if (worldNumber == 1) {
+            this.setState({
+                firstLog: this.state.firstLog + entry + "\n"
+            })
+        }
+        if (worldNumber == 2) {
+            this.setState({
+                secondLog: this.state.secondLog + entry + "\n"
+            })
+        }
     }
 
     render() {
@@ -229,7 +239,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     <div>
                         <div className="flex flex-row gap-4 mt-4">
                             <Commands
-                                log={this.state.log}
+                                worldCounter={this.state.worldCounter}
+                                firstLog={this.state.firstLog}
+                                secondLog={this.state.secondLog}
                                 runningCode={this.state.runningCode}
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
@@ -243,6 +255,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 {levels[this.state.currentLevel].worlds.map((world, i) =>
                                     <World
                                         key={i}
+                                        worldNumber={i + 1}
                                         currentLevel={this.state.currentLevel}
                                         code={this.state.code}
                                         runningCode={this.state.runningCode}
