@@ -2,7 +2,6 @@
 import React from "react"
 import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshot, ISnapshots } from "../types/karel"
 import Canvas from "./canvas"
-import ErrorString from "../types/enums"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
 
@@ -12,10 +11,12 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     leftWall = 1
     intervalRef
     interval = 500
+    lineIndex = 1
     commandCounter = 0
     finishedCode = false
     startedCode = false
     snapshotIndex = 0
+    errorFound = ""
     snapshots: ISnapshots = []
     logs: Array<string> = []
     karel: IKarel
@@ -130,13 +131,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             } else if (valueCommands.includes(command)) {
                 const val = this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.addLog(command + " (); (" + val + ")")
+                this.addLog(command, val)
                 return val;
             } else {
                 try {
                     this[command](this)
                     this.addSnapshot(this.karel, this.beepers)
-                    this.addLog(command + " ();")
+                    this.addLog(command)
                 } catch (e) {
                     console.log('Could not execute command', e);
                 }
@@ -146,10 +147,18 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
     }
 
-    addLog(log) {
-        this.logs.push((log))
+    addErrorToLog() {
+        this.props.writeInLog("L" + this.lineIndex + ":\t" + this.errorFound, this.props.worldNumber)
+        this.errorFound = ""
+    }
+
+    addLog(command: string, bool?: boolean) {
+        let log = "L" + this.lineIndex + ":\t" + command
+        if (bool != undefined) log += " = " + bool
+        this.logs.push(log)
     }
     clearLog() {
+        this.errorFound = ""
         this.logs = []
     }
 
@@ -217,11 +226,21 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             turnAround = () => this.executeCommand("turnAround")
             turnRight = () => this.executeCommand("turnRight")
         }
+        //Adds a function that sets the lineIndex with binded THIS
+        // eslint-disable-next-line prefer-const
+        let setLine = (i) => this.lineIndex = i
         try {
+            //Add line indexing into the users code string
+            const codeArr = this.props.code.split(/\n/);
+            let lineIndexedCodeString = ""
+            for (let i = 0; i < codeArr.length; i++) {
+                lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 2) + ");\n"
+            }
             //Execute user code from string
-            eval(this.props.code)
+            this.lineIndex = 1
+            eval(lineIndexedCodeString)
         } catch (e) {
-            this.props.writeInLog(ErrorString + e, this.props.worldNumber)
+            this.errorFound = e.toString();
         }
         this.executeSnapshots()
     }
@@ -231,6 +250,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             if (this.snapshots.length) {
                 this.intervalRef = setInterval(() => {
                     if (this.snapshotIndex >= this.snapshots.length) {
+                        if (this.errorFound) this.addErrorToLog()
                         clearInterval(this.intervalRef)
                         this.clearLog();
                         if (this.checkSolution()) this.props.completedLevel(true);
@@ -243,9 +263,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                     })
                     this.snapshotIndex++
                 }, this.interval)
-            }
+            } else if (this.errorFound) this.addErrorToLog()
         } catch (e) {
-            this.props.writeInLog(ErrorString + e, this.props.worldNumber)
+            this.props.writeInLog(e, this.props.worldNumber)
         }
     }
 

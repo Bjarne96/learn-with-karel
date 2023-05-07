@@ -16,15 +16,12 @@ export default class Code extends React.Component<ICode> {
                     value={this.props.code}
                     height="33vw"
                     width="33vw"
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                    extensions={[javascript({ jsx: true })]}
                     onChange={(value: string) => {
                         this.props.onCodeChange(value)
                     }}
-                    // onClick={
-                    //     (e) => console.log(e.target)
-                    // }
                     theme={"dark"}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                    extensions={[javascript({ jsx: true })]}
                 />
             </div>
         );
