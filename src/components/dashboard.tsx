@@ -83,6 +83,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         const res = await this.requestLevel(body, "GET")
         return res;
     }
+
     objectToParams(obj) {
         const keys = Object.keys(obj)
         let params = ""
@@ -139,13 +140,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.handleSaveLevel({ code: this.state.code })
     }
 
-    resetKarel() {
-        const karel: IKarel = JSON.parse(JSON.stringify(levels[this.state.currentLevel]?.worlds[0]?.karel)) as IKarel//Deep Copy
-        this.setState({
-            karel: karel
-        })
-    }
-
     setRunningCode(runningCode: boolean) {
         this.setState({ runningCode: runningCode })
     }
@@ -169,6 +163,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             secondLog: ""
         });
         this.setRunningCode(false)
+    }
+
+    handleResetToDefaulftCode() {
+        this.setState({
+            code: levels[this.state.currentLevel].code
+        })
     }
 
     handleLevelChange(level: number) {
@@ -209,6 +209,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     toggleModal(toggle: boolean) {
         this.setState({ showLevelCompletedModal: toggle })
     }
+
     writeInLog(entry: string, worldNumber: number) {
         if (worldNumber == 1) {
             this.setState({
@@ -235,6 +236,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
                         handleSaveCode={this.handleSaveCode.bind(this)}
+                        handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                     />
                     <div>
                         <div className="flex flex-row gap-4 mt-4">

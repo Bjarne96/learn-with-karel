@@ -103,6 +103,8 @@ export interface ITopbar {
     handleRunningCode(): void;
     handleResetCode(): void;
     handleSaveCode(): void;
+    handleSaveCode(): void;
+    handleResetToDefaulftCode(): void;
     isLoggedIn: boolean;
     done: string;
     currentLevel: number;

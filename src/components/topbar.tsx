@@ -39,6 +39,11 @@ export default class Topbar extends React.Component<ITopbar> {
                         >Save Code
                         </button> : ""
                 }
+                <button
+                    className={btnClassName}
+                    onClick={this.props.handleResetToDefaulftCode.bind(this)}
+                >Reset Code
+                </button>
                 {this.props.done == "" ? <button
                     className={uncompletedClassName}
                     disabled
