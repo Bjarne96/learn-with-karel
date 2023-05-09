@@ -231,6 +231,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             const codeArr = this.props.code.split(/\n/);
             let lineIndexedCodeString = ""
             for (let i = 0; i < codeArr.length; i++) {
+                if (/else/.test(codeArr[i + 1])) {
+                    lineIndexedCodeString = lineIndexedCodeString + codeArr[i]
+                    continue
+                }
                 lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 2) + ");\n"
             }
             //Execute user code from string
