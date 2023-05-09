@@ -134,16 +134,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 this.addLog(command, val)
                 return val;
             } else {
-                try {
-                    this[command](this)
-                    this.addSnapshot(this.karel, this.beepers)
-                    this.addLog(command)
-                } catch (e) {
-                    console.log('Could not execute command', e);
-                }
+                this[command](this)
+                this.addSnapshot(this.karel, this.beepers)
+                this.addLog(command)
             }
         } catch (e) {
             console.log('World executes command error.', e);
+            throw e
         }
     }
 
@@ -291,18 +288,24 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     /* WORLD COMMANDS */
 
-    canMove(direction: number, x: number, y: number) {
+    canMove(direction: number, x: number, y: number, move?: boolean) {
+        let can = false
         switch (direction) {
             case 0: // right
-                return this.canMoveRight(x, y)
+                can = this.canMoveRight(x, y)
+                break;
             case 1: // up
-                return this.canMoveUp(x, y)
+                can = this.canMoveUp(x, y)
+                break;
             case 2: // left
-                return this.canMoveLeft(x, y)
+                can = this.canMoveLeft(x, y)
+                break;
             case 3: // down
-                return this.canMoveDown(x, y)
+                can = this.canMoveDown(x, y)
+                break;
         }
-        return false
+        if (!can && move) throw "GameError: You tried running through a wall."
+        return can
     }
 
     canMoveLeft(x: number, y: number) {
@@ -357,6 +360,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }
             }
             this.beepers.push({ x: x, y: y, count: 1 })
+        } else {
+            throw "GameError: You have tried to put a beeper down, but you have zero beepers."
         }
     }
 
@@ -381,7 +386,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     move() {
-        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y)) {
+        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y, true)) {
             this.karelMove()
         }
     }
