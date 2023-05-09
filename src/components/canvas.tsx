@@ -29,10 +29,7 @@ export default class Canvas extends React.Component<ICanvasProps> {
         const xCount = this.props.walls[0].length
         let teiler = yCount
         if (typeof window !== "undefined") this.clientWidth = window.innerWidth * 0.33
-        let canvasHeight = this.clientWidth / (xCount / yCount)
-        if (this.props.walls.length != this.props.walls[0].length) {
-            canvasHeight = this.clientWidth / (8 / yCount)
-        }
+        const canvasHeight = this.clientWidth / (xCount / yCount)
         if (yCount < xCount) teiler = xCount
         this.blockSize = this.clientWidth / teiler
 
