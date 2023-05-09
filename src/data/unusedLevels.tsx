@@ -92,5 +92,60 @@ export const levels: Array<ILevel> = [
             },
         ],
     },
+    {
+        code: "",
+        name: "Double the Beepers - Variables",
+        worlds: [
+            {
+                walls: [[0, 0, 0, 0, 0, 0, 0]],
+                beepers: [{ x: 3, y: 0, count: 3 }],
+                solutions: [{ x: 3, y: 0, count: 6 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+            },
+            {
+                walls: [[0, 0, 0, 0, 0, 0, 0]],
+                beepers: [{ x: 3, y: 0, count: 4 }],
+                solutions: [{ x: 3, y: 0, count: 8 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+            },
+        ],
+    },
+    {
+        code: `for (let i = 0; i < 5; i++) {
+    move();
+}
+if(beepersPresent()) {
+    turnLeft();
+} else {
+    turnRight();
+}
+move();
+putBeeper();`,
+        name: "T-Crossing - If/Else",
+        worlds: [
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 5, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [],
+                solutions: [{ x: 5, y: 2, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
 ];
 export default levels;
