@@ -52,13 +52,13 @@ export interface Beepers extends Array<Beeper> { }
 export interface ICode {
     code: string;
     onCodeChange(code: string): void;
-}
-export interface ICommandProps extends ICode {
-    isKarelSuper: boolean,
     runningCode: boolean,
     firstLog: string,
     secondLog: string,
     worldCounter: number
+}
+export interface ICommandProps extends ICode {
+    isKarelSuper: boolean,
 }
 export interface ISelectLevelProps {
     currentLevel: number

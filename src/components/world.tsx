@@ -13,6 +13,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     interval = 500
     lineIndex = 1
     commandCounter = 0
+    lastCommand = ""
+    lastVal = null
     finishedCode = false
     startedCode = false
     snapshotIndex = 0
@@ -131,27 +133,29 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             } else if (valueCommands.includes(command)) {
                 const val = this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.addLog(command, val)
+                this.lastCommand = command
+                this.lastVal = val
                 return val;
             } else {
                 this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.addLog(command)
+                this.lastCommand = command
             }
         } catch (e) {
+            this.lastCommand = command
             console.log('World executes command error.', e);
             throw e
         }
     }
 
     addErrorToLog() {
-        this.props.writeInLog("L" + this.lineIndex + ":\t" + this.errorFound, this.props.worldNumber)
+        this.props.writeInLog("Error after Line " + this.lineIndex + ".\n" + this.errorFound, this.props.worldNumber)
         this.errorFound = ""
     }
 
-    addLog(command: string, bool?: boolean) {
-        let log = "L" + this.lineIndex + ":\t" + command
-        if (bool != undefined) log += " = " + bool
+    addLog(command: string, line: string, bool?: boolean) {
+        let log = "L" + line + ":\t" + command
+        if (bool != null || bool != undefined) log += " = " + bool
         this.logs.push(log)
     }
     clearLog() {
@@ -181,6 +185,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const update = this.getUpdateFromProps();
         this.karel = update.karel
         this.beepers = update.beepers
+    }
+
+    setLine(line) {
+        if (this.lastCommand == "") return
+        this.addLog(this.lastCommand, line, this.lastVal)
+        this.lastCommand = ""
+        this.lastVal = null
     }
 
     executeCode() {
@@ -225,17 +236,20 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
         //Adds a function that sets the lineIndex with binded THIS
         // eslint-disable-next-line prefer-const
-        let setLine = (i) => this.lineIndex = i
+        let setLine = (i) => {
+            this.setLine(i)
+            this.lineIndex = i
+        }
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/);
             let lineIndexedCodeString = ""
             for (let i = 0; i < codeArr.length; i++) {
-                if (/else/.test(codeArr[i + 1])) {
+                if (/else/.test(codeArr[i + 1]) && /}/.test(codeArr[i])) {
                     lineIndexedCodeString = lineIndexedCodeString + codeArr[i]
                     continue
                 }
-                lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 2) + ");\n"
+                lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 1) + ");\n"
             }
             //Execute user code from string
             this.lineIndex = 1

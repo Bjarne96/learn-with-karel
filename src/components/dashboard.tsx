@@ -252,6 +252,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             <Code
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
+                                worldCounter={this.state.worldCounter}
+                                firstLog={this.state.firstLog}
+                                secondLog={this.state.secondLog}
+                                runningCode={this.state.runningCode}
                             />
                             <div className="block rounded bg-code-grey">
                                 {levels[this.state.currentLevel].worlds.map((world, i) =>
