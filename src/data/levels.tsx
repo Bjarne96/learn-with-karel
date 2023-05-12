@@ -246,7 +246,7 @@ putBeeper();`,
 
 move();
 pickBeeper();
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
@@ -264,7 +264,7 @@ putBeeper();`,
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [{ x: 1, y: 2, count: 1 }],
-                solutions: [{ x: 7, y: 2, count: 1 }],
+                solutions: [{ x: 6, y: 2, count: 1 }],
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
@@ -279,7 +279,7 @@ putBeeper();`,
 
 move();
 pickBeeper();
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
@@ -307,7 +307,7 @@ putBeeper();`,
 //auch mehrere Befehle schreiben, die allesamt in 
 //jedem Durchlauf der Schleife ausgeführt werden.
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
@@ -347,7 +347,7 @@ for (let i = 0; i < 3; i++) {
 //im ersten oder letzten Durchlauf der Schleife
 //an Sonderfälle denken muss.
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
@@ -391,62 +391,26 @@ for (let i = 0; i < 3; i++) {
 //"Bedingungen" oder "If-Statements". Diese
 //prüfen, ob eine bestimmte Bedingung erfüllt ist
 //und führen dann den Code innerhalb der {}-Klammern
-//nach dem "if" nur aus, wenn die Bedingung erfüllt ist. 
-//Ansonsten wird der Code innerhalb der {}-Klammern beim 
-//"Else" ausgeführt.
-//Drücke auf "Run Code" und sieh was passiert.
+//nach dem "if" nur aus, wenn die Bedingung erfüllt ist.
 
 move();
-if(beepersPresent()) {
-    pickBeeper();
-} else {
-    putBeeper();
-}`,
-        name: "Clean up 1 - Seeing If/Else",
+pickBeeper();
+if(frontIsBlocked()) {
+    turnLeft();
+}
+move();
+putBeeper();`,
+        name: "Corner - Seeing If",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 2, 6, 0, 0, 0],
                     [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [{ x: 3, y: 1, count: 1 }],
-                solutions: [],
-                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-                beepers: [],
-                solutions: [{ x: 3, y: 1, count: 1 }],
-                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-        ],
-    },
-    {
-        code: `//Versuche den Code zu ergänzen,
-//um das Level abzuschließen.
-
-move();
-if(beepersPresent()) {
-    pickBeeper();
-} else {
-    putBeeper();
-}`,
-        name: "Clean up 2 - Using If/Else",
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [2, 2, 2, 2, 2, 2, 2, 2],
-                ],
-                beepers: [{ x: 3, y: 1, count: 1 }],
-                solutions: [{ x: 4, y: 1, count: 1 }],
-                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
@@ -455,20 +419,22 @@ if(beepersPresent()) {
                     [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [{ x: 4, y: 1, count: 1 }],
-                solutions: [{ x: 3, y: 1, count: 1 }],
-                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        code: `//Es gibt viele verschiedene Bedingungen,
-//die man abfragen kann.
-
+        code: `//Versuche nun selbst ein if-Statement
+//zu schreiben.
+//Zur Erinnerung, so ist eine if-Statement aufgebaut:
+//if(meineBedingung())
+//{
+//   code der ausgeführt wird, wenn die Bedingung wahr ist.
+//}
+        
 move();
-pickBeeper();
-if(frontIsBlocked()) {
-    turnLeft();
-}`,
+pickBeeper();`,
         name: "Corner - Using If",
         worlds: [
             {
@@ -494,48 +460,46 @@ if(frontIsBlocked()) {
         ],
     },
     {
-        code: `//Es gibt viele verschiedene Bedingungen,
-//die man abfragen kann.
+        code: `//Es kann ganz verschiedene Bedingungen geben,
+//die wir abfragen können. Mit beepersPresent() können
+//wir abfragen, ob Pfeili sich auf einem Beeper befindet.
+//Es wird genauso in die runden Klammern nach dem if()
+//eingesetzt, wie frontIsBlocked()
 
-move();
-pickBeeper();
-if(leftIsClear()) {
-    turnLeft();
-}`,
-        name: "Corner - Using If/Else 2",
+move();`,
+        name: "Clean up 1 - Different Conditions, Using If",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 4, 0, 0, 0],
-                    [0, 0, 0, 2, 6, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                     [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [{ x: 4, y: 1, count: 1 }],
-                solutions: [{ x: 4, y: 0, count: 1 }],
-                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 8, 12, 0, 0, 0],
-                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [{ x: 4, y: 1, count: 1 }],
-                solutions: [{ x: 4, y: 2, count: 1 }],
-                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        code: `//Häufig benutzt man Bedingungen in
+        code: `//Häufig benutzt man if-Statements in
 //Schleifen, da sich die Umstände jeden Schleifen-
-//durchlauf ändern können.
+//durchlauf ändern können und man so flexibel
+//damit umgehen kann.
 
 for (let i = 0; i < 7; i++) {
     move();
-    if(beepersPresent()) {
-    
-    }
+    //hier ein if-Statement einfügen...
 }`,
         name: "Walk Across - If and Loops",
         worlds: [
@@ -566,80 +530,112 @@ for (let i = 0; i < 7; i++) {
         ],
     },
     {
-        code: `for (let i = 0; i < 7; i++) {
-    if(rightIsClear())
-    {
-        fillHole();
-    }
-    move();
+        code: `//Manchmal soll etwas nur dann ausgeführt werden,
+//wenn die Bedingung im If-Statement nicht erfüllt ist.
+//Dafür gibt es das "Else" nach dem "if". Der Code
+//innerhalb der {}-Klammern nach dem "Else" wird
+//nur ausgeführt, wenn die Bedingung im "If" nicht
+//erfüllt ist.
+//Drücke auf "Run Code" und sieh was passiert.
+
+move();
+pickBeeper();
+if(rightIsBlocked()) {
+    turnLeft();
 }
-            
-function fillHole(){
+else{
     turnRight();
-    move();
-    putBeeper();
-    turnRight();
-    turnRight();
-    move();
-    turnRight();
-}`,
-        name: "Repair the street - If/Else",
+}
+move();
+putBeeper();`,
+        name: "Corner - Seeing If/Else",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [2, 13, 2, 9, 8, 12, 2, 9],
-                    [8, 0, 8, 0, 0, 0, 8, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 2, 6, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 0, y: 2, count: 1 },
-                    { x: 2, y: 2, count: 1 },
-                    { x: 6, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [12, 2, 9, 8, 12, 2, 13, 2],
+                    [0, 0, 0, 8, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 1, y: 2, count: 1 },
-                    { x: 5, y: 2, count: 1 },
-                    { x: 7, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true }
-            }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 2, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
         ],
     },
     {
-        code: ``,
-        name: "Zig-Zag - If/Else",
+        code: `//Versuche nun selbst ein if-else-Statement
+//zu schreiben.`,
+        name: "Clean up - Using If/Else",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [11, 10, 12, 0, 9, 10, 12],
-                    [0, 0, 3, 10, 6, 0, 7],
-                    [0, 0, 0, 0, 0, 0, 0,],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [],
-                solutions: [{ x: 6, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [2, 6, 8, 8, 8, 7, 12],
-                    [3, 2, 2, 13, 2, 2, 6],
-                    [0, 0, 0, 0, 0, 0, 0,],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [],
-                solutions: [{ x: 6, y: 1, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 1 }
-            }
+                solutions: [{ x: 3, y: 1, count: 1 }],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `//Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.
+
+for (let i = 0; i < 7; i++) {
+    move();
+    //hier ein if-else-Statement einfügen...
+}`,
+        name: "Walk Across - If-Else and Loops",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 },
+                { x: 3, y: 1, count: 1 },
+                { x: 5, y: 1, count: 1 }],
+                solutions: [{ x: 2, y: 1, count: 1 },
+                { x: 4, y: 1, count: 1 },
+                { x: 6, y: 1, count: 1 },],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 1, count: 1 },
+                { x: 4, y: 1, count: 1 },
+                { x: 6, y: 1, count: 1 },],
+                solutions: [{ x: 1, y: 1, count: 1 },
+                { x: 3, y: 1, count: 1 },
+                { x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
         ],
     },
     {
@@ -720,12 +716,11 @@ function fillHole(){
                 karel: { x: 0, y: 1, direction: 0, isSuper: true }
             },
             {
-                walls: [[8, 8, 8, 8, 8],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],],
+                walls: [[8, 9, 8, 8, 8, 8, 8, 12, 8],
+                [6, 0, 0, 0, 0, 0, 0, 0, 3],],
                 beepers: [],
-                solutions: [{ x: 2, y: 0, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 1, y: 0, direction: 0, isSuper: true }
             },
         ],
     },
@@ -747,19 +742,6 @@ function fillHole(){
                 solutions: [],
                 karel: { x: 0, y: 5, direction: 0, isSuper: true }
             },
-            {
-                walls: [
-                    [2, 0, 2, 0, 6, 0],
-                    [0, 6, 0, 0, 1, 2],
-                    [4, 0, 6, 6, 4, 0],
-                    [4, 2, 2, 4, 2, 0],
-                    [0, 6, 0, 2, 4, 0],
-                    [4, 0, 0, 4, 0, 0]
-                ],
-                beepers: [{ x: 0, y: 5, count: 1 }],
-                solutions: [],
-                karel: { x: 5, y: 0, direction: 0, isSuper: true }
-            }
         ]
     }
 ];
