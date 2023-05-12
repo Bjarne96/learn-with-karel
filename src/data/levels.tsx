@@ -415,7 +415,7 @@ putBeeper();`,
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [{ x: 4, y: 1, count: 1 }],
@@ -450,7 +450,7 @@ pickBeeper();`,
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [{ x: 4, y: 1, count: 1 }],
@@ -464,9 +464,7 @@ pickBeeper();`,
 //die wir abfragen können. Mit beepersPresent() können
 //wir abfragen, ob Pfeili sich auf einem Beeper befindet.
 //Es wird genauso in die runden Klammern nach dem if()
-//eingesetzt, wie frontIsBlocked()
-
-move();`,
+//eingesetzt, wie frontIsBlocked()`,
         name: "Clean up 1 - Different Conditions, Using If",
         worlds: [
             {
@@ -638,7 +636,40 @@ for (let i = 0; i < 7; i++) {
             },
         ],
     },
+    {
+        code: `//
 
+move();
+pickBeeper();
+if(!rightIsBlocked()) {
+    turnRight();
+}
+move();
+putBeeper();`,
+        name: "Corner - Negating Conditions",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 8, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 2, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
     {
         code: "",
         name: "Hang the Lampions - While Loop",
