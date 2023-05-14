@@ -402,6 +402,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                     return
                 }
             }
+        } else {
+            throw "GameError: You have tried to get a beeper, but there is no beeper."
         }
     }
 
