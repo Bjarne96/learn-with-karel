@@ -70,6 +70,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
+        // TODO: pausing interval
+        // if(this.interval != this.props.interval)
     }
 
     render() {
@@ -265,21 +267,24 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     executeSnapshots() {
         try {
             if (this.snapshots.length) {
-                this.intervalRef = setInterval(() => {
-                    if (this.snapshotIndex >= this.snapshots.length) {
-                        if (this.errorFound) this.addErrorToLog()
-                        clearInterval(this.intervalRef)
-                        this.clearLog();
-                        if (this.checkSolution()) this.props.completedLevel(true);
-                        return
-                    }
-                    this.props.writeInLog(this.logs[this.snapshotIndex], this.props.worldNumber)
-                    this.setState({
-                        karel: this.snapshots[this.snapshotIndex].karel,
-                        beepers: this.snapshots[this.snapshotIndex].beepers
-                    })
-                    this.snapshotIndex++
-                }, this.interval)
+                if(this.interval >= 0) {
+                    this.intervalRef = setInterval(() => {
+                        if (this.snapshotIndex >= this.snapshots.length) {
+                            if (this.errorFound) this.addErrorToLog()
+                            clearInterval(this.intervalRef)
+                            this.clearLog();
+                            if (this.checkSolution()) this.props.completedLevel(true);
+                            return
+                        }
+                        this.props.writeInLog(this.logs[this.snapshotIndex], this.props.worldNumber)
+                        this.setState({
+                            karel: this.snapshots[this.snapshotIndex].karel,
+                            beepers: this.snapshots[this.snapshotIndex].beepers
+                        })
+                        this.snapshotIndex++
+                    }, this.interval)
+                }
+                
             } else if (this.errorFound) this.addErrorToLog()
         } catch (e) {
             this.props.writeInLog(e, this.props.worldNumber)
@@ -422,7 +427,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     beepersInBag() {
         return !!this.karel.beeperCount
     }
-
+    //TODO: Check consistency: inkostistente bennenung, ändern zu beeperIsPresent() ?
     beepersPresent() {
         const x = this.karel.x
         const y = this.karel.y
