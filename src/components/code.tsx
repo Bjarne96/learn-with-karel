@@ -30,10 +30,12 @@ export default class Code extends React.Component<ICode, state> {
     highlightLine() {
         const lines = this.props[this.state.log].split('\n')
         for (let i = (lines.length - 1); i >= 0; i--) {
-            const x = lines[i];
-            if (x == "") continue
-            const regex = /L(\d+):/;
-            const matches = x.match(regex);
+            const line = lines[i];
+            if (line == "") continue
+            const commandRegex = /L(\d+):/;
+            const errorRegex = /Line (\d+)./;
+            let matches = line.match(commandRegex);
+            if (matches == null) matches = line.match(errorRegex);
             if (matches && matches.length > 1) {
                 const number = matches[1];
                 setTimeout(() => {

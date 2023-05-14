@@ -151,6 +151,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     addErrorToLog() {
         this.props.writeInLog("Error after Line " + this.lineIndex + ".\n" + this.errorFound, this.props.worldNumber)
         this.errorFound = ""
+        this.lastCommand = ""
+        this.lastVal = null
     }
 
     addLog(command: string, line: string, bool?: boolean) {
