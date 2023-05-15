@@ -13,3 +13,5 @@
      - Users can save custom functions (across levels)
      - neue coding techniken (zb if else) immer bezug zu nehmen in der aufgabe.
      - t crossing sollte logischer sein (leftIsClear / rightIsClear) ohne beeper auf dem boden
+# Tickets
+    - karel needs beeper e.g. "fill the holes" level : { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 3}

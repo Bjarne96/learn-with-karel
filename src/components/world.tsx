@@ -249,7 +249,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             const codeArr = this.props.code.split(/\n/);
             let lineIndexedCodeString = ""
             for (let i = 0; i < codeArr.length; i++) {
-                if (/else/.test(codeArr[i + 1]) && /}/.test(codeArr[i])) {
+                if ((/else/.test(codeArr[i + 1]) && /}/.test(codeArr[i])) || (/{/.test(codeArr[i + 1]) && /while/.test(codeArr[i]))) {
                     lineIndexedCodeString = lineIndexedCodeString + codeArr[i]
                     continue
                 }
