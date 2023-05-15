@@ -637,7 +637,11 @@ for (let i = 0; i < 7; i++) {
         ],
     },
     {
-        code: `//
+        code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
+//wir mittels des "!"-Operators erreichen. Das if-Statement
+//weiter unten wird nur ausgeführt, wenn sich rechts von
+//Pfeile keine Wand befindet.
+//Drücke auf "Run Code" und sieh was passiert.
 
 move();
 pickBeeper();
@@ -646,7 +650,7 @@ if(!rightIsBlocked()) {
 }
 move();
 putBeeper();`,
-        name: "Corner - Negating Conditions",
+        name: "Corner - Seeing Negating Conditions",
         worlds: [
             {
                 walls: [
@@ -667,6 +671,36 @@ putBeeper();`,
                 beepers: [{ x: 4, y: 1, count: 1 }],
                 solutions: [{ x: 4, y: 2, count: 1 }],
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `while(frontIsClear())
+{
+    move();
+}
+putBeeper();`,
+        name: "Walk Across - Seeing While-Loops",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 4],
+                    [0, 0, 0, 0, 0, 0, 0, 4],
+                    [2, 2, 2, 2, 2, 2, 2, 6],
+                ],
+                beepers: [],
+                solutions: [{ x: 7, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [8, 8, 8, 8, 8, 8, 9, 8],
+                    [0, 0, 0, 0, 0, 0, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 1, 0],
+                ],
+                beepers: [],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
     },
