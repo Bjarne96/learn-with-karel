@@ -15,7 +15,7 @@ pickBeeper();
 turnLeft();
 move();
 putBeeper();`,
-        name: "Move the Beeper - Getting Started",
+        name: "Move the Beeper LT - Seeing Commands",
         worlds: [
             {
                 walls: [
@@ -45,7 +45,7 @@ putBeeper();`,
 move();
 pickBeeper();
 //hier drunter weiteren Code einfügen...`,
-        name: "Move the Beeper - Using commands",
+        name: "Move the Beeper LT - Using commands",
         worlds: [
             {
                 walls: [
@@ -65,14 +65,58 @@ pickBeeper();
         ],
     },
     {
-        code: `//Manchmal gibt es bestimmte Befehle noch
-//nicht. Hier muss sich Pfeili nach rechts
-//drehen, aber es gibt nur einen Befehl zur 
-//Linksdrehung. Kannst du mit den vorhandenen
-//Befehlen trotzdem eine Rechtsdrehung
-//erreichen und das Level abschließen? 
+        code: `//Manchmal müssen wir Dinge tun
+//für die es noch keinen Befehl gibt. Hier muss 
+//sich Pfeili nach rechts drehen, aber es gibt 
+//nur einen Befehl zur Linksdrehung. Kannst du
+//mit den vorhandenen Befehlen trotzdem eine 
+//Rechtsdrehung erreichen und das Level abschließen? 
 //hier drunter Code einfügen...`,
-        name: "Move the Beeper - Combining commands",
+        name: "Move the Beeper RT1 - Combining commands",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 3, y: 3, count: 1 }],
+                solutions: [{ x: 4, y: 3, count: 1 }],
+                karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: `//Man kann also eine Rechtsdrehung aus
+//3 Linksdrehungen erzeugen. Wenn du die
+//Rechtsdrehung auf diese Weise häufiger 
+//nutzt, dann wird es allerdings
+//unübersichtlich im Code. Um das zu
+//vermeiden, kann man sogenannte "Funktionen"
+//schreiben. Diese bündeln eine beliebige 
+//Abfolge bereits vorhandener Befehle
+//unter einem neuen Namen zusammen.
+        
+//Hier wird der neue Befehl nur definiert und
+//von sich aus passiert noch nichts. Der Name
+//"turnRight" ist übrigens beliebig.
+function turnRight(){
+    turnLeft();
+    turnLeft();
+    turnLeft();
+}
+
+move();
+pickBeeper();
+turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
+move();
+putBeeper();`,
+        name: "Move the Beeper RT1 - Seeing Functions",
         worlds: [
             {
                 walls: [
@@ -93,28 +137,22 @@ pickBeeper();
     },
     {
         code:
-            `//Man kann also eine Rechtsdrehung aus
-//3 Linksdrehungen erzeugen. Wenn du die
-//Rechtsdrehung auf diese Weise häufiger 
-//nutzt, dann wird es allerdings
-//unübersichtlich im Code. Um das zu
-//vermeiden, kann man sich seine eigenen
-//Befehle schreiben. Diese bündeln eine 
-//Reihe bereits vorhandener Befehle unter
-//einem neuen Namen zusammen.
+            `//Selbst definiert Funktionen werden genauso
+//aufgerufen wie die bereits vorhandenen Befehle.
+//Genau genommen sind die bereits vorhandenen
+//Befehle auch nur Funktionen, die jemand anders
+//für uns geschrieben hat.
 
-//Hier wird der neue Befehl nur definiert und
-//von sich aus passiert noch nichts.
 function turnRight(){
     turnLeft();
     turnLeft();
     turnLeft();
 }
 
-turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
+turnRight();
 move();
 pickBeeper();`,
-        name: "Move the Beeper - Using functions",
+        name: "Move the Beeper RT2 - Using functions",
         worlds: [
             {
                 walls: [
@@ -148,7 +186,7 @@ pickBeeper();
 turnRight();
 move();
 putBeeper();`,
-        name: "Move the Beeper - Writing your own functions 1",
+        name: "Move the Beeper RT2 - Defining functions 1",
         worlds: [
             {
                 walls: [
@@ -179,7 +217,7 @@ walkHalfCircle();
 pickBeeper();
 walkHalfCircle();
 putBeeper();`,
-        name: "Obtain Artifact - Writing your own functions 2",
+        name: "Obtain Artifact - Defining functions 2",
         worlds: [
             {
                 walls: [
@@ -208,11 +246,11 @@ putBeeper();`,
 
 move();
 pickBeeper();
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
-        name: "Walk Across - Using Loops",
+        name: "Walk Across - Seeing Loops",
         worlds: [
             {
                 walls: [
@@ -226,7 +264,7 @@ putBeeper();`,
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [{ x: 1, y: 2, count: 1 }],
-                solutions: [{ x: 7, y: 2, count: 1 }],
+                solutions: [{ x: 6, y: 2, count: 1 }],
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
@@ -241,7 +279,7 @@ putBeeper();`,
 
 move();
 pickBeeper();
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
@@ -269,7 +307,7 @@ putBeeper();`,
 //auch mehrere Befehle schreiben, die allesamt in 
 //jedem Durchlauf der Schleife ausgeführt werden.
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
@@ -309,11 +347,11 @@ for (let i = 0; i < 3; i++) {
 //im ersten oder letzten Durchlauf der Schleife
 //an Sonderfälle denken muss.
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
-        name: "Walk Across - Writing your own Loops 2",
+        name: "Walk Across - Off-by-one Loops",
         worlds: [
             {
                 walls: [
@@ -347,139 +385,322 @@ for (let i = 0; i < 3; i++) {
         ],
     },
     {
-        code: `move();\nmove();\nmove();\nmove();\nmove();\nif(beepersPresent() == true) {\n  turnLeft();\n} else {\n  turnRight();\n}\nmove();\nputBeeper();
-        `,
-        name: "T-Crossing - If/Else",
+        code: `//Häufig wollen wir unseren Code so schreiben,
+//dass er flexibel auf unterschiedliche Situationen
+//reagieren kann. Dafür nutzen wir sogenannte
+//"Bedingungen" oder "If-Statements". Diese
+//prüfen, ob eine bestimmte Bedingung erfüllt ist
+//und führen dann den Code innerhalb der {}-Klammern
+//nach dem "if" nur aus, wenn die Bedingung erfüllt ist.
+
+move();
+pickBeeper();
+if(frontIsBlocked()) {
+    turnLeft();
+}
+move();
+putBeeper();`,
+        name: "Corner - Seeing If",
         worlds: [
             {
                 walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 2, 6, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [{ x: 5, y: 1, count: 1 }],
-                solutions: [{ x: 5, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
-                beepers: [],
-                solutions: [{ x: 5, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        code: `for (let i = 0; i < 7; i++) {
-    if(rightIsClear())
-    {
-        fillHole();
-    }
-    move();
-}
-            
-function fillHole(){
-    turnRight();
-    move();
-    putBeeper();
-    turnRight();
-    turnRight();
-    move();
-    turnRight();
-}`,
-        name: "Repair the street - If/Else",
+        code: `//Versuche nun selbst ein if-Statement
+//zu schreiben.
+//Zur Erinnerung, so ist eine if-Statement aufgebaut:
+//if(meineBedingung())
+//{
+//   code der ausgeführt wird, wenn die Bedingung wahr ist.
+//}
+        
+move();
+pickBeeper();`,
+        name: "Corner - Using If",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 13, 0, 9, 8, 12, 0, 9]
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 2, 6, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 0, y: 3, count: 1 },
-                    { x: 2, y: 3, count: 1 },
-                    { x: 6, y: 3, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true }
-            }],
-    },
-    {
-        code: `for (let i = 0; i < 7; i++) {
-    if(rightIsClear())
-    {
-        fillHole();
-    }
-    move();
-}
-            
-function fillHole(){
-    turnRight();
-    move();
-    putBeeper();
-    turnRight();
-    turnRight();
-    move();
-    turnRight();
-}`,
-        name: "Repair the street 2 - If/Else",
-        worlds: [
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
             {
                 walls: [
                     [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [12, 0, 9, 8, 12, 0, 13, 0]
                 ],
-                beepers: [],
-                solutions: [
-                    { x: 1, y: 3, count: 1 },
-                    { x: 5, y: 3, count: 1 },
-                    { x: 7, y: 3, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true }
-            }],
-    },
-    {
-        code: `
-        `,
-        name: "Zig-Zag 1 - If/Else",
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [11, 10, 12, 0, 9, 10, 12],
-                    [0, 0, 3, 10, 6, 0, 7],
-                    [0, 0, 0, 0, 0, 0, 0,],
-                    [0, 0, 0, 0, 0, 0, 0],
-                ],
-                beepers: [],
-                solutions: [{ x: 6, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        code: `
-        `,
-        name: "Zig-Zag 2 - If/Else",
+        code: `//Es kann ganz verschiedene Bedingungen geben,
+//die wir abfragen können. Mit beepersPresent() können
+//wir abfragen, ob Pfeili sich auf einem Beeper befindet.
+//Es wird genauso in die runden Klammern nach dem if()
+//eingesetzt, wie frontIsBlocked()`,
+        name: "Clean up 1 - Different Conditions, Using If",
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [2, 6, 8, 8, 8, 7, 12],
-                    [3, 2, 2, 13, 2, 2, 6],
-                    [0, 0, 0, 0, 0, 0, 0,],
-                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `//Häufig benutzt man if-Statements in
+//Schleifen, da sich die Umstände jeden Schleifen-
+//durchlauf ändern können und man so flexibel
+//damit umgehen kann.
+
+for (let i = 0; i < 7; i++) {
+    move();
+    //hier ein if-Statement einfügen...
+}`,
+        name: "Walk Across - If and Loops",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 },
+                { x: 3, y: 1, count: 1 },
+                { x: 5, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 1, count: 1 },
+                { x: 4, y: 1, count: 1 },
+                { x: 6, y: 1, count: 1 },],
+                solutions: [],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: `//Manchmal soll etwas nur dann ausgeführt werden,
+//wenn die Bedingung im If-Statement nicht erfüllt ist.
+//Dafür gibt es das "Else" nach dem "if". Der Code
+//innerhalb der {}-Klammern nach dem "Else" wird
+//nur ausgeführt, wenn die Bedingung im "If" nicht
+//erfüllt ist.
+//Drücke auf "Run Code" und sieh was passiert.
+
+move();
+pickBeeper();
+if(rightIsBlocked()) {
+    turnLeft();
+}
+else{
+    turnRight();
+}
+move();
+putBeeper();`,
+        name: "Corner - Seeing If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                    [0, 0, 0, 2, 6, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 8, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 2, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `//Versuche nun selbst ein if-else-Statement
+//zu schreiben.`,
+        name: "Clean up - Using If/Else",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
                 beepers: [],
-                solutions: [{ x: 6, y: 1, count: 1 }],
-                karel: { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 1 }
+                solutions: [{ x: 3, y: 1, count: 1 }],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `//Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.
+
+for (let i = 0; i < 7; i++) {
+    move();
+    //hier ein if-else-Statement einfügen...
+}`,
+        name: "Walk Across - If-Else and Loops",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 1, count: 1 },
+                { x: 3, y: 1, count: 1 },
+                { x: 5, y: 1, count: 1 }],
+                solutions: [{ x: 2, y: 1, count: 1 },
+                { x: 4, y: 1, count: 1 },
+                { x: 6, y: 1, count: 1 },],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 1, count: 1 },
+                { x: 4, y: 1, count: 1 },
+                { x: 6, y: 1, count: 1 },],
+                solutions: [{ x: 1, y: 1, count: 1 },
+                { x: 3, y: 1, count: 1 },
+                { x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
+//wir mittels des "!"-Operators erreichen. Das if-Statement
+//weiter unten wird nur ausgeführt, wenn sich rechts von
+//Pfeile keine Wand befindet.
+//Drücke auf "Run Code" und sieh was passiert.
+
+move();
+pickBeeper();
+if(!rightIsBlocked()) {
+    turnRight();
+}
+move();
+putBeeper();`,
+        name: "Corner - Seeing Negating Conditions",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 8, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 2, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        code: `while(frontIsClear())
+{
+    move();
+}
+putBeeper();`,
+        name: "Walk Across - Seeing While-Loops",
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 4],
+                    [0, 0, 0, 0, 0, 0, 0, 4],
+                    [2, 2, 2, 2, 2, 2, 2, 6],
+                ],
+                beepers: [],
+                solutions: [{ x: 7, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [8, 8, 8, 8, 8, 8, 9, 8],
+                    [0, 0, 0, 0, 0, 0, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 1, 0],
+                ],
+                beepers: [],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
     },
@@ -523,7 +744,7 @@ function fillHole(){
     {
         code: `
         `,
-        name: "T-Crossing 1 - Variables",
+        name: "T-Crossing - Variables",
         worlds: [
             {
                 walls: [
@@ -536,13 +757,6 @@ function fillHole(){
                 solutions: [{ x: 5, y: 0, count: 1 }, { x: 1, y: 1, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
-        ],
-    },
-    {
-        code: `
-        `,
-        name: "T-Crossing 2 - Variables",
-        worlds: [
             {
                 walls: [
                     [2, 2, 2, 2, 6, 12, 0],
@@ -558,62 +772,25 @@ function fillHole(){
     },
     {
         code: "",
-        name: "Midpoint 1 - Variables",
-        worlds: [
-            {
-                walls: [[0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0]],
-                beepers: [],
-                solutions: [{ x: 3, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true }
-            },
-            {
-                walls: [[0, 0, 0, 0, 0]],
-                beepers: [],
-                solutions: [{ x: 2, y: 0, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
-            },
-        ],
-    },
-    {
-        code: "",
-        name: "Midpoint 2 - Variables",
+        name: "Midpoint - Variables",
         worlds: [
             {
                 walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0]],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],],
                 beepers: [],
                 solutions: [{ x: 4, y: 1, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true }
             },
             {
-                walls: [[0, 0, 0, 0, 0]],
+                walls: [[8, 9, 8, 8, 8, 8, 8, 12, 8],
+                [6, 0, 0, 0, 0, 0, 0, 0, 3],],
                 beepers: [],
-                solutions: [{ x: 2, y: 0, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 1, y: 0, direction: 0, isSuper: true }
             },
         ],
     },
-    {
-        code: "",
-        name: "Double the Beepers - Variables",
-        worlds: [
-            {
-                walls: [[0, 0, 0, 0, 0, 0, 0]],
-                beepers: [{ x: 3, y: 0, count: 3 }],
-                solutions: [{ x: 3, y: 0, count: 6 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
-            },
-            {
-                walls: [[0, 0, 0, 0, 0, 0, 0]],
-                beepers: [{ x: 3, y: 0, count: 4 }],
-                solutions: [{ x: 3, y: 0, count: 8 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true }
-            },
-        ],
-    },
+
     {
         code: "",
         name: "Maze",
@@ -631,19 +808,6 @@ function fillHole(){
                 solutions: [],
                 karel: { x: 0, y: 5, direction: 0, isSuper: true }
             },
-            {
-                walls: [
-                    [2, 0, 2, 0, 6, 0],
-                    [0, 6, 0, 0, 1, 2],
-                    [4, 0, 6, 6, 4, 0],
-                    [4, 2, 2, 4, 2, 0],
-                    [0, 6, 0, 2, 4, 0],
-                    [4, 0, 0, 4, 0, 0]
-                ],
-                beepers: [{ x: 0, y: 5, count: 1 }],
-                solutions: [],
-                karel: { x: 5, y: 0, direction: 0, isSuper: true }
-            }
         ]
     }
 ];
