@@ -22,36 +22,6 @@ export default class Commands extends React.Component<ICommandProps, state> {
         }
     }
 
-    commands() {
-        const commands = ["move", "turnLeft", "putBeeper", "pickBeeper"];
-        const superCommands = [
-            "turnRight",
-            "turnAround",
-            "frontIsClear",
-            "frontIsBlocked",
-            "leftIsClear",
-            "leftIsBlocked",
-            "rightIsClear",
-            "rightIsBlocked",
-            "beepersPresent",
-            "noBeepersPresent",
-            "beepersInBag",
-            "noBeepersInBag",
-            "facingNorth",
-            "notFacingNorth",
-            "facingEast",
-            "notFacingEast",
-            "facingSouth",
-            "notFacingSouth",
-            "facingWest",
-            "notFacingWest",
-        ];
-
-        return (this.props.isKarelSuper) ?
-            commands.concat(superCommands) :
-            commands;
-    }
-
     changeLog(log: string) {
         this.setState({
             log: log
@@ -59,10 +29,9 @@ export default class Commands extends React.Component<ICommandProps, state> {
     }
 
     render() {
-        const commands = this.commands();
         let content = <>
             <ul className="list-none">
-                {commands.map((command, i) => {
+                {this.props.commands.map((command, i) => {
                     return <li
                         className="pb-2 cursor-pointer text-code-blue"
                         onClick={() => this.props.onCodeChange(this.props.code + "\n" + command + "();")}

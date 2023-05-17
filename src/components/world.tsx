@@ -199,11 +199,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     executeCode() {
+        let commandList = ""
+        for (let i = 0; i < this.props.commands.length; i++) {
+            commandList = commandList + "\n" + this.props.commands[i] + " = () => this.executeCommand('" + this.props.commands[i] + "');"
+        }
         // Commands
-        const move = () => this.executeCommand("move")
-        const turnLeft = () => this.executeCommand("turnLeft")
-        const pickBeeper = () => this.executeCommand("pickBeeper")
-        const putBeeper = () => this.executeCommand("putBeeper")
+        let move
+        let turnLeft
+        let pickBeeper
+        let putBeeper
         let beepersInBag
         let beepersPresent
         let facingEast
@@ -220,24 +224,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let rightIsClear
         let turnAround
         let turnRight
-        if (this.state.karel.isSuper) {
-            beepersInBag = () => this.executeCommand("beepersInBag")
-            beepersPresent = () => this.executeCommand("beepersPresent")
-            facingEast = () => this.executeCommand("facingEast")
-            facingNorth = () => this.executeCommand("facingNorth")
-            facingWest = () => this.executeCommand("facingWest")
-            frontIsBlocked = () => this.executeCommand("frontIsBlocked")
-            frontIsClear = () => this.executeCommand("frontIsClear")
-            leftIsBlocked = () => this.executeCommand("leftIsBlocked")
-            leftIsClear = () => this.executeCommand("leftIsClear")
-            noBeepersInBag = () => this.executeCommand("noBeepersInBag")
-            noBeepersPresent = () => this.executeCommand("noBeepersPresent")
-            notFacingEast = () => this.executeCommand("notFacingEast")
-            rightIsBlocked = () => this.executeCommand("rightIsBlocked")
-            rightIsClear = () => this.executeCommand("rightIsClear")
-            turnAround = () => this.executeCommand("turnAround")
-            turnRight = () => this.executeCommand("turnRight")
-        }
+        //Binds all available functions
+        eval(commandList)
         //Adds a function that sets the lineIndex with binded THIS
         // eslint-disable-next-line prefer-const
         let setLine = (i) => {

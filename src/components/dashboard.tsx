@@ -36,6 +36,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 currentLevel: lastStage,
                 worldCounter: levels[lastStage].worlds.length,
                 karel: levels[lastStage].worlds[0].karel,
+                commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
                 showLevelCompletedModal: false,
@@ -64,6 +65,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
         this.setState({
             currentLevel: level,
+            commands: levels[level].commands,
             karel: karel,
             code: code,
             done: done,
@@ -247,7 +249,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 runningCode={this.state.runningCode}
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
-                                isKarelSuper={this.state.karel.isSuper}
+                                commands={this.state.commands}
                             />
                             <Code
                                 code={this.state.code}
@@ -267,6 +269,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                         runningCode={this.state.runningCode}
                                         karel={this.state.karel}
                                         world={world}
+                                        commands={this.state.commands}
                                         completedLevel={this.completedLevel.bind(this)}
                                         writeInLog={this.writeInLog.bind(this)}
                                     />
