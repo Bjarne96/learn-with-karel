@@ -162,6 +162,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (bool != null || bool != undefined) log += " = " + bool
         this.logs.push(log)
     }
+
     clearLog() {
         this.errorFound = ""
         this.logs = []
@@ -204,26 +205,30 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             commandList = commandList + "\n" + this.props.commands[i] + " = () => this.executeCommand('" + this.props.commands[i] + "');"
         }
         // Commands
-        let move
-        let turnLeft
+        let move 
+        let turnLeft 
+        let putBeeper 
         let pickBeeper
-        let putBeeper
-        let beepersInBag
-        let beepersPresent
-        let facingEast
-        let facingNorth
-        let facingWest
-        let frontIsBlocked
-        let frontIsClear
-        let leftIsBlocked
-        let leftIsClear
-        let noBeepersInBag
-        let noBeepersPresent
-        let notFacingEast
-        let rightIsBlocked
-        let rightIsClear
-        let turnAround
         let turnRight
+        let turnAround
+        let frontIsClear
+        let frontIsBlocked
+        let leftIsClear
+        let leftIsBlocked
+        let rightIsClear
+        let rightIsBlocked
+        let beepersPresent
+        let noBeepersPresent
+        let beepersInBag
+        let noBeepersInBag
+        let facingNorth
+        let notFacingNorth
+        let facingEast
+        let notFacingEast
+        let facingSouth
+        let notFacingSouth
+        let facingWest
+        let notFacingWest
         //Binds all available functions
         eval(commandList)
         //Adds a function that sets the lineIndex with binded THIS

@@ -14,3 +14,7 @@
      - t crossing sollte logischer sein (leftIsClear / rightIsClear) ohne beeper auf dem boden
 # Tickets
     - karel needs beeper e.g. "fill the holes" level : { x: 0, y: 2, direction: 0, isSuper: true, beeperCount: 3}
+    - Walk across:  if and else loop: logic error for first beeper
+    - fix after line 1 by js error (remove line) for that case
+    - rename beepersPresent
+    - BUG: Line is wrong when if statements with commands inside are wrong fix: setup a lastline index before when an if appears (is the value false take the line from before)

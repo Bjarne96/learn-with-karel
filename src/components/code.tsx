@@ -41,6 +41,7 @@ export default class Code extends React.Component<ICode, state> {
                 setTimeout(() => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const activeLine: any = document.getElementsByClassName("cm-content")[0].childNodes[(number - 1)]
+                    if(activeLine == undefined) return
                     activeLine.style.backgroundColor = "white"
                     activeLine.style.borderRadius = "3px"
                 }, 64);
