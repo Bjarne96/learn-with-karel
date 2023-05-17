@@ -33,10 +33,12 @@ export interface DashboardState {
     worldCounter: number
     done: string
 }
+type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beepersPresent" | "noBeepersPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
     code: string,
     name: string,
-    worlds: Array<IWorld>
+    worlds: Array<IWorld>,
+    commands: Commands;
 }
 export interface IWorld {
     beepers: Beepers,

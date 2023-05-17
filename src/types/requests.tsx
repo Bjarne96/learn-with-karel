@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import levels from "../data/levels"
+import levels from "../data/commandLevels"
 
 export const postLevelBody = {
     user_id: "642161d67a4a6ac23c5b0fe5",

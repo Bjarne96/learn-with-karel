@@ -6,7 +6,7 @@ import World from "./world"
 //Interfaces
 import type { DashboardProps, DashboardState, IKarel } from "../types/karel";
 //Data
-import levels from "../data/levels"
+import levels from "../data/commandLevels"
 import Topbar from "./topbar";
 import LevelModal from "./modal";
 

@@ -1,5 +1,5 @@
-// import type { ILevel } from "../types/karel";
-export const levels: Array<any> = [
+import type { ILevel } from "../types/karel";
+export const levels: Array<ILevel> = [
     {
         code: `//Willkommen beim Learnlab! Rechts siehst 
 //du ein Spielfeld mit einem blauen Pfeil darin, 
@@ -33,6 +33,7 @@ putBeeper();`,
                 karel: { x: 4, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Nun musst du selbst Befehle einfügen, um den 
@@ -63,6 +64,7 @@ pickBeeper();
                 karel: { x: 4, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Manchmal müssen wir Dinge tun
@@ -90,6 +92,7 @@ pickBeeper();
                 karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Man kann also eine Rechtsdrehung aus
@@ -134,6 +137,7 @@ putBeeper();`,
                 karel: { x: 3, y: 4, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code:
@@ -170,6 +174,7 @@ pickBeeper();`,
                 karel: { x: 3, y: 3, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code:
@@ -204,6 +209,7 @@ putBeeper();`,
                 karel: { x: 3, y: 3, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Versuche die Funktion zu vervollständigen.
@@ -235,6 +241,7 @@ putBeeper();`,
                 karel: { x: 2, y: 3, direction: 3, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Manchmal muss man einen Befehl mehrfach
@@ -268,6 +275,7 @@ putBeeper();`,
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Kannst du die Schleife so anpassen, dass 
@@ -301,6 +309,7 @@ putBeeper();`,
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Innerhalb der {}-Klammern in der Schleife, kann man
@@ -341,6 +350,7 @@ for (let i = 0; i < 5; i++) {
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Manchmal wird es etwas knifflig, wenn man
@@ -383,6 +393,7 @@ for (let i = 0; i < 5; i++) {
                 karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"]
     },
     {
         code: `//Häufig wollen wir unseren Code so schreiben,
@@ -423,6 +434,32 @@ putBeeper();`,
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Versuche nun selbst ein if-Statement
@@ -458,6 +495,32 @@ pickBeeper();`,
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Es kann ganz verschiedene Bedingungen geben,
@@ -488,6 +551,32 @@ pickBeeper();`,
                 karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Häufig benutzt man if-Statements in
@@ -526,6 +615,32 @@ for (let i = 0; i < 7; i++) {
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Manchmal soll etwas nur dann ausgeführt werden,
@@ -569,6 +684,32 @@ putBeeper();`,
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Versuche nun selbst ein if-else-Statement
@@ -596,6 +737,32 @@ putBeeper();`,
                 karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.
@@ -635,6 +802,32 @@ for (let i = 0; i < 7; i++) {
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
@@ -673,6 +866,32 @@ putBeeper();`,
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `while(frontIsClear())
@@ -703,6 +922,32 @@ putBeeper();`,
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: "",
@@ -740,6 +985,32 @@ putBeeper();`,
                 karel: { x: 0, y: 7, direction: 0, isSuper: true, beeperCount: 0 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: `
@@ -769,6 +1040,32 @@ putBeeper();`,
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
     {
         code: "",
@@ -789,6 +1086,32 @@ putBeeper();`,
                 karel: { x: 1, y: 0, direction: 0, isSuper: true }
             },
         ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
+        ]
     },
 
     {
@@ -808,6 +1131,32 @@ putBeeper();`,
                 solutions: [],
                 karel: { x: 0, y: 5, direction: 0, isSuper: true }
             },
+        ],
+        commands: [
+            "move", 
+            "turnLeft", 
+            "putBeeper", 
+            "pickBeeper",
+            "turnRight",
+            "turnAround",
+            "frontIsClear",
+            "frontIsBlocked",
+            "leftIsClear",
+            "leftIsBlocked",
+            "rightIsClear",
+            "rightIsBlocked",
+            "beepersPresent",
+            "noBeepersPresent",
+            "beepersInBag",
+            "noBeepersInBag",
+            "facingNorth",
+            "notFacingNorth",
+            "facingEast",
+            "notFacingEast",
+            "facingSouth",
+            "notFacingSouth",
+            "facingWest",
+            "notFacingWest",
         ]
     }
 ];

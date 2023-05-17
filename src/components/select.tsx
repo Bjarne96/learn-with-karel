@@ -1,7 +1,7 @@
 import React from "react";
 import type { ISelectLevelProps, ILevel } from "../types/karel";
 //Data
-import levels from "../data/levels"
+import levels from "../data/commandLevels"
 
 export default class SelectLevel extends React.Component<ISelectLevelProps> {
 
