@@ -2,6 +2,7 @@
 export const levels: Array<any> = [
     {
         name: "Move the Beeper LT - Seeing Commands",
+        explanation: `Willkommen beim Learnlab! Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.`,
         code: `//Willkommen beim Learnlab! Rechts siehst 
 //du ein Spielfeld mit einem blauen Pfeil darin, 
 //das ist Pfeili. Wenn du auf "Run Code" klickst,
@@ -36,6 +37,7 @@ putBeeper();`,
     },
     {
         name: "Move the Beeper LT - Using commands",
+        explanation: `Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle. Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben, oder sie links in der Liste anklicken, um sie direkt einzufügen.`,
         code: `//Nun musst du selbst Befehle einfügen, um den 
 //roten Beeper aufzuheben und ihn in der Zielzone
 //abzulegen. Links siehst du die verfügbaren Befehle. 
@@ -66,6 +68,7 @@ pickBeeper();
     },
     {
         name: "Move the Beeper RT1 - Combining commands",
+        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen? hier drunter Code einfügen...`,
         code: `//Manchmal müssen wir Dinge tun
 //für die es noch keinen Befehl gibt. Hier muss 
 //sich Pfeili nach rechts drehen, aber es gibt 
@@ -93,19 +96,20 @@ pickBeeper();
     },
     {
         name: "Move the Beeper RT1 - Seeing Functions",
-        code: `//Man kann also eine Rechtsdrehung aus
-//3 Linksdrehungen erzeugen. Wenn du die
+        explanation: `Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.`,
+        code: `//Man kann also eine Rechtsdrehung aus 
+//3 Linksdrehungen erzeugen. Wenn du die 
 //Rechtsdrehung auf diese Weise häufiger 
-//nutzt, dann wird es allerdings
-//unübersichtlich im Code. Um das zu
-//vermeiden, kann man sogenannte "Funktionen"
-//schreiben. Diese bündeln eine beliebige 
-//Abfolge bereits vorhandener Befehle
-//unter einem neuen Namen zusammen.
+//nutzt, dann wird es allerdings 
+//unübersichtlich im Code. Um das zu 
+//vermeiden, kann man sogenannte "Funktionen" 
+//schreiben. Diese bündeln eine beliebige  
+//Abfolge bereits vorhandener Befehle 
+//unter einem neuen Namen zusammen. 
         
-//Hier wird der neue Befehl nur definiert und
-//von sich aus passiert noch nichts. Der Name
-//"turnRight" ist übrigens beliebig.
+//Hier wird der neue Befehl nur definiert und 
+//von sich aus passiert noch nichts. Der Name 
+//"turnRight" ist übrigens beliebig. 
 function turnRight(){
     turnLeft();
     turnLeft();
@@ -137,12 +141,12 @@ putBeeper();`,
     },
     {
         name: "Move the Beeper RT2 - Using functions",
-        code:
-            `//Selbst definiert Funktionen werden genauso
-//aufgerufen wie die bereits vorhandenen Befehle.
-//Genau genommen sind die bereits vorhandenen
-//Befehle auch nur Funktionen, die jemand anders
-//für uns geschrieben hat.
+        explanation: `Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. `,
+        code: `//Selbst definiert Funktionen werden genauso 
+//aufgerufen wie die bereits vorhandenen Befehle. 
+//Genau genommen sind die bereits vorhandenen 
+//Befehle auch nur Funktionen, die jemand anders 
+//für uns geschrieben hat. 
 
 function turnRight(){
     turnLeft();
@@ -173,6 +177,11 @@ pickBeeper();`,
     },
     {
         name: "Move the Beeper RT2 - Defining functions 1",
+        explanation: `Versuche nun die Funktion "turnRight" selbst zu definieren. 
+Zur Erinnerung: so ist eine Funktion aufgebaut: 
+function deinFunktionsName(){
+dein Code für die Funktion...
+}`,
         code:
             `//Versuche nun die Funktion "turnRight"
 //selbst zu definieren.
@@ -207,6 +216,7 @@ putBeeper();`,
     },
     {
         name: "Obtain Artifact - Defining functions 2",
+        explanation: `Versuche die Funktion zu vervollständigen.`,
         code: `//Versuche die Funktion zu vervollständigen.
         
 function walkHalfCircle(){
@@ -238,6 +248,7 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing Loops",
+        explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.`,
         code: `//Manchmal muss man einen Befehl mehrfach
 //hintereinander ausführen. Programmier*innen
 //hassen es allerdings, sich zu wiederholen.
@@ -271,6 +282,7 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Modifying Loops",
+        explanation: `Kannst du die Schleife so anpassen, dass Pfeili zur anderen Seite des Levels läuft? Wenn du dir nicht sicher bist, dann drückenochmal auf "Run Code" und sieh, ob dir ein Zusammenhang zwischen dem Code und Pfeilis Bewegung auffällt.`,
         code: `//Kannst du die Schleife so anpassen, dass 
 //Pfeili zur anderen Seite des Levels läuft?
 //Wenn du dir nicht sicher bist, dann drücke
@@ -304,6 +316,7 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Writing your own Loops",
+        explanation: `Innerhalb der {}-Klammern in der Schleife, kann man auch mehrere Befehle schreiben, die allesamt in jedem Durchlauf der Schleife ausgeführt werden.`,
         code: `//Innerhalb der {}-Klammern in der Schleife, kann man
 //auch mehrere Befehle schreiben, die allesamt in 
 //jedem Durchlauf der Schleife ausgeführt werden.
@@ -344,6 +357,7 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Walk Across - Off-by-one Loops",
+        explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss.`,
         code: `//Manchmal wird es etwas knifflig, wenn man
 //im ersten oder letzten Durchlauf der Schleife
 //an Sonderfälle denken muss.
@@ -386,6 +400,7 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Corner - Seeing If",
+        explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.`,
         code: `//Häufig wollen wir unseren Code so schreiben,
 //dass er flexibel auf unterschiedliche Situationen
 //reagieren kann. Dafür nutzen wir sogenannte
@@ -426,6 +441,12 @@ putBeeper();`,
     },
     {
         name: "Corner - Using If",
+        explanation: `Versuche nun selbst ein if-Statement zu schreiben. 
+Zur Erinnerung, so ist eine if-Statement aufgebaut:
+if(meineBedingung())
+{
+   code der ausgeführt wird, wenn die Bedingung wahr ist.
+}`,
         code: `//Versuche nun selbst ein if-Statement
 //zu schreiben.
 //Zur Erinnerung, so ist eine if-Statement aufgebaut:
@@ -461,6 +482,7 @@ pickBeeper();`,
     },
     {
         name: "Clean up 1 - Different Conditions, Using If",
+        explanation: `Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. Mit beepersPresent() können wir abfragen, ob Pfeili sich auf einem Beeper befindet. Es wird genauso in die runden Klammern nach dem if() eingesetzt, wie frontIsBlocked()`,
         code: `//Es kann ganz verschiedene Bedingungen geben,
 //die wir abfragen können. Mit beepersPresent() können
 //wir abfragen, ob Pfeili sich auf einem Beeper befindet.
@@ -491,6 +513,7 @@ pickBeeper();`,
     },
     {
         name: "Walk Across - If and Loops",
+        explanation: `Häufig benutzt man if-Statements in Schleifen, da sich die Umstände jeden Schleifen- durchlauf ändern können und man so flexibel damit umgehen kann.`,
         code: `//Häufig benutzt man if-Statements in
 //Schleifen, da sich die Umstände jeden Schleifen-
 //durchlauf ändern können und man so flexibel
@@ -529,6 +552,9 @@ for (let i = 0; i < 7; i++) {
     },
     {
         name: "Corner - Seeing If/Else",
+        explanation: `Manchmal soll etwas nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.
+        
+Drücke auf "Run Code" und sieh was passiert.`,
         code: `//Manchmal soll etwas nur dann ausgeführt werden,
 //wenn die Bedingung im If-Statement nicht erfüllt ist.
 //Dafür gibt es das "Else" nach dem "if". Der Code
@@ -572,6 +598,7 @@ putBeeper();`,
     },
     {
         name: "Clean up - Using If/Else",
+        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.`,
         code: `//Versuche nun selbst ein if-else-Statement
 //zu schreiben.`,
         worlds: [
@@ -599,6 +626,7 @@ putBeeper();`,
     },
     {
         name: "Walk Across - If-Else and Loops",
+        explanation: `Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.`,
         code: `//Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.
 
 for (let i = 0; i < 7; i++) {
@@ -638,6 +666,7 @@ for (let i = 0; i < 7; i++) {
     },
     {
         name: "Corner - Seeing Negating Conditions",
+        explanation: `Manchmal wollen wir eine Bedingung umkehren. Dies können wir mittels des "!"-Operators erreichen. Das if-Statement weiter unten wird nur ausgeführt, wenn sich rechts von Pfeile keine Wand befindet. Drücke auf "Run Code" und sieh was passiert.`,
         code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
 //wir mittels des "!"-Operators erreichen. Das if-Statement
 //weiter unten wird nur ausgeführt, wenn sich rechts von
@@ -676,6 +705,7 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing While-Loops",
+        explanation: ``,
         code: `while(frontIsClear())
 {
     move();
@@ -706,7 +736,8 @@ putBeeper();`,
     },
     {
         name: "Hang the Lampions - While Loop",
-        code: "",
+        explanation: ``,
+        code: ``,
         worlds: [
             {
                 walls: [
@@ -743,6 +774,7 @@ putBeeper();`,
     },
     {
         name: "T-Crossing - Variables",
+        explanation: ``,
         code: `
         `,
         worlds: [
@@ -772,7 +804,8 @@ putBeeper();`,
     },
     {
         name: "Midpoint - Variables",
-        code: "",
+        explanation: ``,
+        code: ``,
         worlds: [
             {
                 walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -793,7 +826,8 @@ putBeeper();`,
 
     {
         name: "Maze",
-        code: "",
+        explanation: ``,
+        code: ``,
         worlds: [
             {
                 walls: [
