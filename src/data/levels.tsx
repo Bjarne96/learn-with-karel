@@ -1,6 +1,7 @@
 // import type { ILevel } from "../types/karel";
 export const levels: Array<any> = [
     {
+        name: "Move the Beeper LT - Seeing Commands",
         code: `//Willkommen beim Learnlab! Rechts siehst 
 //du ein Spielfeld mit einem blauen Pfeil darin, 
 //das ist Pfeili. Wenn du auf "Run Code" klickst,
@@ -15,7 +16,6 @@ pickBeeper();
 turnLeft();
 move();
 putBeeper();`,
-        name: "Move the Beeper LT - Seeing Commands",
         worlds: [
             {
                 walls: [
@@ -35,6 +35,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Move the Beeper LT - Using commands",
         code: `//Nun musst du selbst Befehle einfügen, um den 
 //roten Beeper aufzuheben und ihn in der Zielzone
 //abzulegen. Links siehst du die verfügbaren Befehle. 
@@ -45,7 +46,6 @@ putBeeper();`,
 move();
 pickBeeper();
 //hier drunter weiteren Code einfügen...`,
-        name: "Move the Beeper LT - Using commands",
         worlds: [
             {
                 walls: [
@@ -65,6 +65,7 @@ pickBeeper();
         ],
     },
     {
+        name: "Move the Beeper RT1 - Combining commands",
         code: `//Manchmal müssen wir Dinge tun
 //für die es noch keinen Befehl gibt. Hier muss 
 //sich Pfeili nach rechts drehen, aber es gibt 
@@ -72,7 +73,6 @@ pickBeeper();
 //mit den vorhandenen Befehlen trotzdem eine 
 //Rechtsdrehung erreichen und das Level abschließen? 
 //hier drunter Code einfügen...`,
-        name: "Move the Beeper RT1 - Combining commands",
         worlds: [
             {
                 walls: [
@@ -92,6 +92,7 @@ pickBeeper();
         ],
     },
     {
+        name: "Move the Beeper RT1 - Seeing Functions",
         code: `//Man kann also eine Rechtsdrehung aus
 //3 Linksdrehungen erzeugen. Wenn du die
 //Rechtsdrehung auf diese Weise häufiger 
@@ -116,7 +117,6 @@ pickBeeper();
 turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
 move();
 putBeeper();`,
-        name: "Move the Beeper RT1 - Seeing Functions",
         worlds: [
             {
                 walls: [
@@ -136,6 +136,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Move the Beeper RT2 - Using functions",
         code:
             `//Selbst definiert Funktionen werden genauso
 //aufgerufen wie die bereits vorhandenen Befehle.
@@ -152,7 +153,6 @@ function turnRight(){
 turnRight();
 move();
 pickBeeper();`,
-        name: "Move the Beeper RT2 - Using functions",
         worlds: [
             {
                 walls: [
@@ -172,6 +172,7 @@ pickBeeper();`,
         ],
     },
     {
+        name: "Move the Beeper RT2 - Defining functions 1",
         code:
             `//Versuche nun die Funktion "turnRight"
 //selbst zu definieren.
@@ -186,7 +187,6 @@ pickBeeper();
 turnRight();
 move();
 putBeeper();`,
-        name: "Move the Beeper RT2 - Defining functions 1",
         worlds: [
             {
                 walls: [
@@ -206,6 +206,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Obtain Artifact - Defining functions 2",
         code: `//Versuche die Funktion zu vervollständigen.
         
 function walkHalfCircle(){
@@ -217,7 +218,6 @@ walkHalfCircle();
 pickBeeper();
 walkHalfCircle();
 putBeeper();`,
-        name: "Obtain Artifact - Defining functions 2",
         worlds: [
             {
                 walls: [
@@ -237,6 +237,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Walk Across - Seeing Loops",
         code: `//Manchmal muss man einen Befehl mehrfach
 //hintereinander ausführen. Programmier*innen
 //hassen es allerdings, sich zu wiederholen.
@@ -250,7 +251,6 @@ for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
-        name: "Walk Across - Seeing Loops",
         worlds: [
             {
                 walls: [
@@ -270,6 +270,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Walk Across - Modifying Loops",
         code: `//Kannst du die Schleife so anpassen, dass 
 //Pfeili zur anderen Seite des Levels läuft?
 //Wenn du dir nicht sicher bist, dann drücke
@@ -283,7 +284,6 @@ for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
-        name: "Walk Across - Modifying Loops",
         worlds: [
             {
                 walls: [
@@ -303,6 +303,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Walk Across - Writing your own Loops",
         code: `//Innerhalb der {}-Klammern in der Schleife, kann man
 //auch mehrere Befehle schreiben, die allesamt in 
 //jedem Durchlauf der Schleife ausgeführt werden.
@@ -311,7 +312,6 @@ for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
-        name: "Walk Across - Writing your own Loops",
         worlds: [
             {
                 walls: [
@@ -343,6 +343,7 @@ for (let i = 0; i < 5; i++) {
         ],
     },
     {
+        name: "Walk Across - Off-by-one Loops",
         code: `//Manchmal wird es etwas knifflig, wenn man
 //im ersten oder letzten Durchlauf der Schleife
 //an Sonderfälle denken muss.
@@ -351,7 +352,6 @@ for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
-        name: "Walk Across - Off-by-one Loops",
         worlds: [
             {
                 walls: [
@@ -385,6 +385,7 @@ for (let i = 0; i < 5; i++) {
         ],
     },
     {
+        name: "Corner - Seeing If",
         code: `//Häufig wollen wir unseren Code so schreiben,
 //dass er flexibel auf unterschiedliche Situationen
 //reagieren kann. Dafür nutzen wir sogenannte
@@ -400,7 +401,6 @@ if(frontIsBlocked()) {
 }
 move();
 putBeeper();`,
-        name: "Corner - Seeing If",
         worlds: [
             {
                 walls: [
@@ -425,6 +425,7 @@ putBeeper();`,
         ],
     },
     {
+        name: "Corner - Using If",
         code: `//Versuche nun selbst ein if-Statement
 //zu schreiben.
 //Zur Erinnerung, so ist eine if-Statement aufgebaut:
@@ -435,7 +436,6 @@ putBeeper();`,
         
 move();
 pickBeeper();`,
-        name: "Corner - Using If",
         worlds: [
             {
                 walls: [
@@ -460,12 +460,12 @@ pickBeeper();`,
         ],
     },
     {
+        name: "Clean up 1 - Different Conditions, Using If",
         code: `//Es kann ganz verschiedene Bedingungen geben,
 //die wir abfragen können. Mit beepersPresent() können
 //wir abfragen, ob Pfeili sich auf einem Beeper befindet.
 //Es wird genauso in die runden Klammern nach dem if()
 //eingesetzt, wie frontIsBlocked()`,
-        name: "Clean up 1 - Different Conditions, Using If",
         worlds: [
             {
                 walls: [
@@ -490,6 +490,7 @@ pickBeeper();`,
         ],
     },
     {
+        name: "Walk Across - If and Loops",
         code: `//Häufig benutzt man if-Statements in
 //Schleifen, da sich die Umstände jeden Schleifen-
 //durchlauf ändern können und man so flexibel
@@ -499,7 +500,6 @@ for (let i = 0; i < 7; i++) {
     move();
     //hier ein if-Statement einfügen...
 }`,
-        name: "Walk Across - If and Loops",
         worlds: [
             {
                 walls: [
@@ -528,6 +528,7 @@ for (let i = 0; i < 7; i++) {
         ],
     },
     {
+        name: "Corner - Seeing If/Else",
         code: `//Manchmal soll etwas nur dann ausgeführt werden,
 //wenn die Bedingung im If-Statement nicht erfüllt ist.
 //Dafür gibt es das "Else" nach dem "if". Der Code
@@ -546,7 +547,6 @@ else{
 }
 move();
 putBeeper();`,
-        name: "Corner - Seeing If/Else",
         worlds: [
             {
                 walls: [
@@ -571,9 +571,9 @@ putBeeper();`,
         ],
     },
     {
+        name: "Clean up - Using If/Else",
         code: `//Versuche nun selbst ein if-else-Statement
 //zu schreiben.`,
-        name: "Clean up - Using If/Else",
         worlds: [
             {
                 walls: [
@@ -598,13 +598,13 @@ putBeeper();`,
         ],
     },
     {
+        name: "Walk Across - If-Else and Loops",
         code: `//Auch if-else-Statments kann man gut innerhalb schon schleifen nutzen.
 
 for (let i = 0; i < 7; i++) {
     move();
     //hier ein if-else-Statement einfügen...
 }`,
-        name: "Walk Across - If-Else and Loops",
         worlds: [
             {
                 walls: [
@@ -637,6 +637,7 @@ for (let i = 0; i < 7; i++) {
         ],
     },
     {
+        name: "Corner - Seeing Negating Conditions",
         code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
 //wir mittels des "!"-Operators erreichen. Das if-Statement
 //weiter unten wird nur ausgeführt, wenn sich rechts von
@@ -650,7 +651,6 @@ if(!rightIsBlocked()) {
 }
 move();
 putBeeper();`,
-        name: "Corner - Seeing Negating Conditions",
         worlds: [
             {
                 walls: [
@@ -675,12 +675,12 @@ putBeeper();`,
         ],
     },
     {
+        name: "Walk Across - Seeing While-Loops",
         code: `while(frontIsClear())
 {
     move();
 }
 putBeeper();`,
-        name: "Walk Across - Seeing While-Loops",
         worlds: [
             {
                 walls: [
@@ -705,8 +705,8 @@ putBeeper();`,
         ],
     },
     {
-        code: "",
         name: "Hang the Lampions - While Loop",
+        code: "",
         worlds: [
             {
                 walls: [
@@ -742,9 +742,9 @@ putBeeper();`,
         ],
     },
     {
+        name: "T-Crossing - Variables",
         code: `
         `,
-        name: "T-Crossing - Variables",
         worlds: [
             {
                 walls: [
@@ -771,8 +771,8 @@ putBeeper();`,
         ],
     },
     {
-        code: "",
         name: "Midpoint - Variables",
+        code: "",
         worlds: [
             {
                 walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -792,8 +792,8 @@ putBeeper();`,
     },
 
     {
-        code: "",
         name: "Maze",
+        code: "",
         worlds: [
             {
                 walls: [
