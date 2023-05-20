@@ -37,6 +37,7 @@ export interface DashboardState {
 type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beepersPresent" | "noBeepersPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
     code: string
+    explanation: string
     name: string
     worlds: Array<IWorld>
     commands: Commands
@@ -92,7 +93,7 @@ export interface IWorldProps {
     worldNumber: number
     commands: Commands
     completedLevel(completed: boolean): void
-    writeInLog(log: string ,worldNumber: number): void
+    writeInLog(log: string, worldNumber: number): void
 }
 
 export interface ICanvasProps {

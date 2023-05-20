@@ -552,10 +552,10 @@ for (let i = 0; i < 7; i++) {
     },
     {
         name: "Corner - Seeing If/Else",
-        explanation: `Manchmal soll etwas nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.
+        explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.
         
 Drücke auf "Run Code" und sieh was passiert.`,
-        code: `//Manchmal soll etwas nur dann ausgeführt werden,
+        code: `//Manchmal soll ein alternativer Code nur dann ausgeführt werden,
 //wenn die Bedingung im If-Statement nicht erfüllt ist.
 //Dafür gibt es das "Else" nach dem "if". Der Code
 //innerhalb der {}-Klammern nach dem "Else" wird
@@ -720,7 +720,7 @@ putBeeper();`,
                 ],
                 beepers: [],
                 solutions: [{ x: 7, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
@@ -730,7 +730,7 @@ putBeeper();`,
                 ],
                 beepers: [],
                 solutions: [{ x: 5, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
@@ -774,9 +774,30 @@ putBeeper();`,
     },
     {
         name: "T-Crossing - Variables",
-        explanation: ``,
-        code: `
-        `,
+        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Hier wird eine Variable mit dem Namen "x" erstellt, der Name ist frei wählbar.`,
+        code: `//Manchmal müssen wir uns eine Information merken,
+        //um diese im späteren Verlauf des Programms wieder
+        //abzurufen. Zu diesem zweck können wir Variablen
+        //nutzen. Variablen sind zunächst wie ein leerer
+        //Container, den wir mit einem Namen versehen und
+        //nach belieben mit Inhalt füllen können. Hier wird
+        //eine Variable mit dem Namen "x" erstellt, der Name
+        //ist frei wählbar.
+        move();
+        var x;
+        x = beepersPresent();
+        move();
+        move();
+        move();
+        move();
+        if(x){
+          turnLeft();
+        }
+        else{
+          turnRight();
+        }
+        move();
+        putBeeper();`,
         worlds: [
             {
                 walls: [
@@ -845,4 +866,5 @@ putBeeper();`,
         ]
     }
 ];
+
 export default levels;
