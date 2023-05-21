@@ -11,10 +11,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     leftWall = 1
     intervalRef
     interval = 500
-    lineIndex = 1
-    commandCounter = 0
-    lastCommand = ""
-    lastVal = null
     finishedCode = false
     startedCode = false
     snapshotIndex = 0
@@ -112,7 +108,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    executeCommand(command) {
+    executeCommand(command, line) {
         const valueCommands = [
             "beepersInBag",
             "beepersPresent",
@@ -131,30 +127,25 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         ]
         try {
             if (typeof this[command] == undefined) {
-                console.log('Unknown Command', command);
+                return
             } else if (valueCommands.includes(command)) {
                 const val = this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.lastCommand = command
-                this.lastVal = val
-                return val;
+                this.addLog(command, line, val)
+                return val
             } else {
                 this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.lastCommand = command
+                this.addLog(command, line)
             }
         } catch (e) {
-            this.lastCommand = command
-            console.log('World executes command error.', e);
             throw e
         }
     }
 
     addErrorToLog() {
-        this.props.writeInLog("Error after Line " + this.lineIndex + ".\n" + this.errorFound, this.props.worldNumber)
+        this.props.writeInLog(this.errorFound, this.props.worldNumber)
         this.errorFound = ""
-        this.lastCommand = ""
-        this.lastVal = null
     }
 
     addLog(command: string, line: string, bool?: boolean) {
@@ -192,22 +183,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.beepers = update.beepers
     }
 
-    setLine(line) {
-        if (this.lastCommand == "") return
-        this.addLog(this.lastCommand, line, this.lastVal)
-        this.lastCommand = ""
-        this.lastVal = null
-    }
-
     executeCode() {
         let commandList = ""
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = () => this.executeCommand('" + this.props.commands[i] + "');"
+            commandList = commandList + "\n" + this.props.commands[i] + " = (line) => this.executeCommand('" + this.props.commands[i] + "', line);"
         }
         // Commands
-        let move 
-        let turnLeft 
-        let putBeeper 
+        let move
+        let turnLeft
+        let putBeeper
         let pickBeeper
         let turnRight
         let turnAround
@@ -231,25 +215,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let notFacingWest
         //Binds all available functions
         eval(commandList)
-        //Adds a function that sets the lineIndex with binded THIS
-        // eslint-disable-next-line prefer-const
-        let setLine = (i) => {
-            this.setLine(i)
-            this.lineIndex = i
-        }
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/);
             let lineIndexedCodeString = ""
+            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g');
             for (let i = 0; i < codeArr.length; i++) {
-                if ((/else/.test(codeArr[i + 1]) && /}/.test(codeArr[i])) || (/{/.test(codeArr[i + 1]) && /while/.test(codeArr[i]))) {
-                    lineIndexedCodeString = lineIndexedCodeString + codeArr[i]
-                    continue
-                }
-                lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 1) + ");\n"
+                lineIndexedCodeString = lineIndexedCodeString + codeArr[i].replace(regex, '$1(' + (i + 1) + ')');
             }
             //Execute user code from string
-            this.lineIndex = 1
             eval(lineIndexedCodeString)
         } catch (e) {
             this.errorFound = e.toString();
@@ -260,7 +234,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     executeSnapshots() {
         try {
             if (this.snapshots.length) {
-                if(this.interval >= 0) {
+                if (this.interval >= 0) {
                     this.intervalRef = setInterval(() => {
                         if (this.snapshotIndex >= this.snapshots.length) {
                             if (this.errorFound) this.addErrorToLog()
@@ -277,7 +251,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                         this.snapshotIndex++
                     }, this.interval)
                 }
-                
+
             } else if (this.errorFound) this.addErrorToLog()
         } catch (e) {
             this.props.writeInLog(e, this.props.worldNumber)

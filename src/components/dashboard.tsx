@@ -213,6 +213,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     writeInLog(entry: string, worldNumber: number) {
+        if (entry == undefined) return
         if (worldNumber == 1) {
             this.setState({
                 firstLog: this.state.firstLog + entry + "\n"
