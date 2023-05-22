@@ -197,6 +197,46 @@ function fillHole(){
         ],
     },
     {
+        name: "Corner - Seeing Negating Conditions",
+        explanation: `Manchmal wollen wir eine Bedingung umkehren. Dies können wir mittels des "!"-Operators erreichen. Das if-Statement weiter unten wird nur ausgeführt, wenn sich rechts von Pfeile keine Wand befindet. Drücke auf "Run Code" und sieh was passiert.`,
+        code: `//Manchmal wollen wir eine Bedingung umkehren. Dies können 
+//wir mittels des "!"-Operators erreichen. Das if-Statement
+//weiter unten wird nur ausgeführt, wenn sich rechts von
+//Pfeile keine Wand befindet.
+//Drücke auf "Run Code" und sieh was passiert.
+
+move();
+pickBeeper();
+if(!rightIsBlocked()) {
+    turnRight();
+}
+move();
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "rightIsBlocked"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 10, 10, 10, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 1, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 8, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 4, 0, 0, 0],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 2, count: 1 }],
+                karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
         code: ``,
         name: "Zig-Zag - If/Else",
         worlds: [

@@ -17,6 +17,7 @@ pickBeeper();
 turnLeft();
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -48,6 +49,7 @@ putBeeper();`,
 move();
 pickBeeper();
 //hier drunter weiteren Code einfügen...`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -76,6 +78,7 @@ pickBeeper();
 //mit den vorhandenen Befehlen trotzdem eine 
 //Rechtsdrehung erreichen und das Level abschließen? 
 //hier drunter Code einfügen...`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -121,6 +124,7 @@ pickBeeper();
 turnRight(); // <- Hier wird der vorher definierte Befehl ausgeführt.
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -157,6 +161,7 @@ function turnRight(){
 turnRight();
 move();
 pickBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -196,6 +201,7 @@ pickBeeper();
 turnRight();
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -228,6 +234,7 @@ walkHalfCircle();
 pickBeeper();
 walkHalfCircle();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -262,6 +269,7 @@ for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -296,6 +304,7 @@ for (let i = 0; i < 5; i++) {
     move();
 }
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -325,6 +334,7 @@ for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -366,6 +376,7 @@ for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
 }`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -416,6 +427,7 @@ if(frontIsBlocked()) {
 }
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -457,6 +469,7 @@ if(meineBedingung())
         
 move();
 pickBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -488,6 +501,7 @@ pickBeeper();`,
 //wir abfragen, ob Pfeili sich auf einem Beeper befindet.
 //Es wird genauso in die runden Klammern nach dem if()
 //eingesetzt, wie frontIsBlocked()`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -523,6 +537,7 @@ for (let i = 0; i < 7; i++) {
     move();
     //hier ein if-Statement einfügen...
 }`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -573,6 +588,7 @@ else{
 }
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -601,6 +617,7 @@ putBeeper();`,
         explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.`,
         code: `//Versuche nun selbst ein if-else-Statement
 //zu schreiben.`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -633,6 +650,7 @@ for (let i = 0; i < 7; i++) {
     move();
     //hier ein if-else-Statement einfügen...
 }`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -680,6 +698,7 @@ if(!rightIsBlocked()) {
 }
 move();
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -711,6 +730,7 @@ putBeeper();`,
     move();
 }
 putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -738,6 +758,7 @@ putBeeper();`,
         name: "Hang the Lampions - While Loop",
         explanation: ``,
         code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -798,6 +819,7 @@ putBeeper();`,
         }
         move();
         putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -827,6 +849,7 @@ putBeeper();`,
         name: "Midpoint - Variables",
         explanation: ``,
         code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -849,6 +872,7 @@ putBeeper();`,
         name: "Maze",
         explanation: ``,
         code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
