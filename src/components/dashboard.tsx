@@ -39,6 +39,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
+                executionCompleted: false,
                 pauseCode: false,
                 interval: 250,
                 showLevelCompletedModal: false,
@@ -158,6 +159,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     setRunningCode(runningCode: boolean) {
         //Unpause when level is finished
+        if (this.state.executionCompleted && runningCode) {
+            //First reset, then run the code
+            this.handleResetCode()
+            setTimeout(() => {
+                this.setState({ runningCode: true })
+            }, 200);
+            return
+        }
         if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
         this.setState({ runningCode: runningCode })
     }
@@ -165,12 +174,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     handleRunningCode() {
         if (this.debounceRunningCode) return
         this.debounceRunningCode = true;
-        setTimeout(() => {
-            this.debounceRunningCode = false
-        }, 200);
-        if (this.state.done == "" && !this.state.pauseCode) {
-            this.handleSaveLevel({ code: this.state.code }, true)
-        }
+        setTimeout(() => this.debounceRunningCode = false, 300);
+        if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
         this.setRunningCode(true)
     }
 
@@ -179,8 +184,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({
             firstLog: "",
             secondLog: "",
+            pauseCode: false,
             runningCode: false,
-            pauseCode: false
+            executionCompleted: false
         });
     }
 
@@ -202,7 +208,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     completedLevel(completed: boolean) {
         //Unpause when level is finished
         if (this.state.pauseCode) this.handleIntervalPause(false)
-        if (this.state.done != "") return
+        if (this.state.done != "") return this.setState({ executionCompleted: true })
         let done = ""
         //Check if all worlds have completed
         if (this.state.worldCounter > 1) {
@@ -222,9 +228,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             })
             this.setState({
                 done: done,
-                showLevelCompletedModal: true
+                showLevelCompletedModal: true,
+                executionCompleted: true
             })
-        }
+        } else this.setState({ executionCompleted: true })
     }
 
     toggleModal(toggle: boolean) {

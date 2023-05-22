@@ -28,6 +28,7 @@ export interface DashboardState {
     karel: IKarel
     runningCode: boolean
     pauseCode: boolean
+    executionCompleted: boolean
     interval: number
     showLevelCompletedModal: boolean
     firstLog: string

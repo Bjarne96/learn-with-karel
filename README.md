@@ -13,4 +13,6 @@
 # Tickets
     - rename beepersPresent
     - max snapshot length or execution time of the eval function (for preventing errors or inifinite loops)
-    - interval speed is still prone to bugs (world snapshot timing differs sometimes + speed is not as selected sometimes)
+    - interval speed is still prone to bugs (world snapshot timing differs sometimes + speed is not updated and or infinite)
+    -> Reproduce the Error: Speed 2s, Pause after 1 Step, Speed 0.1s, Play -> infinite
+    -> Reproduce the Error: Speed 2s, Pause after 1 Step, Speed 0.1s, Play till the end, Reset, Speed 2s, Play -> speed is fast than 2s
