@@ -4,3 +4,13 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+}
+
+.has-tooltip:hover .tooltip {
+    visibility: visible;
+    z-index: 100;
+}

@@ -10,11 +10,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     bottomWall = 2
     leftWall = 1
     intervalRef
-    interval = 500
-    lineIndex = 1
-    commandCounter = 0
-    lastCommand = ""
-    lastVal = null
+    interval = 250
+    pauseInterval = false
     finishedCode = false
     startedCode = false
     snapshotIndex = 0
@@ -29,6 +26,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const stateFromProps = this.getUpdateFromProps()
         this.karel = JSON.parse(JSON.stringify(stateFromProps.karel))
         this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers))
+        this.interval = this.props.interval
 
         this.state = {
             karel: JSON.parse(JSON.stringify(stateFromProps.karel)),
@@ -43,18 +41,18 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     componentDidUpdate(): void {
         //Run Code Button was pressed
-        if (this.props.runningCode && this.finishedCode == false && this.startedCode == false) {
+        if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
             this.startedCode = true
             this.executeCode()
         }
         // Reset Button was pressed, while executing code
-        if (this.props.runningCode == false && this.finishedCode == false && this.startedCode == true) {
+        if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
             //Clears snapshots and the interval
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
         // Reset Button was pressed, after executing code
-        if (this.props.runningCode == false && this.startedCode == true) {
+        if (!this.props.runningCode && this.startedCode) {
             //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
             this.finishedCode = false
             this.startedCode = false
@@ -62,16 +60,24 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.setLevel()
         }
         // Level changed
-        if (this.props.currentLevel != this.state.currentLevel
-            && this.props.runningCode == false
-            && this.finishedCode == false
-            && this.startedCode == false) {
+        if (this.props.currentLevel != this.state.currentLevel && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
             //clears snapshots and the interval
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
-        // TODO: pausing interval
-        // if(this.interval != this.props.interval)
+        // Pausing or unpausing the interval
+        if (this.pauseInterval != this.props.pauseCode) {
+            this.pauseInterval = this.props.pauseCode
+            if (this.pauseInterval && !this.finishedCode && this.startedCode) clearInterval(this.intervalRef)
+            this.interval = this.props.interval
+            if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.executeSnapshots()
+        }
+        // Unpausing Interval or changing speed
+        if (this.interval != this.props.interval) {
+            if (!this.finishedCode && this.startedCode) clearInterval(this.intervalRef)
+            this.interval = this.props.interval
+            if (!this.finishedCode && this.startedCode) this.executeSnapshots()
+        }
     }
 
     render() {
@@ -112,7 +118,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    executeCommand(command) {
+    executeCommand(command, line) {
         const valueCommands = [
             "beepersInBag",
             "beepersPresent",
@@ -130,31 +136,25 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             "rightIsClear",
         ]
         try {
-            if (typeof this[command] == undefined) {
-                console.log('Unknown Command', command);
-            } else if (valueCommands.includes(command)) {
+            if (typeof this[command] == undefined) return
+            if (valueCommands.includes(command)) {
                 const val = this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.lastCommand = command
-                this.lastVal = val
-                return val;
+                if (line) this.addLog(command, line, val)
+                return val
             } else {
                 this[command](this)
                 this.addSnapshot(this.karel, this.beepers)
-                this.lastCommand = command
+                if (line) this.addLog(command, line)
             }
         } catch (e) {
-            this.lastCommand = command
-            console.log('World executes command error.', e);
             throw e
         }
     }
 
     addErrorToLog() {
-        this.props.writeInLog("Error after Line " + this.lineIndex + ".\n" + this.errorFound, this.props.worldNumber)
+        this.props.writeInLog(this.errorFound, this.props.worldNumber)
         this.errorFound = ""
-        this.lastCommand = ""
-        this.lastVal = null
     }
 
     addLog(command: string, line: string, bool?: boolean) {
@@ -192,22 +192,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.beepers = update.beepers
     }
 
-    setLine(line) {
-        if (this.lastCommand == "") return
-        this.addLog(this.lastCommand, line, this.lastVal)
-        this.lastCommand = ""
-        this.lastVal = null
-    }
-
     executeCode() {
         let commandList = ""
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = () => this.executeCommand('" + this.props.commands[i] + "');"
+            commandList = commandList + "\n" + this.props.commands[i] + " = (line) => this.executeCommand('" + this.props.commands[i] + "', line);"
         }
         // Commands
-        let move 
-        let turnLeft 
-        let putBeeper 
+        let move
+        let turnLeft
+        let putBeeper
         let pickBeeper
         let turnRight
         let turnAround
@@ -231,25 +224,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let notFacingWest
         //Binds all available functions
         eval(commandList)
-        //Adds a function that sets the lineIndex with binded THIS
-        // eslint-disable-next-line prefer-const
-        let setLine = (i) => {
-            this.setLine(i)
-            this.lineIndex = i
-        }
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/);
             let lineIndexedCodeString = ""
+            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g');
             for (let i = 0; i < codeArr.length; i++) {
-                if ((/else/.test(codeArr[i + 1]) && /}/.test(codeArr[i])) || (/{/.test(codeArr[i + 1]) && /while/.test(codeArr[i]))) {
-                    lineIndexedCodeString = lineIndexedCodeString + codeArr[i]
-                    continue
-                }
-                lineIndexedCodeString = lineIndexedCodeString + codeArr[i] + "\nsetLine(" + (i + 1) + ");\n"
+                lineIndexedCodeString = lineIndexedCodeString + "\n" + codeArr[i].replace(regex, '$1(' + (i + 1) + ')');
             }
             //Execute user code from string
-            this.lineIndex = 1
             eval(lineIndexedCodeString)
         } catch (e) {
             this.errorFound = e.toString();
@@ -260,13 +243,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     executeSnapshots() {
         try {
             if (this.snapshots.length) {
-                if(this.interval >= 0) {
-                    this.intervalRef = setInterval(() => {
+                this.intervalRef = setInterval(() => {
+                    if (!this.pauseInterval) {
                         if (this.snapshotIndex >= this.snapshots.length) {
                             if (this.errorFound) this.addErrorToLog()
                             clearInterval(this.intervalRef)
                             this.clearLog();
-                            if (this.checkSolution()) this.props.completedLevel(true);
+                            this.props.completedLevel(this.checkSolution())
                             return
                         }
                         this.props.writeInLog(this.logs[this.snapshotIndex], this.props.worldNumber)
@@ -275,9 +258,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                             beepers: this.snapshots[this.snapshotIndex].beepers
                         })
                         this.snapshotIndex++
-                    }, this.interval)
-                }
-                
+                    }
+                }, this.interval)
             } else if (this.errorFound) this.addErrorToLog()
         } catch (e) {
             this.props.writeInLog(e, this.props.worldNumber)
