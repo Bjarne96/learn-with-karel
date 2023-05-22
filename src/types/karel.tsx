@@ -27,6 +27,8 @@ export interface DashboardState {
     code: string
     karel: IKarel
     runningCode: boolean
+    pauseCode: boolean
+    interval: number
     showLevelCompletedModal: boolean
     firstLog: string
     secondLog: string
@@ -87,12 +89,14 @@ export interface IWorldProps {
     karel: IKarel
     world: IWorld
     runningCode: boolean
+    pauseCode: boolean
     code: string
     currentLevel: number
     worldNumber: number
     commands: Commands
+    interval: number
     completedLevel(completed: boolean): void
-    writeInLog(log: string ,worldNumber: number): void
+    writeInLog(log: string, worldNumber: number): void
 }
 
 export interface ICanvasProps {
@@ -109,8 +113,11 @@ export interface ITopbar {
     handleSaveCode(): void
     handleSaveCode(): void
     handleResetToDefaulftCode(): void
+    handleIntervalChange(interval: number): void
+    handleIntervalPause(pause: boolean): void
     isLoggedIn: boolean
     done: string
     currentLevel: number
     runningCode: boolean
+    interval: number
 }

@@ -39,6 +39,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
+                pauseCode: false,
+                interval: 250,
                 showLevelCompletedModal: false,
                 firstLog: "",
                 secondLog: "",
@@ -50,6 +52,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     onCodeChange(code: string) {
         this.setState({
             code: code
+        })
+    }
+
+    handleIntervalPause(pause: boolean) {
+        this.setState({
+            pauseCode: pause
+        })
+    }
+
+    handleIntervalChange(interval: number) {
+        this.setState({
+            interval: interval
         })
     }
 
@@ -143,6 +157,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     setRunningCode(runningCode: boolean) {
+        //Unpause when level is finished
+        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
         this.setState({ runningCode: runningCode })
     }
 
@@ -151,8 +167,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.debounceRunningCode = true;
         setTimeout(() => {
             this.debounceRunningCode = false
-        }, 3000);
-        if (this.state.done == "") {
+        }, 200);
+        if (this.state.done == "" && !this.state.pauseCode) {
             this.handleSaveLevel({ code: this.state.code }, true)
         }
         this.setRunningCode(true)
@@ -162,9 +178,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.resetworldCompletedCounter();
         this.setState({
             firstLog: "",
-            secondLog: ""
+            secondLog: "",
+            runningCode: false,
+            pauseCode: false
         });
-        this.setRunningCode(false)
     }
 
     handleResetToDefaulftCode() {
@@ -183,6 +200,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     completedLevel(completed: boolean) {
+        //Unpause when level is finished
+        if (this.state.pauseCode) this.handleIntervalPause(false)
         if (this.state.done != "") return
         let done = ""
         //Check if all worlds have completed
@@ -235,11 +254,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         done={this.state.done}
                         currentLevel={this.state.currentLevel}
                         runningCode={this.state.runningCode}
+                        interval={this.state.interval}
                         handleLevelChange={this.handleLevelChange.bind(this)}
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
                         handleSaveCode={this.handleSaveCode.bind(this)}
                         handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
+                        handleIntervalChange={this.handleIntervalChange.bind(this)}
+                        handleIntervalPause={this.handleIntervalPause.bind(this)}
                     />
                     <div>
                         <div className="flex flex-row gap-4 mt-4">
@@ -268,6 +290,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                         currentLevel={this.state.currentLevel}
                                         code={this.state.code}
                                         runningCode={this.state.runningCode}
+                                        pauseCode={this.state.pauseCode}
+                                        interval={this.state.interval}
                                         karel={this.state.karel}
                                         world={world}
                                         commands={this.state.commands}
