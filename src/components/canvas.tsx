@@ -1,109 +1,101 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React, { createRef } from "react";
-import type { ICanvasProps } from "../types/karel";
+import React, { useEffect, useRef, useCallback } from "react"
+import type { ICanvasProps } from "../types/karel"
 
-export default class Canvas extends React.Component<ICanvasProps> {
-    canvasRef
-    blockSize = 1
-    clientWidth = 300
+const Canvas: React.FC<ICanvasProps> = (props) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+    let clientWidth = 300
 
-    constructor(props: ICanvasProps) {
-        super(props);
-        this.canvasRef = createRef<HTMLCanvasElement>();
-        this.state = {}
-    }
+    const draw = useCallback(() => {
+        if (props.walls === undefined || props.walls.length === 0 || props.walls[0] === undefined)
+            return
 
-    componentDidUpdate(): void {
-        this.draw()
-    }
-
-    componentDidMount(): void {
-        this.draw()
-    }
-
-    draw() {
-        if (this.props.walls == undefined || this.props.walls.length == 0 || this.props.walls[0] == undefined) return
-        const yCount = this.props.walls.length
-        const xCount = this.props.walls[0].length
+        const yCount = props.walls.length
+        const xCount = props.walls[0].length
         let teiler = yCount
-        if (typeof window !== "undefined") this.clientWidth = window.innerWidth * 0.33
-        const canvasHeight = this.clientWidth / (xCount / yCount)
-        if (yCount < xCount) teiler = xCount
-        this.blockSize = this.clientWidth / teiler
 
-        const canvas = this.canvasRef.current
+        if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
+        const canvasHeight = clientWidth / (xCount / yCount)
+
+        if (yCount < xCount) teiler = xCount
+        const currentBlockSize = clientWidth / teiler
+
+        const canvas = canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
         if (context == null) return
 
-        canvas.width = this.clientWidth
+        canvas.width = clientWidth
         canvas.height = canvasHeight
 
         // walls
-        for (let y = 0; y < this.props.walls.length; y++) {
-            if (this.props.walls == null && this.props.walls[y] == null) return
-            for (let x = 0; x < this.props.walls[y].length; x++) {
-                if (this.props.walls[y][x] == null) break
+        for (let y = 0; y < props.walls.length; y++) {
+            if (props.walls == null && props.walls[y] == null) return
+            for (let x = 0; x < props.walls[y].length; x++) {
+                if (props.walls[y][x] == null) break
                 context.fillStyle = "white"
-                context.fillRect(x * this.blockSize + this.blockSize * 0.5, y * this.blockSize + this.blockSize * 0.5, 2, 2)
-                this.drawWall(x, y, this.props.walls[y][x])
+                context.fillRect(x * currentBlockSize + currentBlockSize * 0.5, y * currentBlockSize + currentBlockSize * 0.5, 2, 2)
+                drawWall(x, y, props.walls[y][x], currentBlockSize)
             }
         }
 
         // beepers
-        for (let i = 0; i < this.props.beepers.length; i++) {
-            const beeper = this.props.beepers[i]
+        for (let i = 0; i < props.beepers.length; i++) {
+            const beeper = props.beepers[i]
             if (beeper == null) return
             let solved = false
-            for (let i = 0; i < this.props.solutions.length; i++) {
-                const solution = this.props.solutions[i]
-                if (solution.x == beeper.x && solution.y == beeper.y && solution.count == beeper.count) {
+            for (let i = 0; i < props.solutions.length; i++) {
+                const solution = props.solutions[i]
+                if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
                     solved = true
-                    break;
+                    break
                 }
             }
-            this.drawBeeper(beeper.x, beeper.y, beeper.count, solved)
+            drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize)
         }
-        for (let i = 0; i < this.props.solutions.length; i++) {
-            const solution = this.props.solutions[i]
+        for (let i = 0; i < props.solutions.length; i++) {
+            const solution = props.solutions[i]
             if (solution == null) return
-            this.drawSolutions(solution.x, solution.y, solution.count)
+            drawSolutions(solution.x, solution.y, solution.count, currentBlockSize)
         }
-        this.drawKarel();
-        this.render();
-    }
+        drawKarel(props.karel, currentBlockSize)
+    }, [])
 
-    drawWall(x: number, y: number, side: number) {
-        const canvas = this.canvasRef.current
+    useEffect(() => {
+        draw()
+    }, [props.walls, props.beepers, props.solutions, draw])
+    const drawWall = (x: number, y: number, side: number, currentBlockSize: number) => {
+        const canvas = canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
         if (context == null) return
-        const minX = x * this.blockSize
-        const minY = y * this.blockSize
-        const maxX = minX + this.blockSize
-        const maxY = minY + this.blockSize
+        const minX = x * currentBlockSize
+        const minY = y * currentBlockSize
+        const maxX = minX + currentBlockSize
+        const maxY = minY + currentBlockSize
 
         context.save()
         context.beginPath()
 
-        if (side & 8) { // Top
+        if (side & 8) {
+            // Top
             context.moveTo(minX, minY)
             context.lineTo(maxX, minY)
         }
 
-        if (side & 4) { // Right
+        if (side & 4) {
+            // Right
             context.moveTo(maxX, minY)
             context.lineTo(maxX, maxY)
         }
 
-        if (side & 2) { // Bottom
+        if (side & 2) {
+            // Bottom
             context.moveTo(minX, maxY)
             context.lineTo(maxX, maxY)
         }
 
-        if (side & 1) { // Left
+        if (side & 1) {
+            // Left
             context.moveTo(minX, minY)
             context.lineTo(minX, maxY)
         }
@@ -114,17 +106,18 @@ export default class Canvas extends React.Component<ICanvasProps> {
         context.restore()
     }
 
-    drawBeeper(x: number, y: number, count: number, solved: boolean) {
-        const canvas = this.canvasRef.current
+    const drawBeeper = (x: number, y: number, count: number, solved: boolean, currentBlockSize: number) => {
+        const canvas = canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
         if (context == null) return
-        const minX = x * this.blockSize
-        const minY = y * this.blockSize
-        const midX = minX + this.blockSize * 0.5
-        const midY = minY + this.blockSize * 0.5
-        const maxX = minX + this.blockSize
-        const maxY = minY + this.blockSize
+        const minX = x * currentBlockSize
+        const minY = y * currentBlockSize
+        const midX = minX + currentBlockSize * 0.5
+        const midY = minY + currentBlockSize * 0.5
+        const maxX = minX + currentBlockSize
+        const maxY = minY + currentBlockSize
+
         context.save()
         context.beginPath()
         context.moveTo(midX, minY + 10) // top point
@@ -133,18 +126,14 @@ export default class Canvas extends React.Component<ICanvasProps> {
         context.lineTo(minX + 10, midY) // left point
 
         context.lineWidth = 2
-        if (solved) {
-            context.fillStyle = "hsl(90, 80%, 40%)"
-        } else {
-            context.fillStyle = "hsl(0, 100%, 40%)"
-        }
+        context.fillStyle = solved ? "hsl(90, 80%, 40%)" : "hsl(0, 100%, 40%)"
         context.strokeStyle = "white"
         context.closePath()
         context.fill()
         context.stroke()
         context.restore()
 
-        if (count && count != 1) {
+        if (count && count !== 1) {
             context.save()
             context.textAlign = "center"
             context.textBaseline = "middle"
@@ -153,17 +142,18 @@ export default class Canvas extends React.Component<ICanvasProps> {
         }
     }
 
-    drawSolutions(x: number, y: number, count: number) {
-        const canvas = this.canvasRef.current
+    const drawSolutions = (x: number, y: number, count: number, currentBlockSize: number) => {
+        const canvas = canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
         if (context == null) return
-        const minX = x * this.blockSize
-        const minY = y * this.blockSize
-        const midX = minX + this.blockSize * 0.5
-        const midY = minY + this.blockSize * 0.5
-        const maxX = minX + this.blockSize
-        const maxY = minY + this.blockSize
+        const minX = x * currentBlockSize
+        const minY = y * currentBlockSize
+        const midX = minX + currentBlockSize * 0.5
+        const midY = minY + currentBlockSize * 0.5
+        const maxX = minX + currentBlockSize
+        const maxY = minY + currentBlockSize
+
         context.save()
         context.beginPath()
         context.moveTo(midX, minY + 10) // top point
@@ -173,11 +163,11 @@ export default class Canvas extends React.Component<ICanvasProps> {
 
         context.lineWidth = 2
         context.strokeStyle = "white"
-
         context.closePath()
         context.stroke()
         context.restore()
-        if (count && count != 1) {
+
+        if (count && count !== 1) {
             context.save()
             context.textAlign = "center"
             context.textBaseline = "middle"
@@ -186,25 +176,86 @@ export default class Canvas extends React.Component<ICanvasProps> {
         }
     }
 
-    drawKarel() {
-        const canvas = this.canvasRef.current
+    const drawKarel = (karel: { x: number; y: number; direction: number }, currentBlockSize: number) => {
+        const canvas = canvasRef.current
         if (canvas == null) return
         const context = canvas.getContext("2d")
         if (context == null) return
-        const karelImage = document.getElementById('img') as CanvasImageSource
-        const minX = this.props.karel.x * this.blockSize
-        const minY = this.props.karel.y * this.blockSize
-        const midX = this.blockSize * 0.5
-        const midY = this.blockSize * 0.5
+        const karelImage = document.getElementById("img") as CanvasImageSource
+        const minX = karel.x * currentBlockSize
+        const minY = karel.y * currentBlockSize
+        const midX = currentBlockSize * 0.5
+        const midY = currentBlockSize * 0.5
         context.save()
         context.translate(minX, minY)
         context.translate(midX, midY)
-        context.rotate(-90 * this.props.karel.direction * (Math.PI / 180))
-        context.drawImage(karelImage, midX, midY, -this.blockSize, -this.blockSize)
+        context.rotate(-90 * karel.direction * (Math.PI / 180))
+        context.drawImage(karelImage, midX, midY, -currentBlockSize, -currentBlockSize)
         context.restore()
     }
 
-    render() {
-        return <><img className="hidden" id="img" src="/karel.png"></img><canvas ref={this.canvasRef} /></>;
-    }
+    useEffect(() => {
+        if (canvasRef.current) {
+            const canvas = canvasRef.current
+            const context = canvas.getContext("2d")
+            if (context) {
+                const yCount = props.walls.length
+                const xCount = props.walls[0].length
+                let teiler = yCount
+                if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
+                const canvasHeight = clientWidth / (xCount / yCount)
+                if (yCount < xCount) teiler = xCount
+                const currentBlockSize = clientWidth / teiler
+
+                canvas.width = clientWidth
+                canvas.height = canvasHeight
+
+                // Walls
+                for (let y = 0; y < props.walls.length; y++) {
+                    if (props.walls == null || props.walls[y] == null) return
+                    for (let x = 0; x < props.walls[y].length; x++) {
+                        if (props.walls[y][x] == null) break
+                        context.fillStyle = "white"
+                        context.fillRect(
+                            x * currentBlockSize + currentBlockSize * 0.5,
+                            y * currentBlockSize + currentBlockSize * 0.5,
+                            2,
+                            2
+                        )
+                        drawWall(x, y, props.walls[y][x], currentBlockSize)
+                    }
+                }
+
+                // Beepers
+                for (let i = 0; i < props.beepers.length; i++) {
+                    const beeper = props.beepers[i]
+                    if (beeper == null) return
+                    let solved = false
+                    for (let i = 0; i < props.solutions.length; i++) {
+                        const solution = props.solutions[i]
+                        if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
+                            solved = true
+                            break
+                        }
+                    }
+                    drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize)
+                }
+                for (let i = 0; i < props.solutions.length; i++) {
+                    const solution = props.solutions[i]
+                    if (solution == null) return
+                    drawSolutions(solution.x, solution.y, solution.count, currentBlockSize)
+                }
+                drawKarel(props.karel, currentBlockSize)
+            }
+        }
+    }, [props.beepers, props.solutions, props.walls, props.karel])
+
+    return (
+        <>{/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="hidden" id="img" src="/karel.png" alt="" />
+            <canvas ref={canvasRef} />
+        </>
+    )
 }
+
+export default Canvas
