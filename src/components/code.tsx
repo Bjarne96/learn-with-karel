@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import CodeMirror from '@uiw/react-codemirror'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { useCodeMirror } from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import type { ICode } from '../types/karel'
 
@@ -7,8 +7,20 @@ const Code: React.FC<ICode> = ({ worldCounter, code, onCodeChange, firstLog, sec
 
     const [log, setLog] = useState<string>('firstLog')
 
-    const changeLog = (newLog: string) => setLog(newLog)
+    const editor = useRef<HTMLDivElement>(null);
 
+    const { setContainer } = useCodeMirror({
+        container: editor.current,
+        value: code,
+        height: "33vw",
+        width: "33vw",
+        onChange: (value: string) => onCodeChange(value),
+        theme: "dark",
+        extensions: [javascript({ jsx: true })],
+    });
+
+    const changeLog = (newLog: string) => setLog(newLog)
+    //Highlighting
     const highlightLine = useCallback(() => {
         const lines = log === 'firstLog' ? firstLog.split('\n') : secondLog.split('\n')
         for (let i = lines.length - 1; i >= 0; i--) {
@@ -34,11 +46,16 @@ const Code: React.FC<ICode> = ({ worldCounter, code, onCodeChange, firstLog, sec
             } catch (e) { }
         }
     }, [log, firstLog, secondLog])
-
+    //Highlighting
     useEffect(() => {
         if (worldCounter === 1 && log === 'secondLog') setLog('firstLog')
         if (runningCode) highlightLine()
     }, [worldCounter, log, runningCode, firstLog, secondLog, highlightLine])
+
+    //Using the editor
+    useEffect(() => {
+        if (editor.current) setContainer(editor.current);
+    }, [setContainer]);
 
     return (
         <div className="border-code-grey bg-code-grey border-[1rem] rounded">
@@ -53,14 +70,7 @@ const Code: React.FC<ICode> = ({ worldCounter, code, onCodeChange, firstLog, sec
                     ))}
                 </select>
             )}
-            <CodeMirror
-                value={code}
-                height="33vw"
-                width="33vw"
-                onChange={(value: string) => onCodeChange(value)}
-                theme="dark"
-                extensions={[javascript({ jsx: true })]}
-            />
+            <div ref={editor}></div>
         </div>
     )
 }

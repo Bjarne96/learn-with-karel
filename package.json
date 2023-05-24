@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/state": "^6.2.1",
     "@uiw/react-codemirror": "^4.19.9",
     "mongodb": "^5.1.0",
     "next": "^13.2.1",
