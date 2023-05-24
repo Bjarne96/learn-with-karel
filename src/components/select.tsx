@@ -11,7 +11,7 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
         >
             {levels.map((level: ILevel, i: number) => (
                 <option value={i} key={i}>
-                    {level.name}
+                    {i + 1}. {level.name}
                 </option>
             ))}
         </select>

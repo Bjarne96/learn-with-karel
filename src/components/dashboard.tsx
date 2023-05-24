@@ -197,6 +197,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     handleLevelChange(level: number) {
+        if (level < 0 || level > (levels.length - 1)) return
         if (this.state.runningCode) this.handleResetCode()
         this.setLevel(level)
     }
