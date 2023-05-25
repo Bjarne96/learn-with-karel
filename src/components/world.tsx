@@ -134,6 +134,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             "rightIsClear",
         ]
         try {
+            //Max snapshot length to protect the browser from crashing
+            if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
             if (typeof this[command] == undefined) return
             if (valueCommands.includes(command)) {
                 const val = this[command](this)
@@ -233,6 +235,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Execute user code from string
             eval(lineIndexedCodeString)
         } catch (e) {
+            // codeExecuted = true
             this.errorFound = e.toString();
         }
         this.executeSnapshots()
