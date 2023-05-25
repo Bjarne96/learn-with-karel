@@ -68,13 +68,11 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         // Pausing or unpausing the interval
         if (this.pauseInterval != this.props.pauseCode) {
             this.pauseInterval = this.props.pauseCode
-            if (this.pauseInterval && !this.finishedCode && this.startedCode) clearInterval(this.intervalRef)
             this.interval = this.props.interval
             if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.executeSnapshots()
         }
         // Unpausing Interval or changing speed
         if (this.interval != this.props.interval) {
-            if (!this.finishedCode && this.startedCode) clearInterval(this.intervalRef)
             this.interval = this.props.interval
             if (!this.finishedCode && this.startedCode) this.executeSnapshots()
         }
@@ -242,6 +240,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     executeSnapshots() {
         try {
+            clearInterval(this.intervalRef)
             if (this.snapshots.length) {
                 this.intervalRef = setInterval(() => {
                     if (!this.pauseInterval) {
