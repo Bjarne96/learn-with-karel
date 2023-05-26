@@ -18,9 +18,11 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     isLoggedIn = false
     userId = ""
     worldCompletedCounter = 0
+    worldCounter = 1
 
     constructor(props: DashboardProps) {
         super(props);
+        //Adapting props, when user data was given
         let lastStage = 0
         let done = ""
         let code = levels[lastStage].code
@@ -31,10 +33,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             lastStage = props.stage
             code = props.code
         }
+        //Setting globals
+        this.worldCounter = levels[lastStage].worlds.length
+        //Setting state
         if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
                 currentLevel: lastStage,
-                worldCounter: levels[lastStage].worlds.length,
                 karel: levels[lastStage].worlds[0].karel,
                 commands: levels[lastStage].commands,
                 code: code,
@@ -43,17 +47,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 pauseCode: false,
                 interval: 250,
                 showLevelCompletedModal: false,
-                firstLog: "",
-                secondLog: "",
+                firstLog: [],
+                secondLog: [],
+                activeLine: 0,
+                activeLog: 1,
                 done: done
             }
         }
     }
 
     onCodeChange(code: string) {
-        this.setState({
-            code: code
-        })
+        if (this.state.runningCode) {
+            //First reset, then update the code
+            this.handleResetCode()
+            setTimeout(() => { this.setState({ code: code }) }, 128);
+            return
+        }
+        this.setState({ code: code })
     }
 
     handleIntervalPause(pause: boolean) {
@@ -72,7 +82,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
         let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
         let done = ""
-        const worldCounter = levels[level].worlds.length
+        this.worldCounter = levels[level].worlds.length
+        this.resetworldCompletedCounter();
         if (this.userId) {
             const res = await this.getLevel(level)
             if (res["code"]) code = res["code"]
@@ -84,9 +95,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             karel: karel,
             code: code,
             done: done,
-            worldCounter: worldCounter,
-            firstLog: "",
-            secondLog: ""
+            firstLog: [],
+            secondLog: [],
+            pauseCode: false,
+            runningCode: false,
+            executionCompleted: false,
+            activeLine: 0,
+            activeLog: 1
         })
     }
 
@@ -162,13 +177,15 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (this.state.executionCompleted && runningCode) {
             //First reset, then run the code
             this.handleResetCode()
-            setTimeout(() => {
-                this.setState({ runningCode: true })
-            }, 200);
+            setTimeout(() => { this.setState({ runningCode: true }) }, 128);
             return
         }
         if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
         this.setState({ runningCode: runningCode })
+    }
+
+    setActiveLog(log: number) {
+        this.setState({ activeLog: log })
     }
 
     handleRunningCode() {
@@ -182,11 +199,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     handleResetCode() {
         this.resetworldCompletedCounter();
         this.setState({
-            firstLog: "",
-            secondLog: "",
+            firstLog: [],
+            secondLog: [],
             pauseCode: false,
             runningCode: false,
-            executionCompleted: false
+            executionCompleted: false,
+            activeLine: 0
         });
     }
 
@@ -198,7 +216,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     handleLevelChange(level: number) {
         if (level < 0 || level > (levels.length - 1)) return
-        if (this.state.runningCode) this.handleResetCode()
         this.setLevel(level)
     }
 
@@ -209,47 +226,58 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     completedLevel(completed: boolean) {
         //Unpause when level is finished
         if (this.state.pauseCode) this.handleIntervalPause(false)
+        //If the level was already completed at some point before,
+        // there is only to the executionCompleted state has to be set
         if (this.state.done != "") return this.setState({ executionCompleted: true })
-        let done = ""
         //Check if all worlds have completed
-        if (this.state.worldCounter > 1) {
+        if (this.worldCounter > 1 && completed) {
+            //Counts up, because one world was completed
             this.worldCompletedCounter++
-            if (this.state.worldCounter == this.worldCompletedCounter) {
-                this.resetworldCompletedCounter()
-            } else {
-                completed = false
-            }
+            //Resets when all where completed successfully
+            if (this.worldCounter == this.worldCompletedCounter) this.resetworldCompletedCounter()
+            else completed = false //Sets to false, when they didnt match the count
         }
-        //Handle Completed
-        if (completed) {
-            done = new Date().toString()
+        //Handle first time completed
+        if (completed) { // Was successfully completed
+            //Saves the code and the done date to database
+            const done = new Date().toString()
             this.handleSaveLevel({
                 done: done,
                 code: this.state.code
             })
+            //Updates the state and shows the modal
             this.setState({
                 done: done,
                 showLevelCompletedModal: true,
                 executionCompleted: true
             })
-        } else this.setState({ executionCompleted: true })
+        } else this.setState({ executionCompleted: true }) // Was unsuccessfully completed
     }
 
     toggleModal(toggle: boolean) {
         this.setState({ showLevelCompletedModal: toggle })
     }
 
-    writeInLog(entry: string, worldNumber: number) {
+    updateLogAndLine(entry: string, line: number, worldNumber: number) {
+        //Work around to highlight the same line again
+        if (worldNumber == this.state.activeLog && this.state.activeLine == line) {
+            const lineLater = line
+            setTimeout(() => this.setState({ activeLine: lineLater }), 16)
+            line = 0
+        }
         if (entry == undefined) return
+
         if (worldNumber == 1) {
-            this.setState({
-                firstLog: this.state.firstLog + entry + "\n"
-            })
+            const firstLog = this.state.firstLog
+            firstLog.push(entry + "\n")
+            if (worldNumber == this.state.activeLog) this.setState({ firstLog: firstLog, activeLine: line })
+            else this.setState({ firstLog: firstLog, activeLine: line })
         }
         if (worldNumber == 2) {
-            this.setState({
-                secondLog: this.state.secondLog + entry + "\n"
-            })
+            const secondLog = this.state.secondLog
+            secondLog.push(entry + "\n")
+            if (worldNumber == this.state.activeLog) this.setState({ secondLog: secondLog, activeLine: line })
+            else this.setState({ secondLog: secondLog })
         }
     }
 
@@ -274,9 +302,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     <div>
                         <div className="flex flex-row gap-4 mt-4">
                             <Commands
-                                worldCounter={this.state.worldCounter}
-                                firstLog={this.state.firstLog}
-                                secondLog={this.state.secondLog}
+                                log={this.state.activeLog == 1 ? this.state.firstLog : this.state.secondLog}
                                 runningCode={this.state.runningCode}
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
@@ -285,11 +311,17 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             <Code
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
-                                worldCounter={this.state.worldCounter}
-                                firstLog={this.state.firstLog}
-                                secondLog={this.state.secondLog}
                                 runningCode={this.state.runningCode}
+                                executionCompleted={this.state.executionCompleted}
+                                activeLine={this.state.activeLine}
                             />
+                            {/* <Editor
+                            // code={this.state.code}
+                            // onCodeChange={this.onCodeChange.bind(this)}
+                            // firstLog={this.state.firstLog}
+                            // secondLog={this.state.secondLog}
+                            // runningCode={this.state.runningCode}
+                            /> */}
                             <div className="block rounded bg-code-grey">
                                 {levels[this.state.currentLevel].worlds.map((world, i) =>
                                     <World
@@ -304,7 +336,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                         world={world}
                                         commands={this.state.commands}
                                         completedLevel={this.completedLevel.bind(this)}
-                                        writeInLog={this.writeInLog.bind(this)}
+                                        updateLogAndLine={this.updateLogAndLine.bind(this)}
                                     />
                                 )}
                             </div>
@@ -314,7 +346,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             </main>
             {this.state.showLevelCompletedModal ? <LevelModal
                 currentlevel={this.state.currentLevel}
-                setLevel={this.setLevel.bind(this)}
+                handleLevelChange={this.handleLevelChange.bind(this)}
                 handleResetCode={this.handleResetCode.bind(this)}
                 toggleModal={this.toggleModal.bind(this)}
             /> : <></>}

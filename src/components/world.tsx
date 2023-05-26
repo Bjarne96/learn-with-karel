@@ -17,7 +17,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     snapshotIndex = 0
     errorFound = ""
     snapshots: ISnapshots = []
-    logs: Array<string> = []
+    logs: Array<{ log: string, line: number }> = []
     karel: IKarel
     beepers: Beepers
 
@@ -116,7 +116,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    executeCommand(command, line) {
+    executeCommand(command: string, line: number) {
         const valueCommands = [
             "beepersInBag",
             "beepersPresent",
@@ -153,14 +153,14 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     addErrorToLog() {
-        this.props.writeInLog(this.errorFound, this.props.worldNumber)
+        this.props.updateLogAndLine(this.errorFound, 0, this.props.worldNumber)
         this.errorFound = ""
     }
 
-    addLog(command: string, line: string, bool?: boolean) {
+    addLog(command: string, line: number, bool?: boolean) {
         let log = "L" + line + ":\t" + command
         if (bool != null || bool != undefined) log += " = " + bool
-        this.logs.push(log)
+        this.logs.push({ log: log, line: line })
     }
 
     clearLog() {
@@ -254,7 +254,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                             this.props.completedLevel(this.checkSolution())
                             return
                         }
-                        this.props.writeInLog(this.logs[this.snapshotIndex], this.props.worldNumber)
+                        this.props.updateLogAndLine(
+                            this.logs[this.snapshotIndex].log,
+                            this.logs[this.snapshotIndex].line,
+                            this.props.worldNumber)
                         this.setState({
                             karel: this.snapshots[this.snapshotIndex].karel,
                             beepers: this.snapshots[this.snapshotIndex].beepers
@@ -264,7 +267,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }, this.interval)
             } else if (this.errorFound) this.addErrorToLog()
         } catch (e) {
-            this.props.writeInLog(e, this.props.worldNumber)
+            this.props.updateLogAndLine(e, 0, this.props.worldNumber)
         }
     }
 

@@ -2,14 +2,14 @@ import React from "react"
 
 interface Props {
     currentlevel: number
-    setLevel(level: number): void
+    handleLevelChange(level: number): void
     handleResetCode(): void
     toggleModal(level: boolean): void
 }
 
-const LevelModal: React.FC<Props> = ({ currentlevel, setLevel, handleResetCode, toggleModal }) => {
+const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleResetCode, toggleModal }) => {
     const nextLevel = () => {
-        setLevel(currentlevel + 1)
+        handleLevelChange(currentlevel + 1)
         hideModal()
         handleResetCode()
     }

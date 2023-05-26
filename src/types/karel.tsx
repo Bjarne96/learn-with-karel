@@ -31,9 +31,10 @@ export interface DashboardState {
     executionCompleted: boolean
     interval: number
     showLevelCompletedModal: boolean
-    firstLog: string
-    secondLog: string
-    worldCounter: number
+    firstLog: Array<string>
+    secondLog: Array<string>
+    activeLine: number
+    activeLog: number
     done: string
     commands: Commands
 }
@@ -56,15 +57,18 @@ export interface Beeper extends Coords {
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Beepers extends Array<Beeper> { }
-export interface ICode {
+export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
     runningCode: boolean
-    firstLog: string
-    secondLog: string
-    worldCounter: number
+    executionCompleted: boolean
+    activeLine: number
 }
-export interface ICommandProps extends ICode {
+export interface ICommandProps {
+    code: string
+    onCodeChange(code: string): void
+    runningCode: boolean
+    log: Array<string>
     commands: Commands
 }
 export interface ISelectLevelProps {
@@ -98,7 +102,7 @@ export interface IWorldProps {
     commands: Commands
     interval: number
     completedLevel(completed: boolean): void
-    writeInLog(log: string, worldNumber: number): void
+    updateLogAndLine(log: string, line: number, worldNumber: number): void
 }
 
 export interface ICanvasProps {

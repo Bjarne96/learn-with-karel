@@ -14,3 +14,8 @@
     visibility: visible;
     z-index: 100;
 }
+
+.highlighted-line {
+    background-color: white !important;
+    border-radius: 3px !important;
+}
