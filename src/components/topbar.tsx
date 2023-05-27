@@ -1,24 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import SelectLevel from './select'
 // Styles
 import type { ITopbar } from "../types/karel"
 
 const Topbar: React.FC<ITopbar> = (props) => {
-    const [interval, setInterval] = useState(250)
-    let intervalSet = false
+    const [interval, setIntervalSpeed] = useState(250)
+    const timer = useRef<NodeJS.Timeout | null>(null); // Create a mutable reference
     const tooltipContainer = "w-10 has-tooltip h-10 my-auto"
     const tooltipContainer2 = "w-8 has-tooltip h-10 my-auto"
     const tooltipText = "tooltip rounded shadow-lg p-1 bg-code-grey text-white -mt-8"
 
-    const handleIntervalSpeed = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!intervalSet) {
-            intervalSet = true
-            setTimeout(() => {
-                intervalSet = false
-                props.handleIntervalChange(interval)
-            }, 200)
-        }
-        setInterval(Number(e.target.value))
+    const handleIntervalSpeed = (value: number) => {
+        // Clear any previous setTimeout
+        clearTimeout(timer.current);
+        // Set the new interval speed
+        setIntervalSpeed(value);
+        // Call props.handleIntervalChange after a delay of 100ms
+        timer.current = setTimeout(() => props.handleIntervalChange(value), 100);
     }
 
     const returnButton = (name: string) => {
@@ -125,7 +123,7 @@ const Topbar: React.FC<ITopbar> = (props) => {
                         step="100"
                         min="100"
                         max="2000"
-                        onChange={(e) => handleIntervalSpeed(e)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleIntervalSpeed(Number(e.target.value))}
                         className="w-32 h-1 mb-4 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700"
                     />
                 </div>
