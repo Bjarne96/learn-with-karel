@@ -121,6 +121,9 @@ export interface ITopbar {
     handleResetToDefaulftCode(): void
     handleIntervalChange(interval: number): void
     handleIntervalPause(pause: boolean): void
+    setActiveLog(log: number): void
+    activeLog: number
+    worldCounter: number
     isLoggedIn: boolean
     done: string
     currentLevel: number

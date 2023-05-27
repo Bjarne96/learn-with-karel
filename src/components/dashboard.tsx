@@ -66,17 +66,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({ code: code })
     }
 
-    handleIntervalPause(pause: boolean) {
-        this.setState({
-            pauseCode: pause
-        })
-    }
+    handleIntervalPause(pause: boolean) { this.setState({ pauseCode: pause }) }
 
-    handleIntervalChange(interval: number) {
-        this.setState({
-            interval: interval
-        })
-    }
+    handleIntervalChange(interval: number) { this.setState({ interval: interval }) }
 
     async setLevel(level: number) {
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
@@ -168,9 +160,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (res) this.debounceSaveCode = false
     }
 
-    async handleSaveCode() {
-        this.handleSaveLevel({ code: this.state.code })
-    }
+    async handleSaveCode() { this.handleSaveLevel({ code: this.state.code }) }
 
     setRunningCode(runningCode: boolean) {
         //Unpause when level is finished
@@ -184,9 +174,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({ runningCode: runningCode })
     }
 
-    setActiveLog(log: number) {
-        this.setState({ activeLog: log })
-    }
+    setActiveLog(log: number) { this.setState({ activeLog: log }) }
 
     handleRunningCode() {
         if (this.debounceRunningCode) return
@@ -208,20 +196,11 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         });
     }
 
-    handleResetToDefaulftCode() {
-        this.setState({
-            code: levels[this.state.currentLevel].code
-        })
-    }
+    handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
-    handleLevelChange(level: number) {
-        if (level < 0 || level > (levels.length - 1)) return
-        this.setLevel(level)
-    }
+    handleLevelChange(level: number) { if (level > 0 && level < levels.length) this.setLevel(level) }
 
-    resetworldCompletedCounter() {
-        this.worldCompletedCounter = 0
-    }
+    resetworldCompletedCounter() { this.worldCompletedCounter = 0 }
 
     completedLevel(completed: boolean) {
         //Unpause when level is finished
@@ -254,9 +233,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         } else this.setState({ executionCompleted: true }) // Was unsuccessfully completed
     }
 
-    toggleModal(toggle: boolean) {
-        this.setState({ showLevelCompletedModal: toggle })
-    }
+    toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
 
     updateLogAndLine(entry: string, line: number, worldNumber: number) {
         //Work around to highlight the same line again
@@ -291,6 +268,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         currentLevel={this.state.currentLevel}
                         runningCode={this.state.runningCode}
                         interval={this.state.interval}
+                        activeLog={this.state.activeLog}
+                        worldCounter={this.worldCounter}
                         handleLevelChange={this.handleLevelChange.bind(this)}
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
@@ -298,6 +277,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                         handleIntervalChange={this.handleIntervalChange.bind(this)}
                         handleIntervalPause={this.handleIntervalPause.bind(this)}
+                        setActiveLog={this.setActiveLog.bind(this)}
                     />
                     <div>
                         <div className="flex flex-row gap-4 mt-4">
@@ -344,12 +324,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     </div>
                 </div>
             </main>
-            {this.state.showLevelCompletedModal ? <LevelModal
-                currentlevel={this.state.currentLevel}
-                handleLevelChange={this.handleLevelChange.bind(this)}
-                handleResetCode={this.handleResetCode.bind(this)}
-                toggleModal={this.toggleModal.bind(this)}
-            /> : <></>}
+            {this.state.showLevelCompletedModal &&
+                <LevelModal
+                    currentlevel={this.state.currentLevel}
+                    handleLevelChange={this.handleLevelChange.bind(this)}
+                    handleResetCode={this.handleResetCode.bind(this)}
+                    toggleModal={this.toggleModal.bind(this)}
+                />}
         </>
     }
 }
