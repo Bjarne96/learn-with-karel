@@ -61,7 +61,6 @@ export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
     runningCode: boolean
-    executionCompleted: boolean
     activeLine: number
 }
 export interface ICommandProps {

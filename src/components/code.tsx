@@ -3,7 +3,7 @@ import { useCodeMirror } from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import type { ICodeProps } from '../types/karel'
 
-const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, executionCompleted, activeLine }) => {
+const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLine }) => {
 
     const editorContainer = useRef<HTMLDivElement>(null);
 
@@ -19,7 +19,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, execution
 
     //Highlight active line
     useEffect(() => {
-        if (runningCode && !executionCompleted && activeLine != 0) {
+        if (runningCode && activeLine != 0) {
             try {
                 setTimeout(() => {
                     document.getElementsByClassName("cm-content")[0]
@@ -30,7 +30,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, execution
                 console.log('e', e);
             }
         }
-    }, [runningCode, executionCompleted, code, activeLine])
+    }, [runningCode, code, activeLine])
 
     //Using the editorContainer
     useEffect(() => {

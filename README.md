@@ -12,4 +12,5 @@
      - Users can save custom functions (across levels)
 # Tickets
     - rename beepersPresent
-    - max snapshot length or execution time of the eval function (for preventing errors or inifinite loops)
+    - user has "geführtes lernen tag"
+    - erklärung an der der linken seite / console an der linken seiten / custom functions an der linken Seite

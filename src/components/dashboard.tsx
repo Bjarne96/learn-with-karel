@@ -203,6 +203,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     resetworldCompletedCounter() { this.worldCompletedCounter = 0 }
 
     completedLevel(completed: boolean) {
+        console.log('completed***************************');
         //Unpause when level is finished
         if (this.state.pauseCode) this.handleIntervalPause(false)
         //If the level was already completed at some point before,
@@ -292,7 +293,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
                                 runningCode={this.state.runningCode}
-                                executionCompleted={this.state.executionCompleted}
                                 activeLine={this.state.activeLine}
                             />
                             {/* <Editor
