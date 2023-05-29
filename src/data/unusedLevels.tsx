@@ -394,5 +394,132 @@ putBeeper();`,
             }
         ],
     },
+    {
+        name: "Double the Length - Seeing Variables with Numbers",
+        explanation: ``,
+        code: `//Wir können Variablen auch mit Zahlen füllen.
+//Hier muss Pfeili messen, wie weit es zum Beeper
+//ist und diese Entfernung dann verdoppeln.
+//In der Zeile "distance = distance + 1;" wird
+//der Wert, welcher bereits in der Variable gespeichert
+//ist, mit 1 addiert und dann wieder in der Variable
+//gespeichert.
+
+var distance = 0;
+while(noBeeperIsPresent()){
+    move();
+    distance = distance + 1;
+}
+pickBeeper();
+for (let i = 0; i < distance; i++) { //<- Hier wird die Variable genutzt, um die Länge der Schleife festzulegen.
+    move();
+}
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "noBeeperIsPresent"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [{ x: 6, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [8, 8, 8, 8, 8, 8, 8, 8, 8],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 3 }
+            },
+        ],
+    },
+    {
+        name: "Midpoint - Using Variables with Numbers",
+        explanation: ``,
+        code: `//Versuche nun selbst, eine Variable zu nutzen, um den
+//Mittelpunkt der Level zu finden.`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        worlds: [
+            {
+                walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],],
+                beepers: [],
+                solutions: [{ x: 4, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true }
+            },
+            {
+                walls: [[8, 9, 8, 8, 8, 8, 8, 12, 8],
+                [6, 0, 0, 0, 0, 0, 0, 0, 3],],
+                beepers: [],
+                solutions: [{ x: 4, y: 0, count: 1 }],
+                karel: { x: 1, y: 0, direction: 0, isSuper: true }
+            },
+        ],
+    },
+    {
+        name: "Tetris Block - Variables",
+        explanation: ``,
+        code: `//Man kann statt fester Zahlenwerte auch Variablen
+//als Parameter für Funktionen nutzen.
+//Insbesondere wenn wir den selben Wert an
+//mehreren Stellen im Code verwerden, lohnt
+//es sich Variablen zu nutzen. Wenn wir den
+//Wert ändern möchten, dann müssen wir nur der
+//Variable einen neuen Wert zuweisen, statt jede
+//Stelle einzeln zu ändern.
+function moveAmount(x){
+for (let i = 0; i < x; i++) {
+    move();
+    }
+}
+
+var x = 3;
+if(beeperIsPresent()){
+    x = 2;
+}
+else{
+    putBeeper();
+}
+
+moveAmount(x);
+putBeeper();
+turnRight();
+moveAmount(x);
+putBeeper();
+turnLeft();
+moveAmount(x);
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [],
+                solutions: [{ x: 0, y: 0, count: 1 }, { x: 3, y: 0, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 6, y: 3, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 4 }
+            },
+            {
+                walls: [
+                    [8, 8, 8, 8, 8, 8, 8, 8, 8],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 0, y: 0, count: 1 }],
+                solutions: [{ x: 0, y: 0, count: 1 }, { x: 2, y: 0, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 3 }
+            },
+        ],
+    },
 ];
 export default levels;
