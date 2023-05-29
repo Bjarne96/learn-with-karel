@@ -45,7 +45,16 @@ putBeeper();`,
 //Du kannst diese entweder per Hand weiter unten in
 //dieses Textfeld schreiben, oder sie links in der
 //Liste anklicken, um sie direkt einzufügen.
-        
+
+//Mit move() bewegst du dich ein Feld vorwärts
+//in aktuelle Blickrichtung.
+//Mit turnLeft() drehst du Pfeili 90° gegen den
+//Uhrzeigersinn.
+//Mit putBeeper() kannst du einen Beeper auf dem Feld
+//ablegen, auf dem sich Pfeili befindet.
+//Mit pickBeeper() kannst du Beeper aufheben, wenn
+//sich Pfeili auf dem selben Feld mit einem Beeper befindet.
+
 move();
 pickBeeper();
 //hier drunter weiteren Code einfügen...`,
@@ -195,6 +204,10 @@ dein Code für die Funktion...
 //dein Code für die Funktion...
 //}
 
+//Tasten-Komination für die {}-Klammern:
+//Windows: AltGr + 7 / AltGr + 0
+//Mac: Shift + Alt + 8 / Shift + Alt + 9
+
 turnRight();
 move();
 pickBeeper();
@@ -297,6 +310,11 @@ putBeeper();`,
 //nochmal auf "Run Code" und sieh, ob dir
 //ein Zusammenhang zwischen dem Code und
 //Pfeilis Bewegung auffällt.
+
+//Es ist völlig normal, wenn du an dieser
+//Stelle noch nicht komplett verstehst, was
+//die ganzen Einzelteile in der Schleife
+//bedeuten.
 
 move();
 pickBeeper();
@@ -461,8 +479,7 @@ if(meineBedingung()){
         code: `//Versuche nun selbst ein if-Statement
 //zu schreiben.
 //Zur Erinnerung, so ist eine if-Statement aufgebaut:
-//if(meineBedingung())
-//{
+//if(meineBedingung()){
 //   code der ausgeführt wird, wenn die Bedingung wahr ist.
 //}
         
@@ -574,6 +591,7 @@ Drücke auf "Run Code" und sieh was passiert.`,
 //Dafür gibt es das "Else" nach dem "if". Der Code
 //innerhalb der {}-Klammern nach dem "Else" wird
 //nur ausgeführt, wenn die Bedingung im "If" nicht
+//erfüllt ist.
 
 //Drücke auf "Run Code" und sieh was passiert.
 
@@ -613,9 +631,12 @@ putBeeper();`,
     },
     {
         name: "Clean up - Using If/Else",
-        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.`,
+        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.
+(In diesem Level startet Pfeili schon mit einem Beeper im Gepäck.)`,
         code: `//Versuche nun selbst ein if-else-Statement
-//zu schreiben.`,
+//zu schreiben.
+//(In diesem Level startet Pfeili schon mit
+//einem Beeper im Gepäck.)`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
         worlds: [
             {
@@ -645,8 +666,7 @@ putBeeper();`,
         explanation: `Auch if-else-Statments kann man gut innerhalb vonn schleifen nutzen.`,
         code: `//Auch if-else-Statments kann man gut innerhalb von schleifen nutzen.
 
-move();
-for (let i = 0; i < 7; i++) {
+for (let i = 0; i < 6; i++) {
     move();
     //hier ein if-else-Statement einfügen...
 }`,
