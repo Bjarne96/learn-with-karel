@@ -148,6 +148,137 @@ putBeeper();`,
         ],
     },
     {
+        name: "Hang the Lampions - While Loop",
+        explanation: `Kannst du for-loops und while-loops kombinieren, um dieses Level zu lösen?`,
+        code: `//Kannst du for-loops und while-loops
+//kombinieren, um dieses Level zu lösen?`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        worlds: [
+            {
+                walls: [
+                    [0, 2, 0, 0, 0, 0, 2, 0],
+                    [2, 0, 0, 0, 2, 2, 0, 2],
+                    [0, 0, 2, 2, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [
+                    { x: 0, y: 7, count: 1 },
+                    { x: 1, y: 7, count: 1 },
+                    { x: 2, y: 7, count: 1 },
+                    { x: 3, y: 7, count: 1 },
+                    { x: 4, y: 7, count: 1 },
+                    { x: 5, y: 7, count: 1 },
+                    { x: 6, y: 7, count: 1 },
+                    { x: 7, y: 7, count: 1 }],
+                solutions: [
+                    { x: 0, y: 2, count: 1 },
+                    { x: 1, y: 1, count: 1 },
+                    { x: 2, y: 3, count: 1 },
+                    { x: 3, y: 3, count: 1 },
+                    { x: 4, y: 2, count: 1 },
+                    { x: 5, y: 2, count: 1 },
+                    { x: 6, y: 1, count: 1 },
+                    { x: 7, y: 2, count: 1 },],
+                karel: { x: 0, y: 7, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "T-Crossing - Seeing Variables",
+        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Hier wird eine Variable mit dem Namen "istOberesLevel" erstellt, der Name ist frei wählbar.`,
+        code: `//Manchmal müssen wir uns eine Information merken,
+//um diese im späteren Verlauf des Programms wieder
+//abzurufen. Zu diesem zweck können wir Variablen
+//nutzen. Variablen sind zunächst wie ein leerer
+//Container, den wir mit einem Namen versehen und
+//nach belieben mit Inhalt füllen können. Hier wird
+//eine Variable mit dem Namen "istOberesLevel" erstellt, 
+//der Name ist frei wählbar.
+//Hier haben wir das obere Level für Pfeili extra
+//mit einem Beeper markiert, damit er es vom unteren
+//unterscheiden kann.
+
+var istOberesLevel;
+istOberesLevel = beepersPresent(); //<- Die Variable wird entweder mit dem Wert "true" oder "false" gefüllt.
+move();
+move();
+move();
+move();
+move();
+if(istOberesLevel){ //<- Hier wird der gespeicherte Wert abgefragt.
+    turnLeft();
+}
+else{
+    turnRight();
+}
+move();
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        worlds: [
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 0, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [],
+                solutions: [{ x: 5, y: 2, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        name: "T-Crossing - Using Variables",
+        explanation: ``,
+        code: `//Versuche nun selbst, eine Variable zu nutzen.
+//Zur Erinnerung, so wird eine Variable verwendet:
+//var meineVariable;
+//meineVariable = zugewiesenerWert;
+//if(meineVariable){...`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        worlds: [
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 0, y: 1, count: 1 }],
+                solutions: [{ x: 5, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [2, 2, 2, 2, 6, 12, 0],
+                    [2, 2, 2, 2, 2, 4, 0],
+                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [],
+                solutions: [{ x: 5, y: 2, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        name: "Repair the street - If/Else",
         code: `for (let i = 0; i < 7; i++) {
     if(rightIsClear())
     {
@@ -165,7 +296,6 @@ function fillHole(){
     move();
     turnRight();
 }`,
-        name: "Repair the street - If/Else",
         worlds: [
             {
                 walls: [

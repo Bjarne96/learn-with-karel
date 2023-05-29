@@ -45,7 +45,16 @@ putBeeper();`,
 //Du kannst diese entweder per Hand weiter unten in
 //dieses Textfeld schreiben, oder sie links in der
 //Liste anklicken, um sie direkt einzufügen.
-        
+
+//Mit move() bewegst du dich ein Feld vorwärts
+//in aktuelle Blickrichtung.
+//Mit turnLeft() drehst du Pfeili 90° gegen den
+//Uhrzeigersinn.
+//Mit putBeeper() kannst du einen Beeper auf dem Feld
+//ablegen, auf dem sich Pfeili befindet.
+//Mit pickBeeper() kannst du Beeper aufheben, wenn
+//sich Pfeili auf dem selben Feld mit einem Beeper befindet.
+
 move();
 pickBeeper();
 //hier drunter weiteren Code einfügen...`,
@@ -195,6 +204,10 @@ dein Code für die Funktion...
 //dein Code für die Funktion...
 //}
 
+//Tasten-Komination für die {}-Klammern:
+//Windows: AltGr + 7 / AltGr + 0
+//Mac: Shift + Alt + 8 / Shift + Alt + 9
+
 turnRight();
 move();
 pickBeeper();
@@ -297,6 +310,11 @@ putBeeper();`,
 //nochmal auf "Run Code" und sieh, ob dir
 //ein Zusammenhang zwischen dem Code und
 //Pfeilis Bewegung auffällt.
+
+//Es ist völlig normal, wenn du an dieser
+//Stelle noch nicht komplett verstehst, was
+//die ganzen Einzelteile in der Schleife
+//bedeuten.
 
 move();
 pickBeeper();
@@ -455,15 +473,13 @@ putBeeper();`,
         name: "Corner - Using If",
         explanation: `Versuche nun selbst ein if-Statement zu schreiben. 
 Zur Erinnerung, so ist eine if-Statement aufgebaut:
-if(meineBedingung())
-{
+if(meineBedingung()){
    code der ausgeführt wird, wenn die Bedingung wahr ist.
 }`,
         code: `//Versuche nun selbst ein if-Statement
 //zu schreiben.
 //Zur Erinnerung, so ist eine if-Statement aufgebaut:
-//if(meineBedingung())
-//{
+//if(meineBedingung()){
 //   code der ausgeführt wird, wenn die Bedingung wahr ist.
 //}
         
@@ -575,6 +591,7 @@ Drücke auf "Run Code" und sieh was passiert.`,
 //Dafür gibt es das "Else" nach dem "if". Der Code
 //innerhalb der {}-Klammern nach dem "Else" wird
 //nur ausgeführt, wenn die Bedingung im "If" nicht
+//erfüllt ist.
 
 //Drücke auf "Run Code" und sieh was passiert.
 
@@ -614,9 +631,12 @@ putBeeper();`,
     },
     {
         name: "Clean up - Using If/Else",
-        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.`,
+        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.
+(In diesem Level startet Pfeili schon mit einem Beeper im Gepäck.)`,
         code: `//Versuche nun selbst ein if-else-Statement
-//zu schreiben.`,
+//zu schreiben.
+//(In diesem Level startet Pfeili schon mit
+//einem Beeper im Gepäck.)`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
         worlds: [
             {
@@ -646,8 +666,7 @@ putBeeper();`,
         explanation: `Auch if-else-Statments kann man gut innerhalb vonn schleifen nutzen.`,
         code: `//Auch if-else-Statments kann man gut innerhalb von schleifen nutzen.
 
-move();
-for (let i = 0; i < 7; i++) {
+for (let i = 0; i < 6; i++) {
     move();
     //hier ein if-else-Statement einfügen...
 }`,
@@ -727,7 +746,7 @@ putBeeper();`,
         ],
     },
     {
-        name: "Walk Across - Using While-Loops",
+        name: "Edge - Using While-Loops",
         explanation: ``,
         code: `//Versuche jetzt selbst eine while-Schleife
 //zu shreiben. Zur Erinnerung, so ist eine
@@ -736,160 +755,233 @@ putBeeper();`,
 //  code der ausgeführt wird, 
 //  solange die Bedingung wahr ist.    
 //}`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "rightIsBlocked"],
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 4],
-                    [0, 0, 0, 0, 0, 0, 0, 4],
-                    [2, 2, 2, 2, 2, 2, 2, 6],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 0, 0],
+                    [0, 0, 0, 0, 0, 4, 0, 0],
                 ],
                 beepers: [],
-                solutions: [{ x: 7, y: 1, count: 1 }],
+                solutions: [{ x: 6, y: 2, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
                 walls: [
-                    [8, 8, 8, 8, 8, 8, 9, 8],
-                    [0, 0, 0, 0, 0, 0, 1, 0],
-                    [0, 0, 0, 0, 0, 0, 1, 0],
+                    [8, 8, 8, 8, 8, 8, 8, 8],
+                    [2, 2, 2, 0, 0, 0, 0, 0],
+                    [0, 0, 4, 0, 0, 0, 0, 0],
                 ],
                 beepers: [],
-                solutions: [{ x: 5, y: 1, count: 1 }],
+                solutions: [{ x: 3, y: 2, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        name: "Hang the Lampions - While Loop",
-        explanation: `Kannst du for-loops und while-loops kombinieren, um dieses Level zu lösen?`,
-        code: `//Kannst du for-loops und while-loops
-//kombinieren, um dieses Level zu lösen?`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
-        worlds: [
-            {
-                walls: [
-                    [0, 2, 0, 0, 0, 0, 2, 0],
-                    [2, 0, 0, 0, 2, 2, 0, 2],
-                    [0, 0, 2, 2, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [
-                    { x: 0, y: 7, count: 1 },
-                    { x: 1, y: 7, count: 1 },
-                    { x: 2, y: 7, count: 1 },
-                    { x: 3, y: 7, count: 1 },
-                    { x: 4, y: 7, count: 1 },
-                    { x: 5, y: 7, count: 1 },
-                    { x: 6, y: 7, count: 1 },
-                    { x: 7, y: 7, count: 1 }],
-                solutions: [
-                    { x: 0, y: 2, count: 1 },
-                    { x: 1, y: 1, count: 1 },
-                    { x: 2, y: 3, count: 1 },
-                    { x: 3, y: 3, count: 1 },
-                    { x: 4, y: 2, count: 1 },
-                    { x: 5, y: 2, count: 1 },
-                    { x: 6, y: 1, count: 1 },
-                    { x: 7, y: 2, count: 1 },],
-                karel: { x: 0, y: 7, direction: 0, isSuper: true, beeperCount: 0 }
-            },
-        ],
-    },
-    {
-        name: "T-Crossing - Seeing Variables",
-        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Hier wird eine Variable mit dem Namen "istOberesLevel" erstellt, der Name ist frei wählbar.`,
+        name: "Walk Across - Seeing Variables",
+        explanation: ``,
         code: `//Manchmal müssen wir uns eine Information merken,
 //um diese im späteren Verlauf des Programms wieder
-//abzurufen. Zu diesem zweck können wir Variablen
+//abzurufen. Zu diesem Zweck können wir Variablen
 //nutzen. Variablen sind zunächst wie ein leerer
-//Container, den wir mit einem Namen versehen und
-//nach belieben mit Inhalt füllen können. Hier wird
-//eine Variable mit dem Namen "istOberesLevel" erstellt, 
-//der Name ist frei wählbar.
-//Hier haben wir das obere Level für Pfeili extra
-//mit einem Beeper markiert, damit er es vom unteren
-//unterscheiden kann.
+//Container oder ein unbeschriebener Notizblock, 
+//den wir mit einem Namen versehen und nach belieben
+//mit Inhalt füllen können. Unter dem Namen können
+//wir dann immer auf den Inhalt zugreifen.
 
-var istOberesLevel;
-istOberesLevel = beepersPresent(); //<- Die Variable wird entweder mit dem Wert "true" oder "false" gefüllt.
+//"var" ist ein Schlüsselwort, das uns sagt, dass
+//hier eine Variable erstellt wird. "stepAmount"
+//ist der Name der Variable, den wir frei wählen
+//können. "=" ist ein Zuweisungsoperator, der uns
+//sagt, dass der Wert auf der rechten Seite der
+//Variable auf der linken Seite zugewiesen wird.
+
+var stepAmount; //<- leere Variable erstellen
+stepAmount = 5; //<- Wert zuweisen ("mit Inhalt füllen")
+
 move();
-move();
-move();
-move();
-move();
-if(istOberesLevel){ //<- Hier wird der gespeicherte Wert abgefragt.
-    turnLeft();
+pickBeeper();
+
+for (let i = 0; i < stepAmount; i++) {
+    move();
 }
-else{
-    turnRight();
-}
-move();
+
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 0, y: 1, count: 1 }],
-                solutions: [{ x: 5, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-            {
-                walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [],
-                solutions: [{ x: 5, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 6, y: 2, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
-        name: "T-Crossing - Using Variables",
+        name: "Walk Across - Modifiying Variables",
         explanation: ``,
-        code: `//Versuche nun selbst, eine Variable zu nutzen.
-//Zur Erinnerung, so wird eine Variable verwendet:
-//var meineVariable;
-//meineVariable = zugewiesenerWert;
-//if(meineVariable){...`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        code: `//Die Zahl "5", die wir abgespeichert haben, wird
+//in der Schleife abgerufen. Das siehst du daran, dass 
+//der Name der Variable "stepAmount" dort auftaucht.
+//Im Prinzip ist "stepAmount" also in der Schleife
+//ein Platzhalter für die Zahl, die wir abgespeichert 
+//haben.
+
+//Versuche nun, der Variable einen anderen Wert
+//zuzuweisen, um das Level zu lösen. 
+
+var stepAmount;
+stepAmount = 5;
+
+move();
+pickBeeper();
+
+for (let i = 0; i < stepAmount; i++) {
+    move();
+}
+
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
-                beepers: [{ x: 0, y: 1, count: 1 }],
-                solutions: [{ x: 5, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-            {
-                walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [],
-                solutions: [{ x: 5, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 7, y: 2, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
+    {
+        name: "Walk Across - Defining Variables",
+        explanation: ``,
+        code: `//Versuche nun selbst eine Variable zu definieren.
+//Es ist wichtig, dass der Name der Variable identisch
+//mit dem Namen ist, den du in der Schleife verwendest.
+//Außerdem muss die Variable definiert werden, *bevor*
+//ihr Wert abgerufen wird. (Also weiter oben im Code
+//definieren und weiter unten im Code nutzen.)
+
+move();
+pickBeeper();
+
+for (let i = 0; i < schrittAnzahl; i++) {
+    move();
+}
+
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 1, y: 2, count: 1 }],
+                solutions: [{ x: 7, y: 2, count: 1 }],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Increase the Length - Seeing Variables Reassignment",
+        explanation: ``,
+        code: `//Wir können Variablen auch während des laufenden
+//Programms einen neuen Wert zuweisen. Wird die
+//Variable nach einer neuen Zuweisung abgerufen,
+//wird der neue Wert verwendet.
+//Drücke auf "Run Code" und sieh was passiert.
+
+var schrittAnzahl;
+schrittAnzahl = 3;
+
+for (let i = 0; i < schrittAnzahl; i++) {
+    move();
+}
+
+pickBeeper();
+schrittAnzahl = 4;
+
+for (let i = 0; i < schrittAnzahl; i++) {
+    move();
+}
+
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "noBeepersPresent"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [{ x: 7, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Increase the Length - Using Variables Reassignment",
+        explanation: ``,
+        code: `//Versuche nun selbst der Variable an der richtigen Stelle
+//die entsprechenden Werte zuzuweisen.
+
+var schrittAnzahl;
+schrittAnzahl = 3;
+
+for (let i = 0; i < schrittAnzahl; i++) {
+    move();
+}
+
+pickBeeper();
+schrittAnzahl = 4;
+
+for (let i = 0; i < schrittAnzahl; i++) {
+    move();
+}
+
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "noBeepersPresent"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 4, y: 1, count: 1 }],
+                solutions: [{ x: 7, y: 1, count: 1 }],
+                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
+            },
+        ],
+    },
+
     {
         name: "Double the Length - Seeing Variables with Numbers",
         explanation: ``,
