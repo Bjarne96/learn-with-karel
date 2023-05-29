@@ -198,7 +198,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
-    handleLevelChange(level: number) { if (level > 0 && level < levels.length) this.setLevel(level) }
+    handleLevelChange(level: number) { if (level >= 0 && level < levels.length) this.setLevel(level) }
 
     resetworldCompletedCounter() { this.worldCompletedCounter = 0 }
 

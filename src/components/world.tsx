@@ -119,7 +119,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     executeCommand(command: string, line: number) {
         const valueCommands = [
             "beepersInBag",
-            "beepersPresent",
+            "beeperIsPresent",
             "facingEast",
             "facingNorth",
             "facingWest",
@@ -128,7 +128,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             "leftIsBlocked",
             "leftIsClear",
             "noBeepersInBag",
-            "noBeepersPresent",
+            "noBeeperIsPresent",
             "notFacingEast",
             "rightIsBlocked",
             "rightIsClear",
@@ -210,8 +210,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let leftIsBlocked
         let rightIsClear
         let rightIsBlocked
-        let beepersPresent
-        let noBeepersPresent
+        let beeperIsPresent
+        let noBeeperIsPresent
         let beepersInBag
         let noBeepersInBag
         let facingNorth
@@ -371,7 +371,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     pickBeeper() {
-        if (this.beepersPresent()) {
+        if (this.beeperIsPresent()) {
             this.karel["beeperCount"] = (this.karel.beeperCount + 1)
             let beeper: Beeper
             const x = this.karel.x
@@ -408,7 +408,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         return !!this.karel.beeperCount
     }
     //TODO: Check consistency: inkostistente bennenung, ändern zu beeperIsPresent() ?
-    beepersPresent() {
+    beeperIsPresent() {
         const x = this.karel.x
         const y = this.karel.y
         let result = false
@@ -456,8 +456,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         return !this.beepersInBag()
     }
 
-    noBeepersPresent() {
-        return !this.beepersPresent()
+    noBeeperIsPresent() {
+        return !this.beeperIsPresent()
     }
 
     notFacingEast() {

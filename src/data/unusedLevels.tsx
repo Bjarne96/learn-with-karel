@@ -114,7 +114,7 @@ export const levels: Array<any> = [
         code: `for (let i = 0; i < 5; i++) {
     move();
 }
-if(beepersPresent()) {
+if(beeperIsPresent()) {
     turnLeft();
 } else {
     turnRight();
@@ -203,7 +203,7 @@ putBeeper();`,
 //unterscheiden kann.
 
 var istOberesLevel;
-istOberesLevel = beepersPresent(); //<- Die Variable wird entweder mit dem Wert "true" oder "false" gefüllt.
+istOberesLevel = beeperIsPresent(); //<- Die Variable wird entweder mit dem Wert "true" oder "false" gefüllt.
 move();
 move();
 move();
@@ -217,7 +217,7 @@ else{
 }
 move();
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
                 walls: [
@@ -251,7 +251,7 @@ putBeeper();`,
 //var meineVariable;
 //meineVariable = zugewiesenerWert;
 //if(meineVariable){...`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beepersPresent"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
                 walls: [
