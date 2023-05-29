@@ -12,3 +12,5 @@
      - Users can save custom functions (across levels)
 # Tickets
     - rename beepersPresent
+    - user has "geführtes lernen tag"
+    - erklärung an der der linken seite / console an der linken seiten / custom functions an der linken Seite
