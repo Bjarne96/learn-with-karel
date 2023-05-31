@@ -188,7 +188,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (this.state.pauseCode) this.handleIntervalPause(false)
         //If the level was already completed at some point before,
         // there is only to the executionCompleted state has to be set
-        if (this.state.done != "" && this.state.worldCounter == 1) return this.setState({ executionCompleted: true })
+        if ((this.state.done != "" && this.state.worldCounter == 1)
+            || (this.state.worldCounter == 2 && completed == false)) {
+            return this.setState({ executionCompleted: true })
+        }
         //Check if all worlds have completed
         if (this.state.worldCounter > 1 && completed) {
             //Counts up, because one world was completed
@@ -206,7 +209,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
         this.setState({
             done: done,
-            executionCompleted: true,
+            executionCompleted: completed,
             showLevelCompletedModal: completed,
             worldCompletedCounter: worldCompletedCounter,
             activeLog: worldCompletedCounter + 1

@@ -24,7 +24,7 @@ const Commands: React.FC<ICommandProps> = ({ runningCode, log, commands }) => {
                 if (str === "") return null
                 let color = "text-sky-500"
                 if (/Error/.test(str)) color = "text-red-600"
-                if (/=/.test(str) && /true/.test(str)) color = "text-green-600"
+                if ((/=/.test(str) && /true/.test(str)) || !/not/.test(str) && /solved/.test(str)) color = "text-green-600"
                 if (/=/.test(str) && /false/.test(str)) color = "text-yellow-600"
                 return <p className={"break-word font-semibold whitespace-pre-wrap " + color} key={i}>{str}</p>
             })}</>

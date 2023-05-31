@@ -40,26 +40,25 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* REACT FUNCTIONS */
 
     componentDidUpdate(): void {
-        //Run Code Button was pressed
-        if (this.props.runningCode &&
-            this.props.worldNumber - 1 == this.props.worldCompletedCounter &&
-            !this.finishedCode && !this.startedCode) {
-            this.startedCode = true
-            this.executeCode()
-        }
         // Reset Button was pressed, while executing code
-        if (!this.props.runningCode && !this.finishedCode && this.startedCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
+        if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
             //Clears snapshots and the interval
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
         // Reset Button was pressed, after executing code
-        if (!this.props.runningCode && this.startedCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
+        if (!this.props.runningCode && this.startedCode) {
             //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
             this.finishedCode = false
             this.startedCode = false
             this.clearSnapshotsAndVariables()
             this.setLevel()
+        }
+        if (this.props.worldNumber - 1 != this.props.worldCompletedCounter) return
+        //Run Code Button was pressed
+        if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
+            this.startedCode = true
+            this.executeCode()
         }
         // Level changed
         if (this.props.currentLevel != this.state.currentLevel && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
@@ -68,13 +67,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.setLevel()
         }
         // Pausing or unpausing the interval
-        if (this.pauseInterval != this.props.pauseCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
+        if (this.pauseInterval != this.props.pauseCode) {
             this.pauseInterval = this.props.pauseCode
             this.interval = this.props.interval
             if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.executeSnapshots()
         }
         // Unpausing Interval or changing speed
-        if (this.interval != this.props.interval && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
+        if (this.interval != this.props.interval) {
             this.interval = this.props.interval
             if (!this.finishedCode && this.startedCode) this.executeSnapshots()
         }
@@ -249,8 +248,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 this.intervalRef = setInterval(() => {
                     if (!this.pauseInterval) {
                         if (this.snapshotIndex >= this.snapshots.length) {
-                            if (!this.checkSolution() && this.errorFound == "") this.errorFound = "Error: The level is not solved."
-                            if (this.errorFound) this.addErrorToLog()
+                            if (!this.checkSolution() && this.errorFound == "") this.errorFound = "Error: The level was not solved."
+                            if (this.checkSolution() && this.errorFound == "") this.errorFound = "Level was solved."
+                            if (this.errorFound != "") this.addErrorToLog()
                             clearInterval(this.intervalRef)
                             this.clearLog();
                             this.props.completedLevel(this.checkSolution())
@@ -267,7 +267,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                         this.snapshotIndex++
                     }
                 }, this.interval)
-            } else if (this.errorFound) this.addErrorToLog()
+            } else if (this.errorFound) {
+                this.addErrorToLog()
+                this.props.completedLevel(this.checkSolution())
+            }
         } catch (e) {
             this.props.updateLogAndLine(e, 0, this.props.worldNumber)
         }
