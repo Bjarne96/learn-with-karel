@@ -41,18 +41,20 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     componentDidUpdate(): void {
         //Run Code Button was pressed
-        if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
+        if (this.props.runningCode &&
+            this.props.worldNumber - 1 == this.props.worldCompletedCounter &&
+            !this.finishedCode && !this.startedCode) {
             this.startedCode = true
             this.executeCode()
         }
         // Reset Button was pressed, while executing code
-        if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
+        if (!this.props.runningCode && !this.finishedCode && this.startedCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
             //Clears snapshots and the interval
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
         // Reset Button was pressed, after executing code
-        if (!this.props.runningCode && this.startedCode) {
+        if (!this.props.runningCode && this.startedCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
             //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
             this.finishedCode = false
             this.startedCode = false
@@ -66,13 +68,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.setLevel()
         }
         // Pausing or unpausing the interval
-        if (this.pauseInterval != this.props.pauseCode) {
+        if (this.pauseInterval != this.props.pauseCode && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
             this.pauseInterval = this.props.pauseCode
             this.interval = this.props.interval
             if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.executeSnapshots()
         }
         // Unpausing Interval or changing speed
-        if (this.interval != this.props.interval) {
+        if (this.interval != this.props.interval && this.props.worldNumber - 1 == this.props.worldCompletedCounter) {
             this.interval = this.props.interval
             if (!this.finishedCode && this.startedCode) this.executeSnapshots()
         }
@@ -235,7 +237,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Execute user code from string
             eval(lineIndexedCodeString)
         } catch (e) {
-            // codeExecuted = true
             this.errorFound = e.toString();
         }
         this.executeSnapshots()
@@ -248,6 +249,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 this.intervalRef = setInterval(() => {
                     if (!this.pauseInterval) {
                         if (this.snapshotIndex >= this.snapshots.length) {
+                            if (!this.checkSolution() && this.errorFound == "") this.errorFound = "Error: The level is not solved."
                             if (this.errorFound) this.addErrorToLog()
                             clearInterval(this.intervalRef)
                             this.clearLog();

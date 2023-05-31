@@ -29,6 +29,8 @@ export interface DashboardState {
     runningCode: boolean
     pauseCode: boolean
     executionCompleted: boolean
+    worldCompletedCounter: number
+    worldCounter: number
     interval: number
     showLevelCompletedModal: boolean
     firstLog: Array<string>
@@ -97,6 +99,7 @@ export interface IWorldProps {
     pauseCode: boolean
     code: string
     currentLevel: number
+    worldCompletedCounter: number
     worldNumber: number
     commands: Commands
     interval: number
@@ -120,8 +123,6 @@ export interface ITopbar {
     handleResetToDefaulftCode(): void
     handleIntervalChange(interval: number): void
     handleIntervalPause(pause: boolean): void
-    setActiveLog(log: number): void
-    activeLog: number
     worldCounter: number
     isLoggedIn: boolean
     done: string

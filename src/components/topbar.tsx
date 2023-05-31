@@ -102,20 +102,9 @@ const Topbar: React.FC<ITopbar> = (props) => {
     return (
         <div className="flex flex-row gap-4 mt-4 items-center justify-start bg-code-grey rounded py-4">
             <div className="m-0 bg-code-grey pl-8 min-w-[250px] rounded overflow-auto">
-                {props.worldCounter === 2 && (
-                    <select
-                        className="font-semibold text-base bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w p-2.5 dark:bg-sky-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={props.activeLog}
-                        onChange={(e) => props.setActiveLog(Number(e.target.value))}
-                    >
-                        {[1, 2].map((logNumber: number) => (
-                            <option value={logNumber} key={logNumber}>Debug world {logNumber}</option>
-                        ))}
-                    </select>
-                )}
-                {/* <p className="text-white text-lg h-8 font-semibold leading-8">
+                <p className="text-white text-lg h-8 font-semibold leading-8">
                     {props.runningCode ? "Command Log" : "Available Commands"}
-                </p> */}
+                </p>
             </div>
             <div className="flex flex-row gap-4 mr-4 bg-code-grey min-w-[33vw] rounded">
                 {returnButton("play")}

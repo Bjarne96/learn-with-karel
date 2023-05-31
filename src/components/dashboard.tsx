@@ -17,8 +17,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     debounceSaveCode = false
     isLoggedIn = false
     userId = ""
-    worldCompletedCounter = 0
-    worldCounter = 1
 
     constructor(props: DashboardProps) {
         super(props);
@@ -33,8 +31,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             lastStage = props.stage
             code = props.code
         }
-        //Setting globals
-        this.worldCounter = levels[lastStage].worlds.length
         //Setting state
         if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
@@ -43,6 +39,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
+                worldCompletedCounter: 0,
+                worldCounter: levels[lastStage].worlds.length,
                 executionCompleted: false,
                 pauseCode: false,
                 interval: 250,
@@ -74,8 +72,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
         let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
         let done = ""
-        this.worldCounter = levels[level].worlds.length
-        this.resetworldCompletedCounter();
         if (this.userId) {
             const res = await this.getLevel(level)
             if (res["code"]) code = res["code"]
@@ -93,17 +89,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             runningCode: false,
             executionCompleted: false,
             activeLine: 0,
-            activeLog: 1
+            activeLog: 1,
+            worldCompletedCounter: 0,
+            worldCounter: levels[level].worlds.length
         })
     }
 
     async getLevel(level: number) {
-        const body = {
-            level: {
-                stage: level,
-                user_id: this.userId
-            }
-        }
+        const body = { level: { stage: level, user_id: this.userId } }
         const res = await this.requestLevel(body, "GET")
         return res;
     }
@@ -113,9 +106,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let params = ""
         for (let i = 0; i < keys.length; i++) {
             const element = keys[i];
-            if (i != 0) {
-                params = params + "&"
-            }
+            if (i != 0) params = params + "&"
             params = params + element.toString() + "=" + obj[keys[i]].toString();
         }
         return params;
@@ -123,24 +114,17 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     async requestLevel(body, method) {
         return new Promise((resolve, reject) => {
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            const myHeaders = new Headers()
+            myHeaders.append("Content-Type", "application/json")
             let url = "/api/level"
-            const requestOptions = {
-                method: method,
-                headers: myHeaders
-            };
+            const requestOptions = { method: method, headers: myHeaders }
             try {
-                if (method == "GET") {
-                    const params = this.objectToParams(body.level)
-                    url = url + "?" + params;
-                } else {
-                    requestOptions["body"] = JSON.stringify(JSON.stringify(body))
-                }
+                if (method == "GET") url = url + "?" + this.objectToParams(body.level);
+                else requestOptions["body"] = JSON.stringify(JSON.stringify(body))
                 fetch(url, requestOptions)
                     .then(response => response.text())
                     .then(result => resolve(JSON.parse(result)))
-                    .catch(error => reject(error));
+                    .catch(error => reject(error))
             } catch (e) {
                 reject(e)
             }
@@ -174,25 +158,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({ runningCode: runningCode })
     }
 
-    setActiveLog(log: number) { this.setState({ activeLog: log }) }
-
     handleRunningCode() {
         if (this.debounceRunningCode) return
-        this.debounceRunningCode = true;
-        setTimeout(() => this.debounceRunningCode = false, 300);
+        this.debounceRunningCode = true
+        setTimeout(() => this.debounceRunningCode = false, 300)
         if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
         this.setRunningCode(true)
     }
 
     handleResetCode() {
-        this.resetworldCompletedCounter();
         this.setState({
             firstLog: [],
             secondLog: [],
             pauseCode: false,
             runningCode: false,
             executionCompleted: false,
-            activeLine: 0
+            activeLine: 0,
+            worldCompletedCounter: 0
         });
     }
 
@@ -200,45 +182,42 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     handleLevelChange(level: number) { if (level >= 0 && level < levels.length) this.setLevel(level) }
 
-    resetworldCompletedCounter() { this.worldCompletedCounter = 0 }
-
     completedLevel(completed: boolean) {
-        console.log('completed***************************');
+        let worldCompletedCounter = this.state.worldCompletedCounter
         //Unpause when level is finished
         if (this.state.pauseCode) this.handleIntervalPause(false)
         //If the level was already completed at some point before,
         // there is only to the executionCompleted state has to be set
-        if (this.state.done != "") return this.setState({ executionCompleted: true })
+        if (this.state.done != "" && this.state.worldCounter == 1) return this.setState({ executionCompleted: true })
         //Check if all worlds have completed
-        if (this.worldCounter > 1 && completed) {
+        if (this.state.worldCounter > 1 && completed) {
             //Counts up, because one world was completed
-            this.worldCompletedCounter++
+            worldCompletedCounter++
             //Resets when all where completed successfully
-            if (this.worldCounter == this.worldCompletedCounter) this.resetworldCompletedCounter()
+            if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = 0
             else completed = false //Sets to false, when they didnt match the count
         }
+        let done = ""
         //Handle first time completed
         if (completed) { // Was successfully completed
             //Saves the code and the done date to database
-            const done = new Date().toString()
-            this.handleSaveLevel({
-                done: done,
-                code: this.state.code
-            })
-            //Updates the state and shows the modal
-            this.setState({
-                done: done,
-                showLevelCompletedModal: true,
-                executionCompleted: true
-            })
-        } else this.setState({ executionCompleted: true }) // Was unsuccessfully completed
+            done = new Date().toString()
+            this.handleSaveLevel({ done: done, code: this.state.code })
+        }
+        this.setState({
+            done: done,
+            executionCompleted: true,
+            showLevelCompletedModal: completed,
+            worldCompletedCounter: worldCompletedCounter,
+            activeLog: worldCompletedCounter + 1
+        })
     }
 
     toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
 
     updateLogAndLine(entry: string, line: number, worldNumber: number) {
         //Work around to highlight the same line again
-        if (worldNumber == this.state.activeLog && this.state.activeLine == line) {
+        if (this.state.activeLine == line) {
             const lineLater = line
             setTimeout(() => this.setState({ activeLine: lineLater }), 16)
             line = 0
@@ -269,8 +248,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         currentLevel={this.state.currentLevel}
                         runningCode={this.state.runningCode}
                         interval={this.state.interval}
-                        activeLog={this.state.activeLog}
-                        worldCounter={this.worldCounter}
+                        worldCounter={this.state.worldCounter}
                         handleLevelChange={this.handleLevelChange.bind(this)}
                         handleRunningCode={this.handleRunningCode.bind(this)}
                         handleResetCode={this.handleResetCode.bind(this)}
@@ -278,35 +256,38 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                         handleIntervalChange={this.handleIntervalChange.bind(this)}
                         handleIntervalPause={this.handleIntervalPause.bind(this)}
-                        setActiveLog={this.setActiveLog.bind(this)}
                     />
                     <div>
                         <div className="flex flex-row gap-4 mt-4">
-                            <Commands
-                                log={this.state.activeLog == 1 ? this.state.firstLog : this.state.secondLog}
-                                runningCode={this.state.runningCode}
-                                code={this.state.code}
-                                onCodeChange={this.onCodeChange.bind(this)}
-                                commands={this.state.commands}
-                            />
+                            {this.state.activeLog == 1 ?
+                                <Commands
+                                    log={this.state.firstLog}
+                                    runningCode={this.state.runningCode}
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                    commands={this.state.commands}
+                                />
+                                :
+                                <Commands
+                                    log={this.state.secondLog}
+                                    runningCode={this.state.runningCode}
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                    commands={this.state.commands}
+                                />
+                            }
                             <Code
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
                                 runningCode={this.state.runningCode}
                                 activeLine={this.state.activeLine}
                             />
-                            {/* <Editor
-                            // code={this.state.code}
-                            // onCodeChange={this.onCodeChange.bind(this)}
-                            // firstLog={this.state.firstLog}
-                            // secondLog={this.state.secondLog}
-                            // runningCode={this.state.runningCode}
-                            /> */}
                             <div className="block rounded bg-code-grey">
                                 {levels[this.state.currentLevel].worlds.map((world, i) =>
                                     <World
                                         key={i}
                                         worldNumber={i + 1}
+                                        worldCompletedCounter={this.state.worldCompletedCounter}
                                         currentLevel={this.state.currentLevel}
                                         code={this.state.code}
                                         runningCode={this.state.runningCode}
