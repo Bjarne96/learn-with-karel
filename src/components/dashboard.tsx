@@ -7,8 +7,11 @@ import World from "./world"
 import type { DashboardProps, DashboardState, IKarel } from "../types/karel";
 //Data
 import levels from "../data/levels"
-import Topbar from "./topbar";
+import WorldButtons from "./worldbuttons";
 import LevelModal from "./modal";
+import Sidebar from "./sidebar"
+import Log from "./log";
+import SelectLevel from "./levelselect";
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -48,7 +51,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 firstLog: [],
                 secondLog: [],
                 activeLine: 0,
-                activeLog: 1,
+                activeTab: 5,
                 done: done
             }
         }
@@ -89,7 +92,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             runningCode: false,
             executionCompleted: false,
             activeLine: 0,
-            activeLog: 1,
+            activeTab: 1,
             worldCompletedCounter: 0,
             worldCounter: levels[level].worlds.length
         })
@@ -146,6 +149,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     async handleSaveCode() { this.handleSaveLevel({ code: this.state.code }) }
 
+    async setActiveTab(tab: number) { this.setState({ activeTab: tab }) }
+
     setRunningCode(runningCode: boolean) {
         //Unpause when level is finished
         if (this.state.executionCompleted && runningCode) {
@@ -155,7 +160,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             return
         }
         if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
-        this.setState({ runningCode: runningCode })
+        this.setState({ runningCode: runningCode, activeTab: 1 })
     }
 
     handleRunningCode() {
@@ -197,7 +202,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             //Counts up, because one world was completed
             worldCompletedCounter++
             //Resets when all where completed successfully
-            if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = 0
+            if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
             else completed = false //Sets to false, when they didnt match the count
         }
         let done = ""
@@ -212,7 +217,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             executionCompleted: completed,
             showLevelCompletedModal: completed,
             worldCompletedCounter: worldCompletedCounter,
-            activeLog: worldCompletedCounter + 1
+            activeTab: worldCompletedCounter + 1
         })
     }
 
@@ -225,86 +230,82 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             setTimeout(() => this.setState({ activeLine: lineLater }), 16)
             line = 0
         }
+        //Update the necessary log
         if (entry == undefined) return
-
-        if (worldNumber == 1) {
-            const firstLog = this.state.firstLog
-            firstLog.push(entry + "\n")
-            if (worldNumber == this.state.activeLog) this.setState({ firstLog: firstLog, activeLine: line })
-            else this.setState({ firstLog: firstLog, activeLine: line })
-        }
-        if (worldNumber == 2) {
-            const secondLog = this.state.secondLog
-            secondLog.push(entry + "\n")
-            if (worldNumber == this.state.activeLog) this.setState({ secondLog: secondLog, activeLine: line })
-            else this.setState({ secondLog: secondLog })
-        }
+        let log = this.state.firstLog
+        if (worldNumber == 2) log = this.state.secondLog
+        log.push(entry + "\n")
+        if (worldNumber == 1) this.setState({ firstLog: log, activeLine: line })
+        if (worldNumber == 2) this.setState({ secondLog: log, activeLine: line })
     }
 
     render() {
         return <>
-            <main className="flex justify-center content-center min-h-[100vh] bg-gradient-to-t from-custom-darkblue to-custom-blue">
-                <div className="flex flex-col justify-center content-center">
-                    <Topbar
-                        isLoggedIn={this.isLoggedIn}
-                        done={this.state.done}
-                        currentLevel={this.state.currentLevel}
-                        runningCode={this.state.runningCode}
-                        interval={this.state.interval}
-                        worldCounter={this.state.worldCounter}
-                        handleLevelChange={this.handleLevelChange.bind(this)}
-                        handleRunningCode={this.handleRunningCode.bind(this)}
-                        handleResetCode={this.handleResetCode.bind(this)}
-                        handleSaveCode={this.handleSaveCode.bind(this)}
-                        handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
-                        handleIntervalChange={this.handleIntervalChange.bind(this)}
-                        handleIntervalPause={this.handleIntervalPause.bind(this)}
-                    />
-                    <div>
-                        <div className="flex flex-row gap-4 mt-4">
-                            {this.state.activeLog == 1 ?
-                                <Commands
-                                    log={this.state.firstLog}
-                                    runningCode={this.state.runningCode}
-                                    code={this.state.code}
-                                    onCodeChange={this.onCodeChange.bind(this)}
-                                    commands={this.state.commands}
-                                />
-                                :
-                                <Commands
-                                    log={this.state.secondLog}
-                                    runningCode={this.state.runningCode}
-                                    code={this.state.code}
-                                    onCodeChange={this.onCodeChange.bind(this)}
-                                    commands={this.state.commands}
-                                />
-                            }
-                            <Code
+            <main className="flex justify-center content-center min-h-[100vh] bg-custom-darkblue">
+                <div className="flex flex-row min-h-[100vh] w-full">
+                    <div className="sidebar bg-custom-blue min-w-[75px] h-full">
+                        <Sidebar
+                            setActiveTab={this.setActiveTab.bind(this)}
+                            worldCounter={this.state.worldCounter}
+                            activeTab={this.state.activeTab}
+                        />
+                    </div>
+                    <div className="min-w-[250px] h-full">
+                        {
+                            {
+                                1: <Log log={this.state.firstLog} />,
+                                2: <Log log={this.state.secondLog} />,
+                                3: <Commands commands={this.state.commands} />,
+                                4: <div className="text-white w-full">Custom Code</div>,
+                                5: <div className="text-white w-full">Task</div>,
+                            }[this.state.activeTab]
+                        }
+                    </div>
+                    <div className="w-full h-full">
+                        <Code
+                            code={this.state.code}
+                            onCodeChange={this.onCodeChange.bind(this)}
+                            runningCode={this.state.runningCode}
+                            activeLine={this.state.activeLine}
+                        />
+                    </div>
+                    <div className="w-full h-full">
+                        <SelectLevel
+                            handleLevelChange={this.handleLevelChange.bind(this)}
+                            currentLevel={this.state.currentLevel}
+                        />
+                        {levels[this.state.currentLevel].worlds.map((world, i) =>
+                            <World
+                                key={i}
+                                worldNumber={i + 1}
+                                worldCompletedCounter={this.state.worldCompletedCounter}
+                                currentLevel={this.state.currentLevel}
                                 code={this.state.code}
-                                onCodeChange={this.onCodeChange.bind(this)}
                                 runningCode={this.state.runningCode}
-                                activeLine={this.state.activeLine}
+                                pauseCode={this.state.pauseCode}
+                                interval={this.state.interval}
+                                karel={this.state.karel}
+                                world={world}
+                                commands={this.state.commands}
+                                completedLevel={this.completedLevel.bind(this)}
+                                updateLogAndLine={this.updateLogAndLine.bind(this)}
                             />
-                            <div className="block rounded bg-code-grey">
-                                {levels[this.state.currentLevel].worlds.map((world, i) =>
-                                    <World
-                                        key={i}
-                                        worldNumber={i + 1}
-                                        worldCompletedCounter={this.state.worldCompletedCounter}
-                                        currentLevel={this.state.currentLevel}
-                                        code={this.state.code}
-                                        runningCode={this.state.runningCode}
-                                        pauseCode={this.state.pauseCode}
-                                        interval={this.state.interval}
-                                        karel={this.state.karel}
-                                        world={world}
-                                        commands={this.state.commands}
-                                        completedLevel={this.completedLevel.bind(this)}
-                                        updateLogAndLine={this.updateLogAndLine.bind(this)}
-                                    />
-                                )}
-                            </div>
-                        </div>
+                        )}
+                        <WorldButtons
+                            isLoggedIn={this.isLoggedIn}
+                            done={this.state.done}
+                            currentLevel={this.state.currentLevel}
+                            runningCode={this.state.runningCode}
+                            interval={this.state.interval}
+                            worldCounter={this.state.worldCounter}
+                            handleLevelChange={this.handleLevelChange.bind(this)}
+                            handleRunningCode={this.handleRunningCode.bind(this)}
+                            handleResetCode={this.handleResetCode.bind(this)}
+                            handleSaveCode={this.handleSaveCode.bind(this)}
+                            handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
+                            handleIntervalChange={this.handleIntervalChange.bind(this)}
+                            handleIntervalPause={this.handleIntervalPause.bind(this)}
+                        />
                     </div>
                 </div>
             </main>

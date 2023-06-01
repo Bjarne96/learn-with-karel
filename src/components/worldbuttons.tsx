@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react'
-import SelectLevel from './select'
 // Styles
-import type { ITopbar } from "../types/karel"
+import type { IWorldButtons } from "../types/karel"
 
-const Topbar: React.FC<ITopbar> = (props) => {
+const WorldButtons: React.FC<IWorldButtons> = (props) => {
     const [interval, setIntervalSpeed] = useState(250)
     const timer = useRef<NodeJS.Timeout | null>(null); // Create a mutable reference
     const tooltipContainer = "w-10 has-tooltip h-10 my-auto"
@@ -68,22 +67,6 @@ const Topbar: React.FC<ITopbar> = (props) => {
             "className": tooltipContainer,
             "path": "M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm79 143c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
             "viewBox": "0 0 448 512"
-        }, {
-            "name": "arrow-right",
-            "color": "fill-gray-200",
-            "text": null,
-            "onClick": () => props.handleLevelChange(props.currentLevel + 1),
-            "className": tooltipContainer,
-            "path": "M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z",
-            "viewBox": "0 0 448 512"
-        }, {
-            "name": "arrow-left",
-            "color": "fill-gray-200",
-            "text": null,
-            "onClick": () => props.handleLevelChange(props.currentLevel - 1),
-            "className": tooltipContainer,
-            "path": "M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z",
-            "viewBox": "0 0 448 512"
         }]
         const btn = svgPaths.filter((e) => { if (e.name == name) return true })[0]
         return <div className={btn.className}>
@@ -100,13 +83,8 @@ const Topbar: React.FC<ITopbar> = (props) => {
     }
 
     return (
-        <div className="flex flex-row gap-4 mt-4 items-center justify-start bg-code-grey rounded py-4">
-            <div className="m-0 bg-code-grey pl-8 min-w-[250px] rounded overflow-auto">
-                <p className="text-white text-lg h-8 font-semibold leading-8">
-                    {props.runningCode ? "Command Log" : "Available Commands"}
-                </p>
-            </div>
-            <div className="flex flex-row gap-4 mr-4 bg-code-grey min-w-[33vw] rounded">
+        <div className="flex flex-row gap-4 mt-4 items-center justify-center py-4">
+            <div className="flex flex-row gap-4 mr-4">
                 {returnButton("play")}
                 {returnButton("pause")}
                 {returnButton("reset")}
@@ -129,16 +107,8 @@ const Topbar: React.FC<ITopbar> = (props) => {
                 </div>
                 {props.isLoggedIn && props.done === "" ? (returnButton("uncompleted")) : (returnButton("completed"))}
             </div>
-            <div className="m-0 bg-code-grey px-4 min-w-[33vw] rounded overflow-auto flex flex-row items-center gap-4">
-                {returnButton("arrow-left")}
-                <SelectLevel
-                    handleLevelChange={props.handleLevelChange}
-                    currentLevel={props.currentLevel}
-                />
-                {returnButton("arrow-right")}
-            </div>
         </div>
     )
 }
 
-export default Topbar
+export default WorldButtons

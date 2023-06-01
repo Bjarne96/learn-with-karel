@@ -10,8 +10,8 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     const { setContainer } = useCodeMirror({
         container: editorContainer.current,
         value: code,
-        height: "33vw",
-        width: "33vw",
+        height: "100vh",
+        width: "100%",
         onChange: (value: string) => onCodeChange(value),
         theme: "dark",
         extensions: [javascript({ jsx: true })],
@@ -26,9 +26,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
                         .children[(activeLine - 1)]
                         .classList.add("highlighted-line")
                 }, 16)
-            } catch (e) {
-                console.log('e', e);
-            }
+            } catch (e) { }
         }
     }, [runningCode, code, activeLine])
 

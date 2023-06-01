@@ -251,10 +251,10 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
     }, [props.beepers, props.solutions, props.walls, props.karel])
 
     return (
-        <>{/* eslint-disable-next-line @next/next/no-img-element */}
+        <div className="w-full">{/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hidden" id="img" src="/karel.png" alt="" />
-            <canvas ref={canvasRef} />
-        </>
+            <canvas className="mx-auto" ref={canvasRef} />
+        </div>
     )
 }
 

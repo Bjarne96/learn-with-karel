@@ -36,7 +36,7 @@ export interface DashboardState {
     firstLog: Array<string>
     secondLog: Array<string>
     activeLine: number
-    activeLog: number
+    activeTab: number
     done: string
     commands: Commands
 }
@@ -65,11 +65,12 @@ export interface ICodeProps {
     runningCode: boolean
     activeLine: number
 }
-export interface ICommandProps {
-    code: string
-    onCodeChange(code: string): void
-    runningCode: boolean
+export interface ILogProps {
     log: Array<string>
+}
+export interface ICommandProps {
+    // code: string
+    // onCodeChange(code: string): void
     commands: Commands
 }
 export interface ISelectLevelProps {
@@ -114,7 +115,7 @@ export interface ICanvasProps {
     walls: Array<Array<number>>
 }
 
-export interface ITopbar {
+export interface IWorldButtons {
     handleLevelChange(code: number): void
     handleRunningCode(): void
     handleResetCode(): void
@@ -129,4 +130,10 @@ export interface ITopbar {
     currentLevel: number
     runningCode: boolean
     interval: number
+}
+
+export interface ISidebar {
+    setActiveTab(code: number): void
+    worldCounter: number
+    activeTab: number
 }
