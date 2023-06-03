@@ -12,5 +12,5 @@
      - Users can save custom functions (across levels)
 # Tickets
     - user has "geführtes lernen tag"
-    - erklärung an der der linken seite / console an der linken seiten / custom functions an der linken Seite
-    - pause + unpause in second level bugs and restarts the first level
+    - mehr space für aufgaben
+    - skip step (low prio) (paused, only usable)

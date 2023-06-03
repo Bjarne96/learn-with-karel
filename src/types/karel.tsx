@@ -117,12 +117,11 @@ export interface ICanvasProps {
 
 export interface IWorldButtons {
     handleLevelChange(code: number): void
-    handleRunningCode(): void
+    setRunningCode(running: boolean, interval: number): void
     handleResetCode(): void
     handleSaveCode(): void
     handleSaveCode(): void
     handleResetToDefaulftCode(): void
-    handleIntervalChange(interval: number): void
     handleIntervalPause(pause: boolean): void
     worldCounter: number
     isLoggedIn: boolean

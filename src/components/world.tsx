@@ -54,7 +54,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
-        if (this.props.worldNumber - 1 != this.props.worldCompletedCounter) return
+        if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
             this.startedCode = true

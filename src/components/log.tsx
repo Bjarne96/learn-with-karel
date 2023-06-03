@@ -3,7 +3,7 @@ import type { ILogProps } from "../types/karel"
 
 const Log: React.FC<ILogProps> = ({ log }) => {
 
-    return <div className="m-0 py-4 px-4 min-w-[250px] max-w-[250px] overflow-y-auto rounded max-h-[calc(33vw+2rem)]">
+    return <div className="m-0 py-4 px-4 min-w-[250px] max-w-[250px] overflow-y-auto rounded h-[100vh]">
         {log.map((str, i) => {
             if (str === "") return null
             let color = "text-sky-500"

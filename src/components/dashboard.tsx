@@ -69,17 +69,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     handleIntervalPause(pause: boolean) { this.setState({ pauseCode: pause }) }
 
-    handleIntervalChange(interval: number) { this.setState({ interval: interval }) }
-
     async setLevel(level: number) {
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
         let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
         let done = ""
-        if (this.userId) {
-            const res = await this.getLevel(level)
-            if (res["code"]) code = res["code"]
-            if (res["done"]) done = res["done"]
-        }
+        try {
+            await this.handleSaveCode()
+            if (this.userId) {
+                const res = await this.getLevel(level)
+                if (res["code"]) code = res["code"]
+                if (res["done"]) done = res["done"]
+            }
+        } catch (e) { console.log("request error", e) }
         this.setState({
             currentLevel: level,
             commands: levels[level].commands,
@@ -151,24 +152,20 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     async setActiveTab(tab: number) { this.setState({ activeTab: tab }) }
 
-    setRunningCode(runningCode: boolean) {
-        //Unpause when level is finished
-        if (this.state.executionCompleted && runningCode) {
-            //First reset, then run the code
-            this.handleResetCode()
-            setTimeout(() => { this.setState({ runningCode: true }) }, 128);
-            return
-        }
-        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
-        this.setState({ runningCode: runningCode, activeTab: 1 })
-    }
-
-    handleRunningCode() {
+    setRunningCode(runningCode: boolean, interval: number) {
         if (this.debounceRunningCode) return
         this.debounceRunningCode = true
         setTimeout(() => this.debounceRunningCode = false, 300)
         if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
-        this.setRunningCode(true)
+        //Unpause when level is finished
+        if (this.state.executionCompleted && runningCode) {
+            //First reset, then run the code
+            this.handleResetCode()
+            setTimeout(() => { this.setState({ runningCode: true, interval: interval }) }, 128);
+            return
+        }
+        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
+        this.setState({ runningCode: runningCode, interval: interval, activeTab: 1 })
     }
 
     handleResetCode() {
@@ -205,17 +202,16 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
             else completed = false //Sets to false, when they didnt match the count
         }
-        let done = ""
-        //Handle first time completed
-        if (completed) { // Was successfully completed
-            //Saves the code and the done date to database
-            done = new Date().toString()
-            this.handleSaveLevel({ done: done, code: this.state.code })
-        }
+        let done = new Date().toString()
+        //Handle first time completed and saves the code and the done date to database
+        if (completed && this.state.done == "") this.handleSaveLevel({ done: done, code: this.state.code })
+        else done = this.state.done
+        let showModal = false
+        if (this.state.done == "" && completed) showModal = true
         this.setState({
             done: done,
             executionCompleted: completed,
-            showLevelCompletedModal: completed,
+            showLevelCompletedModal: showModal,
             worldCompletedCounter: worldCompletedCounter,
             activeTab: worldCompletedCounter + 1
         })
@@ -299,11 +295,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             interval={this.state.interval}
                             worldCounter={this.state.worldCounter}
                             handleLevelChange={this.handleLevelChange.bind(this)}
-                            handleRunningCode={this.handleRunningCode.bind(this)}
+                            setRunningCode={this.setRunningCode.bind(this)}
                             handleResetCode={this.handleResetCode.bind(this)}
                             handleSaveCode={this.handleSaveCode.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
-                            handleIntervalChange={this.handleIntervalChange.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
                         />
                     </div>

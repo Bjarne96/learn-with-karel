@@ -3,6 +3,7 @@ import type { ICanvasProps } from "../types/karel"
 
 const Canvas: React.FC<ICanvasProps> = (props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const parentRef = useRef<HTMLDivElement>(null)
     let clientWidth = 300
 
     const draw = useCallback(() => {
@@ -13,7 +14,11 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         const xCount = props.walls[0].length
         let teiler = yCount
 
-        if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
+        if (typeof window !== "undefined") {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            clientWidth = (parentRef.current.clientWidth - 32)
+            if (parentRef.current.clientWidth > window.innerHeight) clientWidth = (window.innerHeight - 100)
+        }
         const canvasHeight = clientWidth / (xCount / yCount)
 
         if (yCount < xCount) teiler = xCount
@@ -202,7 +207,11 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
                 const yCount = props.walls.length
                 const xCount = props.walls[0].length
                 let teiler = yCount
-                if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
+                if (typeof window !== "undefined") {
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
+                    clientWidth = (parentRef.current.clientWidth - 32)
+                    if (parentRef.current.clientWidth > window.innerHeight) clientWidth = (window.innerHeight - 100)
+                }
                 const canvasHeight = clientWidth / (xCount / yCount)
                 if (yCount < xCount) teiler = xCount
                 const currentBlockSize = clientWidth / teiler
@@ -251,7 +260,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
     }, [props.beepers, props.solutions, props.walls, props.karel])
 
     return (
-        <div className="w-full">{/* eslint-disable-next-line @next/next/no-img-element */}
+        <div ref={parentRef} className="w-full">{/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hidden" id="img" src="/karel.png" alt="" />
             <canvas className="mx-auto" ref={canvasRef} />
         </div>

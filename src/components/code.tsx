@@ -31,15 +31,9 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     }, [runningCode, code, activeLine])
 
     //Using the editorContainer
-    useEffect(() => {
-        if (editorContainer.current) setContainer(editorContainer.current);
-    }, [setContainer]);
+    useEffect(() => { if (editorContainer.current) setContainer(editorContainer.current) }, [setContainer]);
 
-    return (
-        <div className="border-code-grey bg-code-grey border-[1rem] rounded">
-            <div ref={editorContainer}></div>
-        </div>
-    )
+    return <div className="border-code-grey bg-code-grey"><div ref={editorContainer}></div></div>
 }
 
 export default Code
