@@ -38,6 +38,7 @@ export interface DashboardState {
     activeLine: number
     activeTab: number
     done: string
+    step: number
     commands: Commands
     displayHelper: boolean
 }
@@ -107,6 +108,7 @@ export interface IWorldProps {
     interval: number
     activeTab: number
     displayHelper: boolean
+    step: number
     completedLevel(completed: boolean): void
     updateLogAndLine(log: string, line: number, worldNumber: number): void
 }
@@ -126,6 +128,7 @@ export interface IWorldButtons {
     handleResetCode(): void
     handleSaveCode(): void
     handleSaveCode(): void
+    handleStep(): void
     handleResetToDefaulftCode(): void
     handleIntervalPause(pause: boolean): void
     worldCounter: number

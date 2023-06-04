@@ -54,16 +54,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 activeLine: 0,
                 activeTab: 4,
                 done: done,
-                displayHelper: true
+                displayHelper: true,
+                step: 0
             }
         }
+    }
+
+    handleStep() {
+        if (this.state.pauseCode) this.setState({ step: this.state.step + 1 })
     }
 
     onCodeChange(code: string) {
         if (this.state.runningCode) {
             //First reset, then update the code
             this.handleResetCode()
-            setTimeout(() => { this.setState({ code: code }) }, 128);
+            //TODO: Add getResetObject
+            const test = { code: code }
+            setTimeout(() => { this.setState(test) }, 128);
             return
         }
         this.setState({ code: code })
@@ -82,7 +89,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 if (res["code"]) code = res["code"]
                 if (res["done"]) done = res["done"]
             }
-        } catch (e) { console.log("request error", e) }
+        } catch (e) { console.warn("request error", e) }
         this.setState({
             currentLevel: level,
             commands: levels[level].commands,
@@ -158,24 +165,38 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     setRunningCode(runningCode: boolean, interval: number) {
+        console.log('run', this.state.executionCompleted, runningCode);
         if (this.debounceRunningCode) return
         this.debounceRunningCode = true
         setTimeout(() => this.debounceRunningCode = false, 300)
-        if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
+        // if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
+        // Refactor this
         if (this.state.executionCompleted && runningCode) {
             this.setState({
                 firstLog: [],
                 secondLog: [],
                 pauseCode: false,
+                runningCode: false,
                 executionCompleted: false,
                 activeLine: 0,
                 worldCompletedCounter: 0,
-                runningCode: true,
-                interval: interval
+                step: 0
+            }, () => {
+                this.setState({
+                    firstLog: [],
+                    secondLog: [],
+                    pauseCode: false,
+                    executionCompleted: false,
+                    activeLine: 0,
+                    worldCompletedCounter: 0,
+                    runningCode: true,
+                    interval: interval,
+                    step: 0
+                })
             })
             return
         }
-        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false, interval: interval })
+        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false, interval: interval, step: 0 })
         this.setState({ runningCode: runningCode, interval: interval, activeTab: 1 })
     }
 
@@ -187,7 +208,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             runningCode: false,
             executionCompleted: false,
             activeLine: 0,
-            worldCompletedCounter: 0
+            worldCompletedCounter: 0,
+            step: 0
         });
     }
 
@@ -195,10 +217,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     handleLevelChange(level: number) { if (level >= 0 && level < levels.length) this.setLevel(level) }
 
-    completedLevel(completed: boolean) {
+    async completedLevel(completed: boolean) {
         let worldCompletedCounter = this.state.worldCompletedCounter
-        //Unpause when level is finished
-        if (this.state.pauseCode) this.handleIntervalPause(false)
         //If the level was already completed at some point before,
         // there is only to the executionCompleted state has to be set
         if ((this.state.done != "" && this.state.worldCounter == 1)
@@ -212,6 +232,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             //Resets when all where completed successfully
             if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
             else completed = false //Sets to false, when they didnt match the count
+            console.log('completed', completed);
         }
         let done = new Date().toString()
         //Handle first time completed and saves the code and the done date to database
@@ -224,7 +245,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             executionCompleted: completed,
             showLevelCompletedModal: showModal,
             worldCompletedCounter: worldCompletedCounter,
-            activeTab: worldCompletedCounter + 1
+            activeTab: worldCompletedCounter + 1,
+            step: 0
         })
     }
 
@@ -294,6 +316,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 displayHelper={this.state.displayHelper}
                                 completedLevel={this.completedLevel.bind(this)}
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
+                                step={this.state.step}
                             />
                         )}
                         <WorldButtons
@@ -309,6 +332,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             handleSaveCode={this.handleSaveCode.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
+                            handleStep={this.handleStep.bind(this)}
                         />
                     </div>
                 </div>

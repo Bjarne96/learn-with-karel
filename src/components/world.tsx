@@ -20,6 +20,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     logs: Array<{ log: string, line: number }> = []
     karel: IKarel
     beepers: Beepers
+    step = 0
 
     constructor(props) {
         super(props)
@@ -27,6 +28,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.karel = JSON.parse(JSON.stringify(stateFromProps.karel))
         this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers))
         this.interval = this.props.interval
+        this.step = this.props.step
 
         this.state = {
             karel: JSON.parse(JSON.stringify(stateFromProps.karel)),
@@ -56,7 +58,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
         if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
+        console.log('this.props.runningCode', this.props.runningCode);
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
+            console.log('runnn');
             this.startedCode = true
             this.executeCode()
         }
@@ -76,6 +80,12 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (this.interval != this.props.interval) {
             this.interval = this.props.interval
             if (!this.finishedCode && this.startedCode) this.executeSnapshots()
+        }
+        // Skip to the next execution step
+        if (this.props.pauseCode && this.props.step != this.step) {
+            this.step = this.props.step
+            clearInterval(this.intervalRef)
+            if (!this.finishedCode && this.startedCode) this.executeSnapshots(false)
         }
     }
 
@@ -243,36 +253,43 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.executeSnapshots()
     }
 
-    executeSnapshots() {
-        try {
+    executeSnapshots(useInterval = true) {
+        if (this.snapshots.length == 0) return
+        if (this.snapshots.length == 0 && this.errorFound) {
+            this.addErrorToLog()
+            this.props.completedLevel(this.checkSolution())
             clearInterval(this.intervalRef)
-            if (this.snapshots.length) {
-                this.intervalRef = setInterval(() => {
-                    if (!this.pauseInterval) {
-                        if (this.snapshotIndex >= this.snapshots.length) {
-                            if (!this.checkSolution() && this.errorFound == "") this.errorFound = "Error: The level was not solved."
-                            if (this.checkSolution() && this.errorFound == "") this.errorFound = "Level was solved."
-                            if (this.errorFound != "") this.addErrorToLog()
-                            clearInterval(this.intervalRef)
-                            this.clearLog();
-                            this.props.completedLevel(this.checkSolution())
-                            return
-                        }
-                        this.props.updateLogAndLine(
-                            this.logs[this.snapshotIndex].log,
-                            this.logs[this.snapshotIndex].line,
-                            this.props.worldNumber)
-                        this.setState({
-                            karel: this.snapshots[this.snapshotIndex].karel,
-                            beepers: this.snapshots[this.snapshotIndex].beepers
-                        })
-                        this.snapshotIndex++
+            return
+        }
+
+        try {
+            const execute = () => {
+                if (this.pauseInterval) clearInterval(this.intervalRef)
+                if (useInterval && this.pauseInterval || this.snapshotIndex >= this.snapshots.length) return
+                this.props.updateLogAndLine(
+                    this.logs[this.snapshotIndex].log,
+                    this.logs[this.snapshotIndex].line,
+                    this.props.worldNumber)
+                this.setState({
+                    karel: this.snapshots[this.snapshotIndex].karel,
+                    beepers: this.snapshots[this.snapshotIndex].beepers
+                }, () => {
+                    this.snapshotIndex++
+                    if (this.snapshotIndex >= this.snapshots.length) {
+                        const solved = this.checkSolution()
+                        if (!solved && this.errorFound == "") this.errorFound = "Error: The level was not solved."
+                        if (solved && this.errorFound == "") this.errorFound = "Level was solved."
+                        if (this.errorFound != "") this.addErrorToLog()
+                        clearInterval(this.intervalRef)
+                        this.clearLog();
+                        this.props.completedLevel(solved)
+                        return
                     }
-                }, this.interval)
-            } else if (this.errorFound) {
-                this.addErrorToLog()
-                this.props.completedLevel(this.checkSolution())
+                });
             }
+            clearInterval(this.intervalRef)
+            if (useInterval) this.intervalRef = setInterval(async () => { execute() }, this.interval)
+            else execute()
         } catch (e) {
             this.props.updateLogAndLine(e, 0, this.props.worldNumber)
         }

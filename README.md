@@ -12,5 +12,6 @@
      - Users can save custom functions (across levels)
 # Tickets
     - user has "geführtes lernen tag"
-    - mehr space für aufgaben
-    - skip step (low prio) (paused, only usable)
+    - Add getResetObject
+    - save level when the last code change was 5 seconds
+    - refactor reset when playing right into a play
