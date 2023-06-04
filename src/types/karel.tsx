@@ -39,6 +39,7 @@ export interface DashboardState {
     activeTab: number
     done: string
     commands: Commands
+    displayHelper: boolean
 }
 type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
@@ -104,6 +105,8 @@ export interface IWorldProps {
     worldNumber: number
     commands: Commands
     interval: number
+    activeTab: number
+    displayHelper: boolean
     completedLevel(completed: boolean): void
     updateLogAndLine(log: string, line: number, worldNumber: number): void
 }
@@ -113,6 +116,8 @@ export interface ICanvasProps {
     beepers: Beepers
     solutions: Beepers
     walls: Array<Array<number>>
+    activeTab: number
+    displayHelper: boolean
 }
 
 export interface IWorldButtons {
@@ -135,4 +140,5 @@ export interface ISidebar {
     setActiveTab(code: number): void
     worldCounter: number
     activeTab: number
+    displayHelper: boolean
 }

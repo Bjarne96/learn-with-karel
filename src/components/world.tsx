@@ -85,6 +85,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             walls={this.state.walls}
             beepers={this.state.beepers}
             solutions={this.state.solutions}
+            activeTab={this.props.activeTab}
+            displayHelper={this.props.displayHelper}
         />
     }
     //Updates the state to the level depeding on the props

@@ -7,11 +7,12 @@ import World from "./world"
 import type { DashboardProps, DashboardState, IKarel } from "../types/karel";
 //Data
 import levels from "../data/levels"
-import WorldButtons from "./worldbuttons";
+import WorldButtons from "./levelbuttons";
 import LevelModal from "./modal";
 import Sidebar from "./sidebar"
 import Log from "./log";
 import SelectLevel from "./levelselect";
+import Explanation from "./explanation";
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -51,8 +52,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 firstLog: [],
                 secondLog: [],
                 activeLine: 0,
-                activeTab: 5,
-                done: done
+                activeTab: 4,
+                done: done,
+                displayHelper: true
             }
         }
     }
@@ -150,21 +152,30 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     async handleSaveCode() { this.handleSaveLevel({ code: this.state.code }) }
 
-    async setActiveTab(tab: number) { this.setState({ activeTab: tab }) }
+    async setActiveTab(tab: number) {
+        if (this.state.activeTab == tab) this.setState({ displayHelper: !this.state.displayHelper })
+        else this.setState({ activeTab: tab, displayHelper: true })
+    }
 
     setRunningCode(runningCode: boolean, interval: number) {
         if (this.debounceRunningCode) return
         this.debounceRunningCode = true
         setTimeout(() => this.debounceRunningCode = false, 300)
         if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
-        //Unpause when level is finished
         if (this.state.executionCompleted && runningCode) {
-            //First reset, then run the code
-            this.handleResetCode()
-            setTimeout(() => { this.setState({ runningCode: true, interval: interval }) }, 128);
+            this.setState({
+                firstLog: [],
+                secondLog: [],
+                pauseCode: false,
+                executionCompleted: false,
+                activeLine: 0,
+                worldCompletedCounter: 0,
+                runningCode: true,
+                interval: interval
+            })
             return
         }
-        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false })
+        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false, interval: interval })
         this.setState({ runningCode: runningCode, interval: interval, activeTab: 1 })
     }
 
@@ -244,19 +255,15 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             setActiveTab={this.setActiveTab.bind(this)}
                             worldCounter={this.state.worldCounter}
                             activeTab={this.state.activeTab}
+                            displayHelper={this.state.displayHelper}
                         />
                     </div>
-                    <div className="min-w-[250px] h-full">
-                        {
-                            {
-                                1: <Log log={this.state.firstLog} />,
-                                2: <Log log={this.state.secondLog} />,
-                                3: <Commands commands={this.state.commands} />,
-                                4: <div className="text-white w-full">Custom Code</div>,
-                                5: <div className="text-white w-full">Task</div>,
-                            }[this.state.activeTab]
-                        }
-                    </div>
+                    {{
+                        1: this.state.displayHelper && <Log log={this.state.firstLog} />,
+                        2: this.state.displayHelper && <Log log={this.state.secondLog} />,
+                        3: this.state.displayHelper && <Commands commands={this.state.commands} />,
+                        4: this.state.displayHelper && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
+                    }[this.state.activeTab]}
                     <div className="w-full h-full">
                         <Code
                             code={this.state.code}
@@ -283,6 +290,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 karel={this.state.karel}
                                 world={world}
                                 commands={this.state.commands}
+                                activeTab={this.state.activeTab}
+                                displayHelper={this.state.displayHelper}
                                 completedLevel={this.completedLevel.bind(this)}
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
                             />
