@@ -12,6 +12,7 @@
      - Users can save custom functions (across levels)
 # Tickets
     - user has "geführtes lernen tag"
-    - Add getResetObject
-    - save level when the last code change was 5 seconds
-    - refactor reset when playing right into a play
+    - loading state
+    - indicate saving
+    - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
+    

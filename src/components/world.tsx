@@ -53,14 +53,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
             this.finishedCode = false
             this.startedCode = false
+            this.step = 0
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
         if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
-        console.log('this.props.runningCode', this.props.runningCode);
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
-            console.log('runnn');
             this.startedCode = true
             this.executeCode()
         }

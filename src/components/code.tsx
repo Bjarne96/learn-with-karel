@@ -20,13 +20,15 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     //Highlight active line
     useEffect(() => {
         if (runningCode && activeLine != 0) {
-            try {
-                setTimeout(() => {
+
+            setTimeout(() => {
+                try {
                     document.getElementsByClassName("cm-content")[0]
                         .children[(activeLine - 1)]
                         .classList.add("highlighted-line")
-                }, 16)
-            } catch (e) { }
+                } catch (e) { }
+            }, 16)
+
         }
     }, [runningCode, code, activeLine])
 

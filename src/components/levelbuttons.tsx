@@ -9,7 +9,7 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
             "name": "play",
             "color": "fill-green-600",
             "text": "Execute your code.",
-            "onClick": () => props.setRunningCode(true, 1000),
+            "onClick": () => props.executeCode(1000),
             "className": "w-8 has-tooltip h-10 my-auto",
             "path": "M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z",
             "viewBox": "0 0 384 512"
@@ -17,7 +17,7 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
             "name": "forward",
             "color": "fill-gray-200",
             "text": "Execute your code faster.",
-            "onClick": () => props.setRunningCode(true, 500),
+            "onClick": () => props.executeCode(500),
             "className": "w-10 has-tooltip h-10 my-auto",
             "path": "M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z",
             "viewBox": "0 0 512 512"
@@ -25,7 +25,7 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
             "name": "fastforward",
             "color": "fill-gray-200",
             "text": "Execute your code very fast.",
-            "onClick": () => props.setRunningCode(true, 100),
+            "onClick": () => props.executeCode(100),
             "className": "w-10 has-tooltip h-10 my-auto",
             "path": "M18.4 445c11.2 5.3 24.5 3.6 34.1-4.4L224 297.7V416c0 12.4 7.2 23.7 18.4 29s24.5 3.6 34.1-4.4L448 297.7V416c0 17.7 14.3 32 32 32s32-14.3 32-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32V214.3L276.5 71.4c-9.5-7.9-22.8-9.7-34.1-4.4S224 83.6 224 96V214.3L52.5 71.4c-9.5-7.9-22.8-9.7-34.1-4.4S0 83.6 0 96V416c0 12.4 7.2 23.7 18.4 29z",
             "viewBox": "0 0 512 512"

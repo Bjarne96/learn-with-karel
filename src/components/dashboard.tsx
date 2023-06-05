@@ -1,18 +1,18 @@
-import React from "react";
+import React from "react"
 // Components
-import Commands from "./commands";
-import Code from "./code";
+import Commands from "./commands"
+import Code from "./code"
 import World from "./world"
 //Interfaces
-import type { DashboardProps, DashboardState, IKarel } from "../types/karel";
+import type { DashboardProps, DashboardState, IKarel } from "../types/karel"
 //Data
 import levels from "../data/levels"
-import WorldButtons from "./levelbuttons";
-import LevelModal from "./modal";
+import WorldButtons from "./levelbuttons"
+import LevelModal from "./modal"
 import Sidebar from "./sidebar"
-import Log from "./log";
-import SelectLevel from "./levelselect";
-import Explanation from "./explanation";
+import Log from "./log"
+import SelectLevel from "./levelselect"
+import Explanation from "./explanation"
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -21,9 +21,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     debounceSaveCode = false
     isLoggedIn = false
     userId = ""
+    saveCode = null
 
     constructor(props: DashboardProps) {
-        super(props);
+        super(props)
         //Adapting props, when user data was given
         let lastStage = 0
         let done = ""
@@ -60,20 +61,25 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
+    // TODO: add save event
+    // window.addEventListener('keydown', e => {
+    //     if (e.ctrlKey && e.key === 's') {
+    //       // Prevent the Save dialog to open
+    //       e.preventDefault();
+    //       // Place your code here
+    //       console.log('CTRL + S');
+    //     }
+    // });
+
     handleStep() {
         if (this.state.pauseCode) this.setState({ step: this.state.step + 1 })
     }
 
     onCodeChange(code: string) {
-        if (this.state.runningCode) {
-            //First reset, then update the code
-            this.handleResetCode()
-            //TODO: Add getResetObject
-            const test = { code: code }
-            setTimeout(() => { this.setState(test) }, 128);
-            return
-        }
-        this.setState({ code: code })
+        clearTimeout(this.saveCode)
+        this.saveCode = setTimeout(() => this.handleSaveLevel({ code: this.state.code }, true), 5000);
+        if (this.state.runningCode) this.setState({ ...this.getResetRunningCodeObject(), ...{ code: code } })
+        else this.setState({ code: code })
     }
 
     handleIntervalPause(pause: boolean) { this.setState({ pauseCode: pause }) }
@@ -91,38 +97,34 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             }
         } catch (e) { console.warn("request error", e) }
         this.setState({
-            currentLevel: level,
-            commands: levels[level].commands,
-            karel: karel,
-            code: code,
-            done: done,
-            firstLog: [],
-            secondLog: [],
-            pauseCode: false,
-            runningCode: false,
-            executionCompleted: false,
-            activeLine: 0,
-            activeTab: 1,
-            worldCompletedCounter: 0,
-            worldCounter: levels[level].worlds.length
+            ...this.getResetRunningCodeObject(),
+            ...{
+                currentLevel: level,
+                commands: levels[level].commands,
+                karel: karel,
+                code: code,
+                done: done,
+                activeTab: 4,
+                worldCounter: levels[level].worlds.length
+            }
         })
     }
 
     async getLevel(level: number) {
         const body = { level: { stage: level, user_id: this.userId } }
         const res = await this.requestLevel(body, "GET")
-        return res;
+        return res
     }
 
     objectToParams(obj) {
         const keys = Object.keys(obj)
         let params = ""
         for (let i = 0; i < keys.length; i++) {
-            const element = keys[i];
+            const element = keys[i]
             if (i != 0) params = params + "&"
-            params = params + element.toString() + "=" + obj[keys[i]].toString();
+            params = params + element.toString() + "=" + obj[keys[i]].toString()
         }
-        return params;
+        return params
     }
 
     async requestLevel(body, method) {
@@ -132,7 +134,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             let url = "/api/level"
             const requestOptions = { method: method, headers: myHeaders }
             try {
-                if (method == "GET") url = url + "?" + this.objectToParams(body.level);
+                if (method == "GET") url = url + "?" + this.objectToParams(body.level)
                 else requestOptions["body"] = JSON.stringify(JSON.stringify(body))
                 fetch(url, requestOptions)
                     .then(response => response.text())
@@ -141,7 +143,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             } catch (e) {
                 reject(e)
             }
-        });
+        })
     }
 
     async handleSaveLevel(level, attempt?) {
@@ -164,44 +166,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         else this.setState({ activeTab: tab, displayHelper: true })
     }
 
-    setRunningCode(runningCode: boolean, interval: number) {
-        console.log('run', this.state.executionCompleted, runningCode);
+    executeCode(interval: number) {
+        //Debounce to prevent clicking too fast and breaking things
         if (this.debounceRunningCode) return
         this.debounceRunningCode = true
         setTimeout(() => this.debounceRunningCode = false, 300)
-        // if (this.state.done == "" && !this.state.pauseCode) this.handleSaveLevel({ code: this.state.code }, true)
-        // Refactor this
-        if (this.state.executionCompleted && runningCode) {
-            this.setState({
-                firstLog: [],
-                secondLog: [],
-                pauseCode: false,
-                runningCode: false,
-                executionCompleted: false,
-                activeLine: 0,
-                worldCompletedCounter: 0,
-                step: 0
-            }, () => {
-                this.setState({
-                    firstLog: [],
-                    secondLog: [],
-                    pauseCode: false,
-                    executionCompleted: false,
-                    activeLine: 0,
-                    worldCompletedCounter: 0,
-                    runningCode: true,
-                    interval: interval,
-                    step: 0
-                })
-            })
-            return
+        // When the last execution is completed the state resets and is then set the to running
+        if (this.state.executionCompleted) {
+            return this.setState(this.getResetRunningCodeObject(), () => this.setState({ interval: interval, runningCode: true }))
         }
-        if (this.state.pauseCode && runningCode) return this.setState({ pauseCode: false, interval: interval, step: 0 })
-        this.setState({ runningCode: runningCode, interval: interval, activeTab: 1 })
+        // The execution gets unpaused
+        if (this.state.pauseCode) return this.setState({ pauseCode: false, interval: interval })
+        // Execute the code
+        this.setState({ runningCode: true, interval: interval, activeTab: 1 })
     }
 
-    handleResetCode() {
-        this.setState({
+    getResetRunningCodeObject() {
+        return {
             firstLog: [],
             secondLog: [],
             pauseCode: false,
@@ -210,8 +191,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             activeLine: 0,
             worldCompletedCounter: 0,
             step: 0
-        });
+        }
     }
+
+    handleResetCode() { this.setState(this.getResetRunningCodeObject) }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
@@ -232,7 +215,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             //Resets when all where completed successfully
             if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
             else completed = false //Sets to false, when they didnt match the count
-            console.log('completed', completed);
         }
         let done = new Date().toString()
         //Handle first time completed and saves the code and the done date to database
@@ -327,7 +309,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             interval={this.state.interval}
                             worldCounter={this.state.worldCounter}
                             handleLevelChange={this.handleLevelChange.bind(this)}
-                            setRunningCode={this.setRunningCode.bind(this)}
+                            executeCode={this.executeCode.bind(this)}
                             handleResetCode={this.handleResetCode.bind(this)}
                             handleSaveCode={this.handleSaveCode.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}

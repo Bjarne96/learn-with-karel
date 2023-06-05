@@ -124,7 +124,7 @@ export interface ICanvasProps {
 
 export interface IWorldButtons {
     handleLevelChange(code: number): void
-    setRunningCode(running: boolean, interval: number): void
+    executeCode(interval: number): void
     handleResetCode(): void
     handleSaveCode(): void
     handleSaveCode(): void
