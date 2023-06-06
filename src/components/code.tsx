@@ -20,13 +20,12 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     //Highlight active line
     useEffect(() => {
         if (runningCode && activeLine != 0) {
-
             setTimeout(() => {
                 try {
                     document.getElementsByClassName("cm-content")[0]
                         .children[(activeLine - 1)]
                         .classList.add("highlighted-line")
-                } catch (e) { }
+                } catch (e) { /* Prevent breaking when lines are removed. */ }
             }, 16)
 
         }
@@ -35,7 +34,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     //Using the editorContainer
     useEffect(() => { if (editorContainer.current) setContainer(editorContainer.current) }, [setContainer]);
 
-    return <div className="border-code-grey bg-code-grey"><div ref={editorContainer}></div></div>
+    return <div className="border-code-grey"><div ref={editorContainer}></div></div>
 }
 
 export default Code

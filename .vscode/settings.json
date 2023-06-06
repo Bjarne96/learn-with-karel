@@ -1,0 +1,15 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "editor.formatOnSave": true,
+    "eslint.rules.customizations": [
+        //All ESlint is supposed to be a warn, so you can tell it apart from typescript (lint != typechecker)
+        {
+            "rule": "*",
+            "severity": "warn"
+        }
+    ],
+    // use the local ts version
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -8,11 +8,10 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
     const [canvasWidth, setCanvasWidth] = useState(100);
 
     const draw = useCallback(() => {
-
         // Exceptions if the ref is not correctly set
         if (props.walls === undefined || props.walls.length === 0 || props.walls[0] === undefined) return
         if (canvasRef.current == null) return
-        const context = canvasRef.current.getContext("2d")
+        const context: CanvasRenderingContext2D = canvasRef.current.getContext("2d")
         if (context == null) return
 
         // Setup sizes
@@ -40,30 +39,35 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
             }
         }
         // Draw all beepers
-        for (let i = 0; i < props.beepers.length; i++) {
-            const beeper = props.beepers[i]
-            if (beeper == null) return
-            let solved = false
-            for (let i = 0; i < props.solutions.length; i++) {
-                const solution = props.solutions[i]
-                if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
-                    solved = true
-                    break
+        if (props.beepers) {
+            for (let i = 0; i < props.beepers.length; i++) {
+                const beeper = props.beepers[i]
+                if (beeper == null) return
+                let solved = false
+                for (let i = 0; i < props.solutions.length; i++) {
+                    const solution = props.solutions[i]
+                    if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
+                        solved = true
+                        break
+                    }
                 }
+                drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize, context)
             }
-            drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize, context)
         }
         // Draw all solution fields
-        for (let i = 0; i < props.solutions.length; i++) {
-            const solution = props.solutions[i]
-            if (solution == null) return
-            drawSolutions(solution.x, solution.y, solution.count, currentBlockSize, context)
+        if (props.solutions) {
+            for (let i = 0; i < props.solutions.length; i++) {
+                const solution = props.solutions[i]
+                if (solution == null) return
+                drawSolutions(solution.x, solution.y, solution.count, currentBlockSize, context)
+            }
         }
+
         // Draw karel
-        drawKarel(props.karel, currentBlockSize, context)
+        if (props.karel) drawKarel(props.karel, currentBlockSize, context)
     }, [canvasWidth, props.beepers, props.karel, props.solutions, props.walls])
 
-    const drawWall = (x: number, y: number, side: number, currentBlockSize: number, context) => {
+    const drawWall = (x: number, y: number, side: number, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
         const maxX = minX + currentBlockSize
@@ -102,7 +106,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         context.restore()
     }
 
-    const drawBeeper = (x: number, y: number, count: number, solved: boolean, currentBlockSize: number, context) => {
+    const drawBeeper = (x: number, y: number, count: number, solved: boolean, currentBlockSize: number, context: CanvasRenderingContext2D) => {
 
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
@@ -135,7 +139,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         }
     }
 
-    const drawSolutions = (x: number, y: number, count: number, currentBlockSize: number, context) => {
+    const drawSolutions = (x: number, y: number, count: number, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
         const midX = minX + currentBlockSize * 0.5
@@ -165,7 +169,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         }
     }
 
-    const drawKarel = (karel: { x: number; y: number; direction: number }, currentBlockSize: number, context) => {
+    const drawKarel = (karel: { x: number; y: number; direction: number }, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const karelImage = document.getElementById("img") as CanvasImageSource
         const minX = karel.x * currentBlockSize
         const minY = karel.y * currentBlockSize

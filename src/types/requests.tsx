@@ -1,5 +1,7 @@
 import { ObjectId } from 'mongodb';
 import levels from "../data/levels"
+import type { NextApiRequest, NextApiResponse } from "next"
+import { unknown } from 'zod';
 
 export const postLevelBody = {
     user_id: "642161d67a4a6ac23c5b0fe5",
@@ -89,7 +91,7 @@ export async function getLevel(body, db) {
         if (level == null && body["id"]) return { status: 300, msg: "Could not find your Level." }
         //Level has to be created, when user_id exists
         if (level == null) {
-            const user = await db
+            const user: IUser = await db
                 .collection("user")
                 .findOne({ _id: new ObjectId(body["user_id"] as string) })
             if (user == null) return { status: 300, msg: "You are not registered or you have not used your user specific link." }
@@ -115,35 +117,33 @@ export async function getLevel(body, db) {
 }
 
 //Checks if keys and types are the same
-export function hasSameKeys(a, b) {
+export function hasSameKeys(a: object, b: object) {
     return Object.keys(a).length === Object.keys(b).length
-        && Object.keys(a).every(k => b.hasOwnProperty(k)
-            && Object.keys(a).every(k => typeof b[k] == typeof a[k]))
+        && Object.keys(a).every(k => Object.prototype.hasOwnProperty.call(b, k)
+            && Object.keys(a).every(k => typeof b[k as keyof object] == typeof a[k as keyof object]))
 }
 //Checks if b has all keys that are in a, as well as the correct types
-export function hasKeys(a, b) {
-    return Object.keys(a).every(k => b.hasOwnProperty(k)
-        && Object.keys(a).every(k => typeof b[k] == typeof a[k]))
+export function hasKeys(a: object, b: object) {
+    return Object.keys(a).every(k => Object.prototype.hasOwnProperty.call(b, k)
+        && Object.keys(a).every(k => typeof b[k as keyof object] == typeof a[k as keyof object]))
 }
-//Process the request body to an object
-export function setBodyObject(body) {
-    let bodyObject = body;
+//Process the request body to an object if not already happend
+export function setBodyObject(body: string) {
+    let bodyObject: unknown = body;
     try {
-        if (typeof body == "string") {
-            bodyObject = JSON.parse(body);
-        }
-    } catch { }
+        if (typeof body == "string") bodyObject = JSON.parse(body);
+    } catch {/* Prevent errors */ }
     return bodyObject
 }
 
-export async function databaseError(res, e) {
+export function databaseError(res: NextApiResponse, e: string) {
     return res.status(500).json({ "error": "DATABASE ERROR: " + e.toString(), "status": 500 })
 }
 
-export async function userError(res, e) {
+export function userError(res: NextApiResponse, e: string) {
     return res.status(300).json({ "error": "INVALID INPUT: " + e, "status": 300 })
 }
 
-export async function returnError(res, e) {
+export function returnError(res: NextApiResponse, e: string) {
     return res.status(500).json({ "error": "INTERNAL SERVER ERROR: " + e.toString(), "status": 500 })
 }

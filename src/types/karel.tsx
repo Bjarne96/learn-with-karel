@@ -41,7 +41,10 @@ export interface DashboardState {
     step: number
     commands: Commands
     displayHelper: boolean
+    loading: boolean
+    savedCode: number
 }
+
 type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
     code: string
@@ -109,25 +112,24 @@ export interface IWorldProps {
     activeTab: number
     displayHelper: boolean
     step: number
+    loading: boolean
     completedLevel(completed: boolean): void
     updateLogAndLine(log: string, line: number, worldNumber: number): void
 }
 
 export interface ICanvasProps {
-    karel: IKarel
-    beepers: Beepers
-    solutions: Beepers
+    karel?: IKarel
+    beepers?: Beepers
+    solutions?: Beepers
     walls: Array<Array<number>>
     activeTab: number
     displayHelper: boolean
 }
 
-export interface IWorldButtons {
+export interface ILevelButtons {
     handleLevelChange(code: number): void
     executeCode(interval: number): void
     handleResetCode(): void
-    handleSaveCode(): void
-    handleSaveCode(): void
     handleStep(): void
     handleResetToDefaulftCode(): void
     handleIntervalPause(pause: boolean): void
@@ -144,4 +146,53 @@ export interface ISidebar {
     worldCounter: number
     activeTab: number
     displayHelper: boolean
+}
+
+// Request
+
+export interface GetLevelApiResponse {
+    id: string
+    user_id: string
+    stage: number
+    start: string
+    default_world: IWorld
+    code: string
+    done: string
+}
+
+export interface RestRequest {
+    headers: Headers
+    method: "GET" | "PUT" | "POST" | "DELETE"
+    body?: string
+}
+
+export interface GetObject {
+    level: {
+        stage: number,
+        user_id: string
+    }
+}
+export interface IUpdateLevelRequest {
+    code?: string
+    done?: string
+}
+export interface PutRequestBodyObject {
+    user_id: string,
+    stage: number,
+    level: IUpdateLevelRequest,
+    attempt?: IAttempt
+}
+export interface IAttempt {
+    timestamp: string
+}
+
+export interface ResetStateObject {
+    firstLog: Array<string>
+    secondLog: Array<string>
+    pauseCode: boolean
+    runningCode: boolean
+    executionCompleted: boolean
+    activeLine: number
+    worldCompletedCounter: number
+    step: number
 }

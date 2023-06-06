@@ -1,8 +1,8 @@
 import React from 'react'
 // Styles
-import type { IWorldButtons } from "../types/karel"
+import type { ILevelButtons } from "../types/karel"
 
-const WorldButtons: React.FC<IWorldButtons> = (props) => {
+const LevelButtons: React.FC<ILevelButtons> = (props) => {
 
     const returnButton = (name: string) => {
         const svgPaths = [{
@@ -33,7 +33,7 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
             "name": "step",
             "color": "fill-gray-200",
             "text": "Next step of execution.",
-            "onClick": props.handleStep,
+            "onClick": () => props.handleStep.bind(this),
             "className": "w-8 has-tooltip h-10 my-auto",
             "path": "M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241V96c0-17.7 14.3-32 32-32s32 14.3 32 32V416c0 17.7-14.3 32-32 32s-32-14.3-32-32V271l-11.5 9.6-192 160z",
             "viewBox": "0 0 320 512"
@@ -49,18 +49,10 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
             "name": "reset",
             "color": "fill-gray-200",
             "text": "Reset the execution.",
-            "onClick": props.handleResetCode,
+            "onClick": () => props.handleResetCode.bind(this),
             "className": "w-9 has-tooltip h-9 my-auto",
             "path": "M125.7 160H176c17.7 0 32 14.3 32 32s-14.3 32-32 32H48c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32s32 14.3 32 32v51.2L97.6 97.6c87.5-87.5 229.3-87.5 316.8 0s87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3s-163.8-62.5-226.3 0L125.7 160z",
             "viewBox": "0 0 512 512"
-        }, {
-            "name": "save",
-            "color": "fill-green-200",
-            "text": "Save your code.",
-            "onClick": props.handleSaveCode,
-            "className": "w-10 has-tooltip h-10 my-auto",
-            "path": "M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z",
-            "viewBox": "0 0 448 512"
         }, {
             "name": "completed",
             "color": "fill-green-700",
@@ -104,10 +96,9 @@ const WorldButtons: React.FC<IWorldButtons> = (props) => {
                 {returnButton("pause")}
                 {returnButton("step")}
                 {returnButton("reset")}
-                {/* {props.isLoggedIn && (returnButton("save"))} */}
                 {props.isLoggedIn && props.done === "" ? (returnButton("uncompleted")) : (returnButton("completed"))}
             </div>
         </div>
     )
 }
-export default WorldButtons
+export default LevelButtons

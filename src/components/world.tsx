@@ -9,7 +9,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     rightWall = 4
     bottomWall = 2
     leftWall = 1
-    intervalRef
+    intervalRef: ReturnType<typeof setInterval> = null
     interval = 250
     pauseInterval = false
     finishedCode = false
@@ -21,6 +21,16 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     karel: IKarel
     beepers: Beepers
     step = 0
+    loadingWorld = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
 
     constructor(props) {
         super(props)
@@ -89,14 +99,22 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     render() {
-        return <Canvas
-            karel={this.state.karel}
-            walls={this.state.walls}
-            beepers={this.state.beepers}
-            solutions={this.state.solutions}
-            activeTab={this.props.activeTab}
-            displayHelper={this.props.displayHelper}
-        />
+        const loadingWorld = this.loadingWorld.slice(0, this.state.walls.length)
+        return <>{this.props.loading ?
+            <Canvas
+                walls={loadingWorld}
+                activeTab={this.props.activeTab}
+                displayHelper={this.props.displayHelper}
+            /> :
+            <Canvas
+                karel={this.state.karel}
+                walls={this.state.walls}
+                beepers={this.state.beepers}
+                solutions={this.state.solutions}
+                activeTab={this.props.activeTab}
+                displayHelper={this.props.displayHelper}
+            />
+        }</>
     }
     //Updates the state to the level depeding on the props
     setLevel() {

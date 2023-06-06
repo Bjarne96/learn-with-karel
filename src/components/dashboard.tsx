@@ -4,15 +4,16 @@ import Commands from "./commands"
 import Code from "./code"
 import World from "./world"
 //Interfaces
-import type { DashboardProps, DashboardState, IKarel } from "../types/karel"
+import type { DashboardProps, DashboardState, IKarel, GetLevelApiResponse, RestRequest, PutRequestBodyObject, IUpdateLevelRequest, ResetStateObject } from "../types/karel"
 //Data
 import levels from "../data/levels"
-import WorldButtons from "./levelbuttons"
+import LevelButtons from "./levelbuttons"
 import LevelModal from "./modal"
 import Sidebar from "./sidebar"
 import Log from "./log"
 import SelectLevel from "./levelselect"
 import Explanation from "./explanation"
+import Loading from "./loading"
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -21,7 +22,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     debounceSaveCode = false
     isLoggedIn = false
     userId = ""
-    saveCode = null
+    saveCode: ReturnType<typeof setTimeout> = null
 
     constructor(props: DashboardProps) {
         super(props)
@@ -50,26 +51,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 pauseCode: false,
                 interval: 250,
                 showLevelCompletedModal: false,
-                firstLog: [],
-                secondLog: [],
+                firstLog: [] as string[],
+                secondLog: [] as string[],
                 activeLine: 0,
                 activeTab: 4,
                 done: done,
                 displayHelper: true,
-                step: 0
+                step: 0,
+                loading: false,
+                savedCode: 0
             }
         }
     }
-
-    // TODO: add save event
-    // window.addEventListener('keydown', e => {
-    //     if (e.ctrlKey && e.key === 's') {
-    //       // Prevent the Save dialog to open
-    //       e.preventDefault();
-    //       // Place your code here
-    //       console.log('CTRL + S');
-    //     }
-    // });
 
     handleStep() {
         if (this.state.pauseCode) this.setState({ step: this.state.step + 1 })
@@ -77,7 +70,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     onCodeChange(code: string) {
         clearTimeout(this.saveCode)
-        this.saveCode = setTimeout(() => this.handleSaveLevel({ code: this.state.code }, true), 5000);
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        this.saveCode = setTimeout(() => this.handleSaveLevel({ code: this.state.code }, true), 5000)
         if (this.state.runningCode) this.setState({ ...this.getResetRunningCodeObject(), ...{ code: code } })
         else this.setState({ code: code })
     }
@@ -85,17 +79,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     handleIntervalPause(pause: boolean) { this.setState({ pauseCode: pause }) }
 
     async setLevel(level: number) {
+        this.setState({ loading: true })
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
-        let code: string = (' ' + (levels[level]?.code as string)).slice(1) //Deep Copy
+        let code: string = (' ' + (levels[level]?.code)).slice(1) //Deep Copy
         let done = ""
-        try {
-            await this.handleSaveCode()
-            if (this.userId) {
-                const res = await this.getLevel(level)
-                if (res["code"]) code = res["code"]
-                if (res["done"]) done = res["done"]
-            }
-        } catch (e) { console.warn("request error", e) }
+        await this.handleSaveLevel({ code: this.state.code })
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        // await new Promise((res) => setTimeout(() => res("p1"), 1000)); // Testing loading screen
+        const res: GetLevelApiResponse | string = await this.getLevel(level)
+        if (typeof res != "string") {
+            code = res.code
+            done = res.done
+        }
         this.setState({
             ...this.getResetRunningCodeObject(),
             ...{
@@ -105,63 +100,73 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 code: code,
                 done: done,
                 activeTab: 4,
-                worldCounter: levels[level].worlds.length
+                worldCounter: levels[level].worlds.length,
+                loading: false
             }
         })
     }
 
     async getLevel(level: number) {
-        const body = { level: { stage: level, user_id: this.userId } }
-        const res = await this.requestLevel(body, "GET")
-        return res
+        if (!this.userId) return "No user id."
+        const url = "?" + this.objectToParams({ stage: level, user_id: this.userId })
+        return await this.requestLevel("GET", url)
     }
 
-    objectToParams(obj) {
-        const keys = Object.keys(obj)
+    objectToParams(obj: object) {
+        const keys: Array<string> = Object.keys(obj)
         let params = ""
         for (let i = 0; i < keys.length; i++) {
-            const element = keys[i]
             if (i != 0) params = params + "&"
-            params = params + element.toString() + "=" + obj[keys[i]].toString()
+            params = `${params}${keys[i]}=${obj[keys[i] as keyof object] as string}`
         }
         return params
     }
 
-    async requestLevel(body, method) {
+    async requestLevel(method: "GET" | "PUT", url: string, body?: PutRequestBodyObject,): Promise<GetLevelApiResponse | string> {
         return new Promise((resolve, reject) => {
             const myHeaders = new Headers()
             myHeaders.append("Content-Type", "application/json")
-            let url = "/api/level"
-            const requestOptions = { method: method, headers: myHeaders }
+            url = "/api/level" + url
+            const request: RestRequest = { method: method, headers: myHeaders }
             try {
-                if (method == "GET") url = url + "?" + this.objectToParams(body.level)
-                else requestOptions["body"] = JSON.stringify(JSON.stringify(body))
-                fetch(url, requestOptions)
+                if (body != null && method == "PUT") request.body = JSON.stringify(JSON.stringify(body))
+                fetch(url, request)
                     .then(response => response.text())
-                    .then(result => resolve(JSON.parse(result)))
-                    .catch(error => reject(error))
+                    .then((result: string) => {
+                        let parsed
+                        try {
+                            parsed = JSON.parse(result) as GetLevelApiResponse
+                        } catch (e) {
+                            reject(e as string)
+                        } finally {
+                            resolve(parsed)
+                        }
+                    })
+                    .catch(error => reject(error as string))
             } catch (e) {
-                reject(e)
+                reject(e as string)
             }
         })
     }
 
-    async handleSaveLevel(level, attempt?) {
-        if (this.debounceSaveCode) return
+    async handleSaveLevel(updateLevel: IUpdateLevelRequest, attempt?: boolean): Promise<boolean> {
+        if (!this.userId) return false
+        if (this.debounceSaveCode) return false
         this.debounceSaveCode = true
-        const body = {
+        const body: PutRequestBodyObject = {
             user_id: this.userId,
             stage: this.state.currentLevel,
-            level: level
+            level: updateLevel
         }
-        if (attempt) body["attempt"] = { "timestamp": new Date().toString() }
-        const res = await this.requestLevel(body, "PUT")
+        if (attempt) body.attempt = { "timestamp": new Date().toString() }
+        const res = await this.requestLevel("PUT", "", body)
+
+        if (res && Object.prototype.hasOwnProperty.call(updateLevel, "code")) this.setState({ savedCode: (this.state.savedCode + 1) })
         if (res) this.debounceSaveCode = false
+        return !this.debounceSaveCode
     }
 
-    async handleSaveCode() { this.handleSaveLevel({ code: this.state.code }) }
-
-    async setActiveTab(tab: number) {
+    setActiveTab(tab: number) {
         if (this.state.activeTab == tab) this.setState({ displayHelper: !this.state.displayHelper })
         else this.setState({ activeTab: tab, displayHelper: true })
     }
@@ -181,10 +186,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({ runningCode: true, interval: interval, activeTab: 1 })
     }
 
-    getResetRunningCodeObject() {
+    getResetRunningCodeObject(): ResetStateObject {
         return {
-            firstLog: [],
-            secondLog: [],
+            firstLog: [] as string[],
+            secondLog: [] as string[],
             pauseCode: false,
             runningCode: false,
             executionCompleted: false,
@@ -194,13 +199,15 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
-    handleResetCode() { this.setState(this.getResetRunningCodeObject) }
+    handleResetCode() { this.setState(this.getResetRunningCodeObject.bind(this)) }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
-    handleLevelChange(level: number) { if (level >= 0 && level < levels.length) this.setLevel(level) }
+    handleLevelChange(level: number) {
+        if (level >= 0 && level < levels.length) void this.setLevel(level)
+    }
 
-    async completedLevel(completed: boolean) {
+    completedLevel(completed: boolean) {
         let worldCompletedCounter = this.state.worldCompletedCounter
         //If the level was already completed at some point before,
         // there is only to the executionCompleted state has to be set
@@ -216,10 +223,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
             else completed = false //Sets to false, when they didnt match the count
         }
-        let done = new Date().toString()
+        let done = this.state.done
         //Handle first time completed and saves the code and the done date to database
-        if (completed && this.state.done == "") this.handleSaveLevel({ done: done, code: this.state.code })
-        else done = this.state.done
+        if (completed && this.state.done == "") {
+            done = new Date().toString()
+            void this.handleSaveLevel({ done: done, code: this.state.code })
+        }
         let showModal = false
         if (this.state.done == "" && completed) showModal = true
         this.setState({
@@ -263,18 +272,25 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         />
                     </div>
                     {{
-                        1: this.state.displayHelper && <Log log={this.state.firstLog} />,
-                        2: this.state.displayHelper && <Log log={this.state.secondLog} />,
-                        3: this.state.displayHelper && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
+                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} />,
+                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} />,
+                        3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
+                        4: this.state.displayHelper && !this.state.loading && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
                     }[this.state.activeTab]}
-                    <div className="w-full h-full">
-                        <Code
-                            code={this.state.code}
-                            onCodeChange={this.onCodeChange.bind(this)}
-                            runningCode={this.state.runningCode}
-                            activeLine={this.state.activeLine}
-                        />
+                    {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
+
+                    <div className="w-full h-full bg-code-grey">
+                        {
+                            this.state.loading ?
+                                <Loading />
+                                :
+                                <Code
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                    runningCode={this.state.runningCode}
+                                    activeLine={this.state.activeLine}
+                                />
+                        }
                     </div>
                     <div className="w-full h-full">
                         <SelectLevel
@@ -299,9 +315,11 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 completedLevel={this.completedLevel.bind(this)}
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
                                 step={this.state.step}
+                                loading={this.state.loading}
                             />
-                        )}
-                        <WorldButtons
+                        )
+                        }
+                        <LevelButtons
                             isLoggedIn={this.isLoggedIn}
                             done={this.state.done}
                             currentLevel={this.state.currentLevel}
@@ -311,7 +329,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             handleLevelChange={this.handleLevelChange.bind(this)}
                             executeCode={this.executeCode.bind(this)}
                             handleResetCode={this.handleResetCode.bind(this)}
-                            handleSaveCode={this.handleSaveCode.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
                             handleStep={this.handleStep.bind(this)}
