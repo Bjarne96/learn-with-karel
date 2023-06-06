@@ -1,5 +1,4 @@
-// import type { ILevel } from "../types/karel";
-export const levels: Array<any> = [
+export const levels = [
     {
         code: "",
         name: "Get two sticks - Reuse code with functions 2",
