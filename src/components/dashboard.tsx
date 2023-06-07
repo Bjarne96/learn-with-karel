@@ -4,7 +4,16 @@ import Commands from "./commands"
 import Code from "./code"
 import World from "./world"
 //Interfaces
-import type { DashboardProps, DashboardState, IKarel, GetLevelApiResponse, RestRequest, PutRequestBodyObject, IUpdateLevelRequest, ResetStateObject } from "../types/karel"
+import type {
+    DashboardProps,
+    DashboardState,
+    IKarel,
+    GetLevelApiResponse,
+    RestRequest,
+    PutRequestBodyObject,
+    ResetStateObject,
+    IUpdateLevelData
+} from "../types/karel"
 //Data
 import levels from "../data/levels"
 import LevelButtons from "./levelbuttons"
@@ -70,8 +79,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     onCodeChange(code: string) {
         clearTimeout(this.saveCode)
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.saveCode = setTimeout(() => this.handleSaveLevel({ code: this.state.code }, true), 5000)
+        this.saveCode = setTimeout(() => void this.handleSaveLevel({ code: this.state.code }), 5000)
         if (this.state.runningCode) this.setState({ ...this.getResetRunningCodeObject(), ...{ code: code } })
         else this.setState({ code: code })
     }
@@ -84,7 +92,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let code: string = (' ' + (levels[level]?.code)).slice(1) //Deep Copy
         let done = ""
         await this.handleSaveLevel({ code: this.state.code })
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         // await new Promise((res) => setTimeout(() => res("p1"), 1000)); // Testing loading screen
         const res: GetLevelApiResponse | string = await this.getLevel(level)
         if (typeof res != "string") {
@@ -149,7 +156,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         })
     }
 
-    async handleSaveLevel(updateLevel: IUpdateLevelRequest, attempt?: boolean): Promise<boolean> {
+    async handleSaveLevel(updateLevel: IUpdateLevelData, attempt?: boolean): Promise<boolean> {
         if (!this.userId) return false
         if (this.debounceSaveCode) return false
         this.debounceSaveCode = true
@@ -227,7 +234,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         //Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
             done = new Date().toString()
-            void this.handleSaveLevel({ done: done, code: this.state.code })
+            void this.handleSaveLevel({ done: done, code: this.state.code }, true)
         }
         let showModal = false
         if (this.state.done == "" && completed) showModal = true
@@ -279,7 +286,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
 
-                    <div className="w-full h-full bg-code-grey">
+                    <div className="w-full h-full bg-code-grey max-w-2xl">
                         {
                             this.state.loading ?
                                 <Loading />

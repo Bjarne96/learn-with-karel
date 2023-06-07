@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
-import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshot, ISnapshots } from "../types/karel"
+import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshots, Walls } from "../types/karel"
 import Canvas from "./canvas"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
@@ -32,20 +32,20 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         [0, 0, 0, 0, 0, 0, 0, 0]
     ]
 
-    constructor(props) {
+    constructor(props: IWorldProps) {
         super(props)
         const stateFromProps = this.getUpdateFromProps()
-        this.karel = JSON.parse(JSON.stringify(stateFromProps.karel))
-        this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers))
+        this.karel = JSON.parse(JSON.stringify(stateFromProps.karel)) as IKarel
+        this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers)) as Beepers
         this.interval = this.props.interval
         this.step = this.props.step
 
         this.state = {
-            karel: JSON.parse(JSON.stringify(stateFromProps.karel)),
-            beepers: JSON.parse(JSON.stringify(stateFromProps.beepers)),
-            solutions: JSON.parse(JSON.stringify(stateFromProps.solutions)),
-            walls: JSON.parse(JSON.stringify(stateFromProps.walls)),
-            currentLevel: JSON.parse(JSON.stringify(stateFromProps.currentLevel))
+            karel: JSON.parse(JSON.stringify(stateFromProps.karel)) as IKarel,
+            beepers: JSON.parse(JSON.stringify(stateFromProps.beepers)) as Beepers,
+            solutions: JSON.parse(JSON.stringify(stateFromProps.solutions)) as Beepers,
+            walls: JSON.parse(JSON.stringify(stateFromProps.walls)) as Walls,
+            currentLevel: JSON.parse(JSON.stringify(stateFromProps.currentLevel)) as number
         }
     }
 
@@ -129,11 +129,11 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
     // Deep copies all the props and returns them
     getUpdateFromProps() {
-        const karel: IKarel = JSON.parse(JSON.stringify(this.props.world.karel))
-        const beepers: Array<Beeper> = JSON.parse(JSON.stringify(this.props.world.beepers))
-        const solutions: Array<Beeper> = JSON.parse(JSON.stringify(this.props.world.solutions))
-        const walls: Array<Array<number>> = JSON.parse(JSON.stringify(this.props.world.walls))
-        const currentLevel: number = JSON.parse(JSON.stringify(this.props.currentLevel))
+        const karel = JSON.parse(JSON.stringify(this.props.world.karel)) as IKarel
+        const beepers = JSON.parse(JSON.stringify(this.props.world.beepers)) as Beepers
+        const solutions = JSON.parse(JSON.stringify(this.props.world.solutions)) as Beepers
+        const walls = JSON.parse(JSON.stringify(this.props.world.walls)) as Walls
+        const currentLevel = JSON.parse(JSON.stringify(this.props.currentLevel)) as number
         const stateFromProps: IWorldState = {
             karel: karel,
             beepers: beepers,
@@ -147,39 +147,36 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     /* WORLD FUNCTIONS */
     executeCommand(command: string, line: number) {
-        const valueCommands = [
-            "beepersInBag",
-            "beeperIsPresent",
-            "facingEast",
-            "facingNorth",
-            "facingWest",
-            "frontIsBlocked",
-            "frontIsClear",
-            "leftIsBlocked",
-            "leftIsClear",
-            "noBeepersInBag",
-            "noBeeperIsPresent",
-            "notFacingEast",
-            "rightIsBlocked",
-            "rightIsClear",
-        ]
-        try {
-            //Max snapshot length to protect the browser from crashing
-            if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
-            if (typeof this[command] == undefined) return
-            if (valueCommands.includes(command)) {
-                const val = this[command](this)
-                this.addSnapshot(this.karel, this.beepers)
-                if (line) this.addLog(command, line, val)
-                return val
-            } else {
-                this[command](this)
-                this.addSnapshot(this.karel, this.beepers)
-                if (line) this.addLog(command, line)
-            }
-        } catch (e) {
-            throw e
-        }
+        //Max snapshot length to protect the browser from crashing
+        if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
+        if (typeof this[command as keyof this] == undefined) return
+        let val: boolean = null
+        // MOVEMENT COMMANDS
+        if (command == "move") this.move()
+        if (command == "turnRight") this.turnRight()
+        if (command == "turnLeft") this.turnLeft()
+        if (command == "turnAround") this.turnAround()
+        if (command == "pickBeeper") this.pickBeeper()
+        if (command == "putBeeper") this.putBeeper()
+        // RETURN VALUE COMMANDS
+        if (command == "beepersInBag") val = this.beepersInBag()
+        if (command == "beeperIsPresent") val = this.beeperIsPresent()
+        if (command == "facingEast") val = this.facingEast()
+        if (command == "facingNorth") val = this.facingNorth()
+        if (command == "facingWest") val = this.facingWest()
+        if (command == "frontIsBlocked") val = this.frontIsBlocked()
+        if (command == "frontIsClear") val = this.frontIsClear()
+        if (command == "leftIsBlocked") val = this.leftIsBlocked()
+        if (command == "leftIsClear") val = this.leftIsClear()
+        if (command == "noBeepersInBag") val = this.noBeepersInBag()
+        if (command == "noBeeperIsPresent") val = this.noBeeperIsPresent()
+        if (command == "notFacingEast") val = this.notFacingEast()
+        if (command == "rightIsBlocked") val = this.rightIsBlocked()
+        if (command == "rightIsClear") val = this.rightIsClear()
+        // ADD SNAPSHOT + LOG
+        this.addSnapshot(this.karel, this.beepers)
+        if (line) this.addLog(command, line, val)
+        if (val != null) return val
     }
 
     addErrorToLog() {
@@ -188,8 +185,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     addLog(command: string, line: number, bool?: boolean) {
-        let log = "L" + line + ":\t" + command
-        if (bool != null || bool != undefined) log += " = " + bool
+        let log = `L ${line.toString()}:\t${command}`
+        if (bool != null || bool != undefined) log += ` = ${bool.toString()}`
         this.logs.push({ log: log, line: line })
     }
 
@@ -207,8 +204,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     addSnapshot(karel: IKarel, beepers: Beepers) {
-        const karelClone: IKarel = JSON.parse(JSON.stringify(karel))
-        const beepersClone: Beepers = JSON.parse(JSON.stringify(beepers))
+        const karelClone = JSON.parse(JSON.stringify(karel)) as IKarel
+        const beepersClone = JSON.parse(JSON.stringify(beepers)) as Beepers
         this.snapshots.push({ karel: karelClone, beepers: beepersClone })
     }
 
@@ -260,7 +257,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             let lineIndexedCodeString = ""
             const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g');
             for (let i = 0; i < codeArr.length; i++) {
-                lineIndexedCodeString = lineIndexedCodeString + "\n" + codeArr[i].replace(regex, '$1(' + (i + 1) + ')');
+                lineIndexedCodeString = lineIndexedCodeString + "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()})`);
             }
             //Execute user code from string
             eval(lineIndexedCodeString)
@@ -305,10 +302,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 });
             }
             clearInterval(this.intervalRef)
-            if (useInterval) this.intervalRef = setInterval(async () => { execute() }, this.interval)
+            if (useInterval) this.intervalRef = setInterval(() => execute(), this.interval)
             else execute()
         } catch (e) {
-            this.props.updateLogAndLine(e, 0, this.props.worldNumber)
+            this.props.updateLogAndLine(e.toString(), 0, this.props.worldNumber)
         }
     }
 
@@ -330,9 +327,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         return true
     }
 
-    /* END WORLD FUNCTIONS */
-
-    /* WORLD COMMANDS */
+    /* HIGH LEVEL COMMANDS */
 
     canMove(direction: number, x: number, y: number, move?: boolean) {
         let can = false
@@ -390,7 +385,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         return noBottomWall && noTopWall
     }
 
-    /* Commands */
+    /* MOVEMENT COMMANDS */
 
     putBeeper() {
         if (this.karel.beeperCount > 0) {
@@ -443,12 +438,20 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.karelTurnLeft()
     }
 
-    /* Super Commands */
+    turnAround() {
+        this.karelTurnAround()
+    }
+
+    turnRight() {
+        this.karelTurnRight()
+    }
+
+    /* RETURN VALUE COMMANDS */
 
     beepersInBag() {
         return !!this.karel.beeperCount
     }
-    //TODO: Check consistency: inkostistente bennenung, ändern zu beeperIsPresent() ?
+
     beeperIsPresent() {
         const x = this.karel.x
         const y = this.karel.y
@@ -524,16 +527,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     rightIsClear() {
         return this.canMove(this.karelRight(), this.karel.x, this.karel.y)
     }
-
-    turnAround() {
-        this.karelTurnAround()
-    }
-
-    turnRight() {
-        this.karelTurnRight()
-    }
-
-    /* END WORLD COMMANDS */
 
     /* KAREL COMMANDS */
 
