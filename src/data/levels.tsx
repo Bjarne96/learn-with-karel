@@ -2,17 +2,8 @@ import type { ILevel } from "../types/karel";
 export const levels: Array<ILevel> = [
     {
         name: "Move the Beeper LT - Seeing Commands",
-        explanation: `Willkommen beim Learnlab! Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.`,
-        code: `//Willkommen beim Learnlab! Rechts siehst 
-//du ein Spielfeld mit einem blauen Pfeil darin, 
-//das ist Pfeili. Wenn du auf "Run Code" klickst,
-//dann wird Pfeili die Befehle weiter unten ausführen.
-
-//Dein Ziel ist es die roten Beeper aufzusammeln
-//und in den markierten Zielzonen wieder abzulegen. 
-//Drücke auf "Run Code" und sieh was passiert.
-
-move();
+        explanation: `TO DO: GOAL CONDITION ERKLÄREN; UI ERKLÄREN <h1>Willkommen beim Learnlab!</h1><p>Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.</p>`,
+        code: `move();
 pickBeeper();
 turnLeft();
 move();
@@ -39,14 +30,7 @@ putBeeper();`,
     {
         name: "Move the Beeper LT - Using commands",
         explanation: `Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle. Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben, oder sie links in der Liste anklicken, um sie direkt einzufügen.`,
-        code: `//Nun musst du selbst Befehle einfügen, um den 
-//roten Beeper aufzuheben und ihn in der Zielzone
-//abzulegen. Links siehst du die verfügbaren Befehle. 
-//Du kannst diese entweder per Hand weiter unten in
-//dieses Textfeld schreiben, oder sie links in der
-//Liste anklicken, um sie direkt einzufügen.
-
-//Mit move() bewegst du dich ein Feld vorwärts
+        code: `//Mit move() bewegst du dich ein Feld vorwärts
 //in aktuelle Blickrichtung.
 //Mit turnLeft() drehst du Pfeili 90° gegen den
 //Uhrzeigersinn.
@@ -79,14 +63,8 @@ pickBeeper();
     },
     {
         name: "Move the Beeper RT1 - Combining commands",
-        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen? hier drunter Code einfügen...`,
-        code: `//Manchmal müssen wir Dinge tun
-//für die es noch keinen Befehl gibt. Hier muss 
-//sich Pfeili nach rechts drehen, aber es gibt 
-//nur einen Befehl zur Linksdrehung. Kannst du
-//mit den vorhandenen Befehlen trotzdem eine 
-//Rechtsdrehung erreichen und das Level abschließen? 
-//hier drunter Code einfügen...`,
+        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?`,
+        code: ``,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -109,17 +87,7 @@ pickBeeper();
     {
         name: "Move the Beeper RT1 - Seeing Functions",
         explanation: `Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.`,
-        code: `//Man kann also eine Rechtsdrehung aus 
-//3 Linksdrehungen erzeugen. Wenn du die 
-//Rechtsdrehung auf diese Weise häufiger 
-//nutzt, dann wird es allerdings 
-//unübersichtlich im Code. Um das zu 
-//vermeiden, kann man sogenannte "Funktionen" 
-//schreiben. Diese bündeln eine beliebige  
-//Abfolge bereits vorhandener Befehle 
-//unter einem neuen Namen zusammen. 
-        
-//Hier wird der neue Befehl nur definiert und 
+        code: `//Hier wird der neue Befehl nur definiert und 
 //von sich aus passiert noch nichts. Der Name 
 //"turnRight" ist übrigens beliebig. 
 function turnRight(){
@@ -155,13 +123,7 @@ putBeeper();`,
     {
         name: "Move the Beeper RT2 - Using functions",
         explanation: `Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. `,
-        code: `//Selbst definiert Funktionen werden genauso 
-//aufgerufen wie die bereits vorhandenen Befehle. 
-//Genau genommen sind die bereits vorhandenen 
-//Befehle auch nur Funktionen, die jemand anders 
-//für uns geschrieben hat. 
-
-function turnRight(){
+        code: `function turnRight(){
     turnLeft();
     turnLeft();
     turnLeft();
@@ -191,30 +153,25 @@ pickBeeper();`,
     },
     {
         name: "Move the Beeper RT2 - Defining functions 1",
-        explanation: `Versuche nun die Funktion "turnRight" selbst zu definieren. 
-Zur Erinnerung: so ist eine Funktion aufgebaut: 
-function deinFunktionsName(){
-dein Code für die Funktion...
-}`,
+        explanation: `TO DO: ZEILENUMBRÜCHE 
+        Versuche nun die Funktion "turnRight" selbst zu definieren. 
+        
+        Tasten-Komination für die {}-Klammern: 
+        Windows: AltGr + 7 / AltGr + 0 
+        Mac: Shift + Alt + 8 / Shift + Alt + 9 
+
+        Zur Erinnerung: so ist eine Funktion aufgebaut:
+        function deinFunktionsName(){
+        dein Code für die Funktion...
+        }`,
         code:
-            `//Versuche nun die Funktion "turnRight"
-//selbst zu definieren.
-//Zur Erinnerung: so ist eine Funktion aufgebaut:
-//function deinFunktionsName(){
-//dein Code für die Funktion...
-//}
-
-//Tasten-Komination für die {}-Klammern:
-//Windows: AltGr + 7 / AltGr + 0
-//Mac: Shift + Alt + 8 / Shift + Alt + 9
-
-turnRight();
+            `turnRight();
 move();
 pickBeeper();
 turnRight();
 move();
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -236,18 +193,16 @@ putBeeper();`,
     {
         name: "Obtain Artifact - Defining functions 2",
         explanation: `Versuche die Funktion zu vervollständigen.`,
-        code: `//Versuche die Funktion zu vervollständigen.
-        
-function walkHalfCircle(){
-    move();
-    //Hier weiteren Code einfügen...
+        code: `function walkHalfCircle(){
+move();
+//Hier weiteren Code einfügen...
 }
           
 walkHalfCircle();
 pickBeeper();
 walkHalfCircle();
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -268,15 +223,8 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing Loops",
-        explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.`,
-        code: `//Manchmal muss man einen Befehl mehrfach
-//hintereinander ausführen. Programmier*innen
-//hassen es allerdings, sich zu wiederholen.
-//Also nutzen sie die sogenannten Schleifen
-//oder auch Loops, um das Problem zu lösen. 
-//Drücke auf "Run Code" und sieh was passiert.
-
-move();
+        explanation: 'Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.<br></br> (Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden)',
+        code: `move();
 pickBeeper();
 for (let i = 0; i < 5; i++) {
     move();
@@ -385,15 +333,11 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Walk Across - Off-by-one Loops",
-        explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss.`,
-        code: `//Manchmal wird es etwas knifflig, wenn man
-//im ersten oder letzten Durchlauf der Schleife
-//an Sonderfälle denken muss.
-
-for (let i = 0; i < 5; i++) {
-    pickBeeper();
-    move();
-}`,
+        explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt. Manchmal möchte man aber auch einen Beeper aufheben, ohne sich danach zu bewegen. Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, respektive bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. (Vielleicht lohnt es sich, deinen Code aus dem vorherigen Level kopieren, um darauf aufzubauen.)`,
+        code: `for (let i = 0; i < 5; i++) {
+pickBeeper();
+move();
+        }`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -429,16 +373,8 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Corner - Seeing If",
-        explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.`,
-        code: `//Häufig wollen wir unseren Code so schreiben,
-//dass er flexibel auf unterschiedliche Situationen
-//reagieren kann. Dafür nutzen wir sogenannte
-//"Bedingungen" oder "If-Statements". Diese
-//prüfen, ob eine bestimmte Bedingung erfüllt ist
-//und führen dann den Code innerhalb der {}-Klammern
-//nach dem "if" nur aus, wenn die Bedingung erfüllt ist.
-
-move();
+        explanation: `TO DO: MULTIWORLDS ERKLÄREN Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.`,
+        code: `move();
 pickBeeper();
 if(frontIsBlocked()) {
     turnLeft();
@@ -512,11 +448,7 @@ pickBeeper();`,
     {
         name: "Clean up 1 - Different Conditions, Using If",
         explanation: `Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. Mit beeperIsPresent() können wir abfragen, ob Pfeili sich auf einem Beeper befindet. Es wird genauso in die runden Klammern nach dem if() eingesetzt, wie frontIsBlocked()`,
-        code: `//Es kann ganz verschiedene Bedingungen geben,
-//die wir abfragen können. Mit beeperIsPresent() können
-//wir abfragen, ob Pfeili sich auf einem Beeper befindet.
-//Es wird genauso in die runden Klammern nach dem if()
-//eingesetzt, wie frontIsBlocked()`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
@@ -631,12 +563,9 @@ putBeeper();`,
     },
     {
         name: "Clean up - Using If/Else",
-        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.
+        explanation: `TO DO: Wincodition wiederholt genau erklären Versuche nun selbst ein if-else-Statement zu schreiben.
 (In diesem Level startet Pfeili schon mit einem Beeper im Gepäck.)`,
-        code: `//Versuche nun selbst ein if-else-Statement
-//zu schreiben.
-//(In diesem Level startet Pfeili schon mit
-//einem Beeper im Gepäck.)`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
@@ -748,7 +677,8 @@ putBeeper();`,
     {
         name: "Edge - Using While-Loops",
         explanation: ``,
-        code: `//Versuche jetzt selbst eine while-Schleife
+        code: `//TO DO: hier ist eine neue Funktion verfügbar
+//Versuche jetzt selbst eine while-Schleife
 //zu shreiben. Zur Erinnerung, so ist eine
 //while-Schleife aufgebaut:
 //while(meineBedingung()){
@@ -918,14 +848,14 @@ putBeeper();`,
 //Drücke auf "Run Code" und sieh was passiert.
 
 var schrittAnzahl;
-schrittAnzahl = 3;
+schrittAnzahl = 3; //<-hier wird der Varaible ihr erster Wert zugewiesen
 
 for (let i = 0; i < schrittAnzahl; i++) {
     move();
 }
 
 pickBeeper();
-schrittAnzahl = 4;
+schrittAnzahl = 4; //<-hier wird die Variable neu zugewiesen
 
 for (let i = 0; i < schrittAnzahl; i++) {
     move();
@@ -978,75 +908,6 @@ putBeeper();`,
                 beepers: [{ x: 4, y: 1, count: 1 }],
                 solutions: [{ x: 7, y: 1, count: 1 }],
                 karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
-            },
-        ],
-    },
-
-    {
-        name: "Double the Length - Seeing Variables with Numbers",
-        explanation: ``,
-        code: `//Wir können Variablen auch mit Zahlen füllen.
-//Hier muss Pfeili messen, wie weit es zum Beeper
-//ist und diese Entfernung dann verdoppeln.
-//In der Zeile "distance = distance + 1;" wird
-//der Wert, welcher bereits in der Variable gespeichert
-//ist, mit 1 addiert und dann wieder in der Variable
-//gespeichert.
-
-var distance = 0;
-while(noBeeperIsPresent()){
-    move();
-    distance = distance + 1;
-}
-pickBeeper();
-for (let i = 0; i < distance; i++) { //<- Hier wird die Variable genutzt, um die Länge der Schleife festzulegen.
-    move();
-}
-putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "noBeeperIsPresent"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
-                ],
-                beepers: [{ x: 3, y: 1, count: 1 }],
-                solutions: [{ x: 6, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 0 }
-            },
-            {
-                walls: [
-                    [8, 8, 8, 8, 8, 8, 8, 8, 8],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-                beepers: [{ x: 2, y: 1, count: 1 }],
-                solutions: [{ x: 4, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 3 }
-            },
-        ],
-    },
-    {
-        name: "Midpoint - Using Variables with Numbers",
-        explanation: ``,
-        code: `//Versuche nun selbst, eine Variable zu nutzen, um den
-//Mittelpunkt der Level zu finden.`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
-        worlds: [
-            {
-                walls: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0],],
-                beepers: [],
-                solutions: [{ x: 4, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true }
-            },
-            {
-                walls: [[8, 9, 8, 8, 8, 8, 8, 12, 8],
-                [6, 0, 0, 0, 0, 0, 0, 0, 3],],
-                beepers: [],
-                solutions: [{ x: 4, y: 0, count: 1 }],
-                karel: { x: 1, y: 0, direction: 0, isSuper: true }
             },
         ],
     },
@@ -1123,7 +984,61 @@ putBeeper();`,
         ],
     },
     {
-        name: "Beeper Lines - Variables and Functions",
+        name: "Beeper Spiral - Variables and Functions",
+        explanation: ``,
+        code: ``,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [],
+                solutions: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 1, count: 1 },
+                { x: 6, y: 2, count: 1 }, { x: 6, y: 3, count: 1 }, { x: 6, y: 4, count: 1 }, { x: 6, y: 5, count: 1 }, { x: 6, y: 6, count: 1 },
+                { x: 1, y: 1, count: 1 }, { x: 2, y: 6, count: 1 }, { x: 3, y: 6, count: 1 }, { x: 4, y: 6, count: 1 }, { x: 5, y: 6, count: 1 },
+                { x: 2, y: 5, count: 1 }, { x: 2, y: 4, count: 1 }, { x: 2, y: 3, count: 1 }],
+                karel: { x: 0, y: 1, direction: 4, isSuper: false, beeperCount: 99 }
+            },
+        ],
+    },
+    {
+        name: "Beeper Lines 1 - Variables and Functions",
+        explanation: ``,
+        code: `//TO DO: weniger lines, sodass man noch keine loop braucht.`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [],
+                solutions: [{ x: 0, y: 6, count: 1 }, { x: 1, y: 6, count: 1 }, { x: 2, y: 6, count: 1 }, { x: 3, y: 6, count: 1 },
+                { x: 0, y: 5, count: 1 }, { x: 1, y: 5, count: 1 }, { x: 2, y: 5, count: 1 },
+                { x: 0, y: 4, count: 1 }, { x: 1, y: 4, count: 1 }, { x: 2, y: 4, count: 1 }, { x: 3, y: 4, count: 1 }, { x: 4, y: 4, count: 1 },
+                { x: 0, y: 3, count: 1 }, { x: 1, y: 3, count: 1 }, { x: 2, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 5, y: 3, count: 1 },
+                { x: 0, y: 2, count: 1 }, { x: 1, y: 2, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 3, y: 2, count: 1 },
+                { x: 0, y: 1, count: 1 }, { x: 1, y: 1, count: 1 }, { x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 1, count: 1 }],
+                karel: { x: 0, y: 7, direction: 1, isSuper: false, beeperCount: 99 }
+            },
+        ],
+    },
+    {
+        name: "Beeper Lines 2 - Variables, Functions and Loops",
         explanation: ``,
         code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
@@ -1151,61 +1066,28 @@ putBeeper();`,
         ],
     },
     {
-        name: "Tetris Block - Variables",
+        name: "Beeper Spiral - TO DO: USING THE LOOP INDEX",
         explanation: ``,
-        code: `//Man kann statt fester Zahlenwerte auch Variablen
-//als Parameter für Funktionen nutzen.
-//Insbesondere wenn wir den selben Wert an
-//mehreren Stellen im Code verwerden, lohnt
-//es sich Variablen zu nutzen. Wenn wir den
-//Wert ändern möchten, dann müssen wir nur der
-//Variable einen neuen Wert zuweisen, statt jede
-//Stelle einzeln zu ändern.
-function moveAmount(x){
-for (let i = 0; i < x; i++) {
-    move();
-    }
-}
-
-var x = 3;
-if(beeperIsPresent()){
-    x = 2;
-}
-else{
-    putBeeper();
-}
-
-moveAmount(x);
-putBeeper();
-turnRight();
-moveAmount(x);
-putBeeper();
-turnLeft();
-moveAmount(x);
-putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
+        code: ``,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [],
-                solutions: [{ x: 0, y: 0, count: 1 }, { x: 3, y: 0, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 6, y: 3, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 4 }
-            },
-            {
-                walls: [
-                    [8, 8, 8, 8, 8, 8, 8, 8, 8],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-                beepers: [{ x: 0, y: 0, count: 1 }],
-                solutions: [{ x: 0, y: 0, count: 1 }, { x: 2, y: 0, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 }],
-                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 3 }
+                solutions: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 1, count: 1 },
+                { x: 6, y: 2, count: 1 }, { x: 6, y: 3, count: 1 }, { x: 6, y: 4, count: 1 }, { x: 6, y: 5, count: 1 }, { x: 6, y: 6, count: 1 },
+                { x: 1, y: 1, count: 1 }, { x: 2, y: 6, count: 1 }, { x: 3, y: 6, count: 1 }, { x: 4, y: 6, count: 1 }, { x: 5, y: 6, count: 1 },
+                { x: 2, y: 5, count: 1 }, { x: 2, y: 4, count: 1 }, { x: 2, y: 3, count: 1 }],
+                karel: { x: 0, y: 1, direction: 4, isSuper: false, beeperCount: 99 }
             },
         ],
     },
