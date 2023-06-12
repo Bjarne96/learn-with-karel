@@ -23,69 +23,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let client: MongoClient;
 
     try {
-        console.log('req["method"]', req["method"]);
+        console.log('req.method', req.method);
         client = await clientPromise;
         db = client.db(db_name);
     } catch (e) { return databaseError(res, e.toString()) }
-    // if (req["method"] == "POST") return handlePost(req, res, db)
-    if (req["method"] == "GET") return handleGet(req, res, db)
-    if (req["method"] == "PUT") return handlePut(req, res, db)
+    // if (req.method == "POST") return handlePost(req, res, db)
+    if (req.method == "GET") return handleGet(req, res, db)
+    if (req.method == "PUT") return handlePut(req, res, db)
 }
 // Returns a level for a user_id and stage
 // The function creates a level if the user exists, but no level for that stage
 async function handleGet(req: NextApiRequest, res: NextApiResponse, db: Db) {
     const bodyObject: GetLevelObject = setBodyObject(req.query)
     const response = await getLevel(bodyObject, db)
-    if (response["status"] == 200) return res.status(200).json(response.level)
-    if (response["status"] == 300) return userError(res, response["msg"])
-    if (response["status"] == 500) return databaseError(res, response["msg"])
+    if (response.status == 200) return res.status(200).json(response.level)
+    if (response.status == 300) return userError(res, response.msg)
+    if (response.status == 500) return databaseError(res, response.msg)
 }
 
 async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) {
     const bodyObject: PutRequestBodyObject = req.body
     try {
-        const bodyLevel = bodyObject["level"]
+        const bodyLevel = bodyObject.level
         if (!hasKeys(bodyLevel, updateLevelBody)) return userError(res, "Your request does not meet the specifications.")
-        const level: levelData = await findLevel(bodyObject, db)
+        const level: levelData = await findLevel(bodyObject, db) as levelData
         if (level == null) return userError(res, "Could not find your level.")
         if (level.id) {
             //Adds attempt, when attempt object is given 
             if (Object.prototype.hasOwnProperty.call(bodyObject, "attempt")
-                && hasKeys(bodyObject["attempt"], postAttemptBody) && bodyLevel["code"]) {
+                && hasKeys(bodyObject.attempt, postAttemptBody) && bodyLevel.code) {
                 const response = await db.collection("attempts").insertOne({
                     "level_id": level.id,
-                    "user_id": bodyObject["user_id"],
-                    "stage": bodyObject["stage"],
-                    "timestamp": bodyObject["attempt"]["timestamp"],
-                    "code": bodyLevel["code"],
+                    "user_id": bodyObject.user_id,
+                    "stage": bodyObject.stage,
+                    "timestamp": bodyObject.attempt.timestamp,
+                    "code": bodyLevel.code,
                 });
-                if (!response["insertedId"]) return databaseError(res, "Could not insert Attempt.")
+                if (!response.insertedId) return databaseError(res, "Could not insert Attempt.")
             }
             //Save into the levellog, when finished the first time
-            if (level["done"] == "" && bodyLevel["done"] != null && bodyLevel["done"] != "") {
+            if (level.done == "" && bodyLevel.done != null && bodyLevel.done != "") {
                 const response = await db.collection("levellog").insertOne({
                     "_id": new ObjectId(level.id),
-                    "user_id": level["user_id"],
-                    "stage": level["stage"],
-                    "default_code": level["default_code"],
-                    "default_world": level["default_world"],
-                    "start": level["start"],
-                    "code": bodyLevel["code"],
-                    "done": bodyLevel["done"]
-                    // "inactive": bodyLevel["inactive"]
+                    "user_id": level.user_id,
+                    "stage": level.stage,
+                    "default_code": level.default_code,
+                    "default_world": level.default_world,
+                    "start": level.start,
+                    "code": bodyLevel.code,
+                    "done": bodyLevel.done
                 });
-                if (!response["insertedId"]) return databaseError(res, "Could not insert Level.")
+                if (!response.insertedId) return databaseError(res, "Could not insert Level.")
             }
             const response = await db.collection("level").updateOne(
                 {
-                    _id: new ObjectId(level["id"]),
+                    _id: new ObjectId(level.id),
                 },
                 {
                     $set: bodyLevel
                 }
-            );
-            if (response["matchedCount"] == 0) return databaseError(res, "Could not update the level.")
-            return res.status(200).json({ "id": level["id"], status: 200 })
+            )
+            if (response.matchedCount == 0) return databaseError(res, "Could not update the level.")
+            return res.status(200).json({ "id": level.id, status: 200 })
         } else {
             return userError(res, 'We could not find the level you want to update')
         }

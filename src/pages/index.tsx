@@ -33,9 +33,9 @@ export async function getServerSideProps(context: query) {
         const db = client.db("karel");
         const user: GetUserDbResponse = await db
             .collection("user")
-            .findOne({ _id: new ObjectId(id) })
+            .findOne({ _id: new ObjectId(id) }) as GetUserDbResponse
         if (user == null) return { props: { id: "" } }
-        const response: levelDataResponse = await getLevel({ user_id: id, stage: Number(user.lastStage) }, db)
+        const response: levelDataResponse = await getLevel({ user_id: id, stage: Number(user.lastStage) }, db) as levelDataResponse
         if (response.level == undefined) return { props: { id: "" } }
         const level: levelData = response.level
         if (response.status == 200) {

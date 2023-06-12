@@ -57,9 +57,9 @@ export async function findLevel(bodyObject: GetLevelObject, db: Db) {
             const dbLevel: GetLevelDbResponse = await db
                 .collection("level")
                 .findOne({
-                    user_id: bodyObject["user_id"],
-                    stage: Number(bodyObject["stage"])
-                })
+                    user_id: bodyObject.user_id,
+                    stage: Number(bodyObject.stage)
+                }) as GetLevelDbResponse
             const level: levelData = {
                 id: dbLevel._id.toString(),
                 user_id: dbLevel.user_id,
@@ -87,7 +87,7 @@ export async function getLevel(body: GetLevelObject, db: Db) {
         if (level == null && body["id"]) return { status: 300, msg: "Could not find your Level." }
         //Level has to be created, when user_id exists
         if (level == null) {
-            const user: GetUserDbResponse = await db.collection("user").findOne({ _id: new ObjectId(body.user_id) })
+            const user: GetUserDbResponse = await db.collection("user").findOne({ _id: new ObjectId(body.user_id) }) as GetUserDbResponse
             if (user == null) return { status: 300, msg: "You are not registered or you have not used your user specific link." }
             const response = await createLevel(body["user_id"], body["stage"], new Date().toString(), db)
             if (!response["insertedId"]) return { status: 500, msg: "Could not insert Level." }
@@ -96,11 +96,11 @@ export async function getLevel(body: GetLevelObject, db: Db) {
         }
         await db.collection("user").updateOne(
             {
-                _id: new ObjectId(body["user_id"])
+                _id: new ObjectId(body.user_id)
             },
             {
                 $set: {
-                    "lastStage": Number(body["stage"])
+                    "lastStage": Number(body.stage)
                 }
             }
         );
