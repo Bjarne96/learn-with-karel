@@ -2,7 +2,7 @@ import type { ILevel } from "../types/karel";
 export const levels: Array<ILevel> = [
     {
         name: "Move the Beeper LT - Seeing Commands",
-        explanation: `TO DO: Zielbedingung genauer erklären <h1>Willkommen beim Learnlab!</h1><p>Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.</p>`,
+        explanation: `TO DO: GOAL CONDITION ERKLÄREN; UI ERKLÄREN <h1>Willkommen beim Learnlab!</h1><p>Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.</p>`,
         code: `move();
 pickBeeper();
 turnLeft();
@@ -333,15 +333,11 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Walk Across - Off-by-one Loops",
-        explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss.`,
-        code: `//Manchmal wird es etwas knifflig, wenn man
-//im ersten oder letzten Durchlauf der Schleife
-//an Sonderfälle denken muss.
-
-for (let i = 0; i < 5; i++) {
-    pickBeeper();
-    move();
-}`,
+        explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt. Manchmal möchte man aber auch einen Beeper aufheben, ohne sich danach zu bewegen. Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, respektive bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. (Vielleicht lohnt es sich, deinen Code aus dem vorherigen Level kopieren, um darauf aufzubauen.)`,
+        code: `for (let i = 0; i < 5; i++) {
+pickBeeper();
+move();
+        }`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -377,16 +373,8 @@ for (let i = 0; i < 5; i++) {
     },
     {
         name: "Corner - Seeing If",
-        explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.`,
-        code: `//Häufig wollen wir unseren Code so schreiben,
-//dass er flexibel auf unterschiedliche Situationen
-//reagieren kann. Dafür nutzen wir sogenannte
-//"Bedingungen" oder "If-Statements". Diese
-//prüfen, ob eine bestimmte Bedingung erfüllt ist
-//und führen dann den Code innerhalb der {}-Klammern
-//nach dem "if" nur aus, wenn die Bedingung erfüllt ist.
-
-move();
+        explanation: `TO DO: MULTIWORLDS ERKLÄREN Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.`,
+        code: `move();
 pickBeeper();
 if(frontIsBlocked()) {
     turnLeft();
@@ -460,11 +448,7 @@ pickBeeper();`,
     {
         name: "Clean up 1 - Different Conditions, Using If",
         explanation: `Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. Mit beeperIsPresent() können wir abfragen, ob Pfeili sich auf einem Beeper befindet. Es wird genauso in die runden Klammern nach dem if() eingesetzt, wie frontIsBlocked()`,
-        code: `//Es kann ganz verschiedene Bedingungen geben,
-//die wir abfragen können. Mit beeperIsPresent() können
-//wir abfragen, ob Pfeili sich auf einem Beeper befindet.
-//Es wird genauso in die runden Klammern nach dem if()
-//eingesetzt, wie frontIsBlocked()`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
