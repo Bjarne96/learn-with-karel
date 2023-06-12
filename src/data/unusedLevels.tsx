@@ -1,4 +1,13 @@
-export const levels = [
+import type { IWorld, Commands } from "~/types/karel";
+
+export interface IUnusedLevel {
+    code: string
+    explanation?: string
+    name: string
+    worlds: Array<IWorld>
+    commands?: Commands
+}
+export const levels: Array<IUnusedLevel> = [
     {
         code: "",
         name: "Get two sticks - Reuse code with functions 2",

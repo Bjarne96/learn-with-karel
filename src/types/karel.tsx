@@ -60,7 +60,7 @@ export interface DashboardState {
     savedCode: number
 }
 
-type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
+export type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
     code: string
     explanation: string
