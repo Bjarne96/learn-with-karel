@@ -676,15 +676,13 @@ putBeeper();`,
     },
     {
         name: "Edge - Using While-Loops",
-        explanation: ``,
-        code: `//TO DO: hier ist eine neue Funktion verfügbar
-//Versuche jetzt selbst eine while-Schleife
-//zu shreiben. Zur Erinnerung, so ist eine
-//while-Schleife aufgebaut:
-//while(meineBedingung()){
-//  code der ausgeführt wird, 
-//  solange die Bedingung wahr ist.    
-//}`,
+        explanation: `//TO DO: HIER IST NEUE FUKTION VERFÜGBAR
+Versuche jetzt selbst eine while-Schleife zu schreiben. Zur Erinnerung, so ist eine while-Schleife aufgebaut:
+while(meineBedingung()){
+  code der ausgeführt wird, 
+  solange die Bedingung wahr ist.    
+}`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "rightIsBlocked"],
         worlds: [
             {
@@ -711,24 +709,10 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing Variables",
-        explanation: ``,
-        code: `//Manchmal müssen wir uns eine Information merken,
-//um diese im späteren Verlauf des Programms wieder
-//abzurufen. Zu diesem Zweck können wir Variablen
-//nutzen. Variablen sind zunächst wie ein leerer
-//Container oder ein unbeschriebener Notizblock, 
-//den wir mit einem Namen versehen und nach belieben
-//mit Inhalt füllen können. Unter dem Namen können
-//wir dann immer auf den Inhalt zugreifen.
-
-//"var" ist ein Schlüsselwort, das uns sagt, dass
-//hier eine Variable erstellt wird. "stepAmount"
-//ist der Name der Variable, den wir frei wählen
-//können. "=" ist ein Zuweisungsoperator, der uns
-//sagt, dass der Wert auf der rechten Seite der
-//Variable auf der linken Seite zugewiesen wird.
-
-var stepAmount; //<- leere Variable erstellen
+        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container oder ein unbeschriebener Notizblock, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.
+        
+        "var" ist ein Schlüsselwort, das uns sagt, dass hier eine Variable erstellt wird. "stepAmount" ist der Name der Variable, den wir frei wählen können. "=" ist ein Zuweisungsoperator, der uns sagt, dass der Wert auf der rechten Seite der Variable auf der linken Seite zugewiesen wird.`,
+        code: `var stepAmount; //<- leere Variable erstellen
 stepAmount = 5; //<- Wert zuweisen ("mit Inhalt füllen")
 
 move();
@@ -760,18 +744,10 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Modifiying Variables",
-        explanation: ``,
-        code: `//Die Zahl "5", die wir abgespeichert haben, wird
-//in der Schleife abgerufen. Das siehst du daran, dass 
-//der Name der Variable "stepAmount" dort auftaucht.
-//Im Prinzip ist "stepAmount" also in der Schleife
-//ein Platzhalter für die Zahl, die wir abgespeichert 
-//haben.
-
-//Versuche nun, der Variable einen anderen Wert
-//zuzuweisen, um das Level zu lösen. 
-
-var stepAmount;
+        explanation: `Die Zahl "5", die wir abgespeichert haben, wird in der Schleife abgerufen. Das siehst du daran, dass der Name der Variable "stepAmount" dort auftaucht. Im Prinzip ist "stepAmount" also in der Schleife ein Platzhalter für die Zahl, die wir abgespeichert haben.
+        
+        Versuche nun, der Variable einen anderen Wert zuzuweisen, um das Level zu lösen. `,
+        code: `var stepAmount;
 stepAmount = 5;
 
 move();
@@ -803,15 +779,8 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Defining Variables",
-        explanation: ``,
-        code: `//Versuche nun selbst eine Variable zu definieren.
-//Es ist wichtig, dass der Name der Variable identisch
-//mit dem Namen ist, den du in der Schleife verwendest.
-//Außerdem muss die Variable definiert werden, *bevor*
-//ihr Wert abgerufen wird. (Also weiter oben im Code
-//definieren und weiter unten im Code nutzen.)
-
-move();
+        explanation: `Versuche nun selbst eine Variable zu definieren. Es ist wichtig, dass der Name der Variable identisch mit dem Namen ist, den du in der Schleife verwendest. Außerdem muss die Variable definiert werden, *bevor* ihr Wert abgerufen wird. (Also weiter oben im Code definieren und weiter unten im Code nutzen.)`,
+        code: `move();
 pickBeeper();
 
 for (let i = 0; i < schrittAnzahl; i++) {
@@ -840,14 +809,8 @@ putBeeper();`,
     },
     {
         name: "Increase the Length - Seeing Variables Reassignment",
-        explanation: ``,
-        code: `//Wir können Variablen auch während des laufenden
-//Programms einen neuen Wert zuweisen. Wird die
-//Variable nach einer neuen Zuweisung abgerufen,
-//wird der neue Wert verwendet.
-//Drücke auf "Run Code" und sieh was passiert.
-
-var schrittAnzahl;
+        explanation: `Wir können Variablen auch während des laufenden Programms einen neuen Wert zuweisen. Wird die Variable nach einer neuen Zuweisung abgerufen, wird der neue Wert verwendet. Drücke auf "Run Code" und sieh was passiert.`,
+        code: `var schrittAnzahl;
 schrittAnzahl = 3; //<-hier wird der Varaible ihr erster Wert zugewiesen
 
 for (let i = 0; i < schrittAnzahl; i++) {
@@ -878,11 +841,8 @@ putBeeper();`,
     },
     {
         name: "Increase the Length - Using Variables Reassignment",
-        explanation: ``,
-        code: `//Versuche nun selbst der Variable an der richtigen Stelle
-//die entsprechenden Werte zuzuweisen.
-
-var schrittAnzahl;
+        explanation: `Versuche nun selbst der Variable an der richtigen Stelle die entsprechenden Werte zuzuweisen.`,
+        code: `var schrittAnzahl;
 schrittAnzahl = 3;
 
 for (let i = 0; i < schrittAnzahl; i++) {
@@ -913,17 +873,8 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing Variables and Functions",
-        explanation: ``,
-        code: `//Hier werden Variablen und Funktionen verknüpft.
-//In der Definition der Funktion siehst du
-//"stepAmount" in den runden Klammern. Dies ist
-//eine Variable, die später beim Aufruf der Funktion
-//zugewiesen wird. Innerhalb der Funktion greifen
-//wir auf die Variable "stepAmount" ganz normal zu.
-//In der Zeile "walkAmount(5)" wird der Variable
-//dann der Wert "5" zugewiesen.
-
-function walkAmount(stepAmount) {
+        explanation: `Hier werden Variablen und Funktionen verknüpft. In der Definition der Funktion siehst du "stepAmount" in den runden Klammern. Dies ist eine Variable, die später beim Aufruf der Funktion zugewiesen wird. Innerhalb der Funktion greifen wir auf die Variable "stepAmount" ganz normal zu. In der Zeile "walkAmount(5)" wird der Variable dann der Wert "5" zugewiesen.`,
+        code: `function walkAmount(stepAmount) {
     for (let i = 0; i < stepAmount; i++) {
         move();
     }
@@ -954,16 +905,14 @@ putBeeper();`,
     },
     {
         name: "Bring Back - Using Variables and Functions",
-        explanation: ``,
-        code: `//Versuche es nun selbst. Du kannst die Funktion
-// so häufig du willst mit verschiedenen Werten 
-//aufrufen, sobald sie einmal erstellt wurde.
-
-//function meinFunktionsName(meinVariablenName) {
-//    ...
-//}
-//meinFunktionsName(5);
-//meinFunktionsName(10);`,
+        explanation: `Versuche es nun selbst. Du kannst die Funktion so häufig du willst mit verschiedenen Werten aufrufen, sobald sie einmal erstellt wurde.
+        
+        function meinFunktionsName(meinVariablenName) {
+            ...
+        }
+        meinFunktionsName(5);
+        meinFunktionsName(10);`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
