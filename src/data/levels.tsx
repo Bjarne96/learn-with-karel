@@ -2,17 +2,8 @@ import type { ILevel } from "../types/karel";
 export const levels: Array<ILevel> = [
     {
         name: "Move the Beeper LT - Seeing Commands",
-        explanation: `Willkommen beim Learnlab! Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.`,
-        code: `//Willkommen beim Learnlab! Rechts siehst 
-//du ein Spielfeld mit einem blauen Pfeil darin, 
-//das ist Pfeili. Wenn du auf "Run Code" klickst,
-//dann wird Pfeili die Befehle weiter unten ausführen.
-
-//Dein Ziel ist es die roten Beeper aufzusammeln
-//und in den markierten Zielzonen wieder abzulegen. 
-//Drücke auf "Run Code" und sieh was passiert.
-
-move();
+        explanation: `TO DO: Zielbedingung genauer erklären <h1>Willkommen beim Learnlab!</h1><p>Rechts siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf "Run Code" klickst, dann wird Pfeili die Befehle weiter unten ausführen. Dein Ziel ist es die roten Beeper aufzusammeln und in den markierten Zielzonen wieder abzulegen. Drücke auf "Run Code" und sieh was passiert.</p>`,
+        code: `move();
 pickBeeper();
 turnLeft();
 move();
@@ -39,14 +30,7 @@ putBeeper();`,
     {
         name: "Move the Beeper LT - Using commands",
         explanation: `Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle. Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben, oder sie links in der Liste anklicken, um sie direkt einzufügen.`,
-        code: `//Nun musst du selbst Befehle einfügen, um den 
-//roten Beeper aufzuheben und ihn in der Zielzone
-//abzulegen. Links siehst du die verfügbaren Befehle. 
-//Du kannst diese entweder per Hand weiter unten in
-//dieses Textfeld schreiben, oder sie links in der
-//Liste anklicken, um sie direkt einzufügen.
-
-//Mit move() bewegst du dich ein Feld vorwärts
+        code: `//Mit move() bewegst du dich ein Feld vorwärts
 //in aktuelle Blickrichtung.
 //Mit turnLeft() drehst du Pfeili 90° gegen den
 //Uhrzeigersinn.
@@ -79,14 +63,8 @@ pickBeeper();
     },
     {
         name: "Move the Beeper RT1 - Combining commands",
-        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen? hier drunter Code einfügen...`,
-        code: `//Manchmal müssen wir Dinge tun
-//für die es noch keinen Befehl gibt. Hier muss 
-//sich Pfeili nach rechts drehen, aber es gibt 
-//nur einen Befehl zur Linksdrehung. Kannst du
-//mit den vorhandenen Befehlen trotzdem eine 
-//Rechtsdrehung erreichen und das Level abschließen? 
-//hier drunter Code einfügen...`,
+        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?`,
+        code: ``,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -109,17 +87,7 @@ pickBeeper();
     {
         name: "Move the Beeper RT1 - Seeing Functions",
         explanation: `Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.`,
-        code: `//Man kann also eine Rechtsdrehung aus 
-//3 Linksdrehungen erzeugen. Wenn du die 
-//Rechtsdrehung auf diese Weise häufiger 
-//nutzt, dann wird es allerdings 
-//unübersichtlich im Code. Um das zu 
-//vermeiden, kann man sogenannte "Funktionen" 
-//schreiben. Diese bündeln eine beliebige  
-//Abfolge bereits vorhandener Befehle 
-//unter einem neuen Namen zusammen. 
-        
-//Hier wird der neue Befehl nur definiert und 
+        code: `//Hier wird der neue Befehl nur definiert und 
 //von sich aus passiert noch nichts. Der Name 
 //"turnRight" ist übrigens beliebig. 
 function turnRight(){
@@ -155,13 +123,7 @@ putBeeper();`,
     {
         name: "Move the Beeper RT2 - Using functions",
         explanation: `Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. `,
-        code: `//Selbst definiert Funktionen werden genauso 
-//aufgerufen wie die bereits vorhandenen Befehle. 
-//Genau genommen sind die bereits vorhandenen 
-//Befehle auch nur Funktionen, die jemand anders 
-//für uns geschrieben hat. 
-
-function turnRight(){
+        code: `function turnRight(){
     turnLeft();
     turnLeft();
     turnLeft();
@@ -191,30 +153,25 @@ pickBeeper();`,
     },
     {
         name: "Move the Beeper RT2 - Defining functions 1",
-        explanation: `Versuche nun die Funktion "turnRight" selbst zu definieren. 
-Zur Erinnerung: so ist eine Funktion aufgebaut: 
-function deinFunktionsName(){
-dein Code für die Funktion...
-}`,
+        explanation: `TO DO: ZEILENUMBRÜCHE 
+        Versuche nun die Funktion "turnRight" selbst zu definieren. 
+        
+        Tasten-Komination für die {}-Klammern: 
+        Windows: AltGr + 7 / AltGr + 0 
+        Mac: Shift + Alt + 8 / Shift + Alt + 9 
+
+        Zur Erinnerung: so ist eine Funktion aufgebaut:
+        function deinFunktionsName(){
+        dein Code für die Funktion...
+        }`,
         code:
-            `//Versuche nun die Funktion "turnRight"
-//selbst zu definieren.
-//Zur Erinnerung: so ist eine Funktion aufgebaut:
-//function deinFunktionsName(){
-//dein Code für die Funktion...
-//}
-
-//Tasten-Komination für die {}-Klammern:
-//Windows: AltGr + 7 / AltGr + 0
-//Mac: Shift + Alt + 8 / Shift + Alt + 9
-
-turnRight();
+            `turnRight();
 move();
 pickBeeper();
 turnRight();
 move();
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -236,18 +193,16 @@ putBeeper();`,
     {
         name: "Obtain Artifact - Defining functions 2",
         explanation: `Versuche die Funktion zu vervollständigen.`,
-        code: `//Versuche die Funktion zu vervollständigen.
-        
-function walkHalfCircle(){
-    move();
-    //Hier weiteren Code einfügen...
+        code: `function walkHalfCircle(){
+move();
+//Hier weiteren Code einfügen...
 }
           
 walkHalfCircle();
 pickBeeper();
 walkHalfCircle();
 putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -268,15 +223,8 @@ putBeeper();`,
     },
     {
         name: "Walk Across - Seeing Loops",
-        explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.`,
-        code: `//Manchmal muss man einen Befehl mehrfach
-//hintereinander ausführen. Programmier*innen
-//hassen es allerdings, sich zu wiederholen.
-//Also nutzen sie die sogenannten Schleifen
-//oder auch Loops, um das Problem zu lösen. 
-//Drücke auf "Run Code" und sieh was passiert.
-
-move();
+        explanation: 'Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.<br></br> (Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden)',
+        code: `move();
 pickBeeper();
 for (let i = 0; i < 5; i++) {
     move();
@@ -631,12 +579,9 @@ putBeeper();`,
     },
     {
         name: "Clean up - Using If/Else",
-        explanation: `Versuche nun selbst ein if-else-Statement zu schreiben.
+        explanation: `TO DO: Wincodition wiederholt genau erklären Versuche nun selbst ein if-else-Statement zu schreiben.
 (In diesem Level startet Pfeili schon mit einem Beeper im Gepäck.)`,
-        code: `//Versuche nun selbst ein if-else-Statement
-//zu schreiben.
-//(In diesem Level startet Pfeili schon mit
-//einem Beeper im Gepäck.)`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
