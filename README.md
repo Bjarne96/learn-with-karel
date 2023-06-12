@@ -12,4 +12,7 @@
      - Users can save custom functions (across levels)
 # Tickets
     - user has "geführtes lernen tag"
-    - erklärung an der der linken seite / console an der linken seiten / custom functions an der linken Seite
+    - loading state
+    - indicate saving
+    - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
+    

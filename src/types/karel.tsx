@@ -29,15 +29,22 @@ export interface DashboardState {
     runningCode: boolean
     pauseCode: boolean
     executionCompleted: boolean
+    worldCompletedCounter: number
+    worldCounter: number
     interval: number
     showLevelCompletedModal: boolean
     firstLog: Array<string>
     secondLog: Array<string>
     activeLine: number
-    activeLog: number
+    activeTab: number
     done: string
+    step: number
     commands: Commands
+    displayHelper: boolean
+    loading: boolean
+    savedCode: number
 }
+
 type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
 export interface ILevel {
     code: string
@@ -63,11 +70,12 @@ export interface ICodeProps {
     runningCode: boolean
     activeLine: number
 }
-export interface ICommandProps {
-    code: string
-    onCodeChange(code: string): void
-    runningCode: boolean
+export interface ILogProps {
     log: Array<string>
+}
+export interface ICommandProps {
+    // code: string
+    // onCodeChange(code: string): void
     commands: Commands
 }
 export interface ISelectLevelProps {
@@ -97,35 +105,94 @@ export interface IWorldProps {
     pauseCode: boolean
     code: string
     currentLevel: number
+    worldCompletedCounter: number
     worldNumber: number
     commands: Commands
     interval: number
+    activeTab: number
+    displayHelper: boolean
+    step: number
+    loading: boolean
     completedLevel(completed: boolean): void
     updateLogAndLine(log: string, line: number, worldNumber: number): void
 }
 
 export interface ICanvasProps {
-    karel: IKarel
-    beepers: Beepers
-    solutions: Beepers
+    karel?: IKarel
+    beepers?: Beepers
+    solutions?: Beepers
     walls: Array<Array<number>>
+    activeTab: number
+    displayHelper: boolean
 }
 
-export interface ITopbar {
+export interface ILevelButtons {
     handleLevelChange(code: number): void
-    handleRunningCode(): void
+    executeCode(interval: number): void
     handleResetCode(): void
-    handleSaveCode(): void
-    handleSaveCode(): void
+    handleStep(): void
     handleResetToDefaulftCode(): void
-    handleIntervalChange(interval: number): void
     handleIntervalPause(pause: boolean): void
-    setActiveLog(log: number): void
-    activeLog: number
     worldCounter: number
     isLoggedIn: boolean
     done: string
     currentLevel: number
     runningCode: boolean
     interval: number
+}
+
+export interface ISidebar {
+    setActiveTab(code: number): void
+    worldCounter: number
+    activeTab: number
+    displayHelper: boolean
+}
+
+// Request
+
+export interface GetLevelApiResponse {
+    id: string
+    user_id: string
+    stage: number
+    start: string
+    default_world: IWorld
+    code: string
+    done: string
+}
+
+export interface RestRequest {
+    headers: Headers
+    method: "GET" | "PUT" | "POST" | "DELETE"
+    body?: string
+}
+
+export interface GetObject {
+    level: {
+        stage: number,
+        user_id: string
+    }
+}
+export interface IUpdateLevelRequest {
+    code?: string
+    done?: string
+}
+export interface PutRequestBodyObject {
+    user_id: string,
+    stage: number,
+    level: IUpdateLevelRequest,
+    attempt?: IAttempt
+}
+export interface IAttempt {
+    timestamp: string
+}
+
+export interface ResetStateObject {
+    firstLog: Array<string>
+    secondLog: Array<string>
+    pauseCode: boolean
+    runningCode: boolean
+    executionCompleted: boolean
+    activeLine: number
+    worldCompletedCounter: number
+    step: number
 }

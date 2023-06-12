@@ -17,13 +17,16 @@ import clientPromise from '../../lib/mongodb'
 
 //Sorts the requests by type
 export default async function handler(req, res) {
+    if (!process.env.DB_NAME) throw new Error('Invalid/Missing environment variable: "DB_NAME"')
 
+    const db_name = process.env.DB_NAME
     let db;
     let client;
+
     try {
         console.log('req["method"]', req["method"]);
         client = await clientPromise;
-        db = client.db("karel");
+        db = client.db(db_name);
     } catch (e) {
         return databaseError(res, e)
     }

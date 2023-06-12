@@ -5,6 +5,7 @@ import clientPromise from '../lib/mongodb'
 import { ObjectId } from "mongodb"
 import type { DashboardProps } from "~/types/karel";
 import { getLevel } from "~/types/requests";
+import React from 'react';
 
 const Home: NextPage = ({ id: id, stage: stage, code: code, done: done, user_id: user_id }: DashboardProps) => {
     return (

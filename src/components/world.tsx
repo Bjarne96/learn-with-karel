@@ -9,7 +9,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     rightWall = 4
     bottomWall = 2
     leftWall = 1
-    intervalRef
+    intervalRef: ReturnType<typeof setInterval> = null
     interval = 250
     pauseInterval = false
     finishedCode = false
@@ -20,6 +20,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     logs: Array<{ log: string, line: number }> = []
     karel: IKarel
     beepers: Beepers
+    step = 0
+    loadingWorld = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
 
     constructor(props) {
         super(props)
@@ -27,6 +38,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.karel = JSON.parse(JSON.stringify(stateFromProps.karel))
         this.beepers = JSON.parse(JSON.stringify(stateFromProps.beepers))
         this.interval = this.props.interval
+        this.step = this.props.step
 
         this.state = {
             karel: JSON.parse(JSON.stringify(stateFromProps.karel)),
@@ -40,11 +52,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* REACT FUNCTIONS */
 
     componentDidUpdate(): void {
-        //Run Code Button was pressed
-        if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
-            this.startedCode = true
-            this.executeCode()
-        }
         // Reset Button was pressed, while executing code
         if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
             //Clears snapshots and the interval
@@ -56,8 +63,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Resets all variables that are needed to manage the state in the code execution and clears snapshots and the interval
             this.finishedCode = false
             this.startedCode = false
+            this.step = 0
             this.clearSnapshotsAndVariables()
             this.setLevel()
+        }
+        if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
+        //Run Code Button was pressed
+        if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
+            this.startedCode = true
+            this.executeCode()
         }
         // Level changed
         if (this.props.currentLevel != this.state.currentLevel && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
@@ -76,15 +90,31 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.interval = this.props.interval
             if (!this.finishedCode && this.startedCode) this.executeSnapshots()
         }
+        // Skip to the next execution step
+        if (this.props.pauseCode && this.props.step != this.step) {
+            this.step = this.props.step
+            clearInterval(this.intervalRef)
+            if (!this.finishedCode && this.startedCode) this.executeSnapshots(false)
+        }
     }
 
     render() {
-        return <Canvas
-            karel={this.state.karel}
-            walls={this.state.walls}
-            beepers={this.state.beepers}
-            solutions={this.state.solutions}
-        />
+        const loadingWorld = this.loadingWorld.slice(0, this.state.walls.length)
+        return <>{this.props.loading ?
+            <Canvas
+                walls={loadingWorld}
+                activeTab={this.props.activeTab}
+                displayHelper={this.props.displayHelper}
+            /> :
+            <Canvas
+                karel={this.state.karel}
+                walls={this.state.walls}
+                beepers={this.state.beepers}
+                solutions={this.state.solutions}
+                activeTab={this.props.activeTab}
+                displayHelper={this.props.displayHelper}
+            />
+        }</>
     }
     //Updates the state to the level depeding on the props
     setLevel() {
@@ -235,37 +265,48 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Execute user code from string
             eval(lineIndexedCodeString)
         } catch (e) {
-            // codeExecuted = true
             this.errorFound = e.toString();
         }
         this.executeSnapshots()
     }
 
-    executeSnapshots() {
-        try {
+    executeSnapshots(useInterval = true) {
+        if (this.snapshots.length == 0) return
+        if (this.snapshots.length == 0 && this.errorFound) {
+            this.addErrorToLog()
+            this.props.completedLevel(this.checkSolution())
             clearInterval(this.intervalRef)
-            if (this.snapshots.length) {
-                this.intervalRef = setInterval(() => {
-                    if (!this.pauseInterval) {
-                        if (this.snapshotIndex >= this.snapshots.length) {
-                            if (this.errorFound) this.addErrorToLog()
-                            clearInterval(this.intervalRef)
-                            this.clearLog();
-                            this.props.completedLevel(this.checkSolution())
-                            return
-                        }
-                        this.props.updateLogAndLine(
-                            this.logs[this.snapshotIndex].log,
-                            this.logs[this.snapshotIndex].line,
-                            this.props.worldNumber)
-                        this.setState({
-                            karel: this.snapshots[this.snapshotIndex].karel,
-                            beepers: this.snapshots[this.snapshotIndex].beepers
-                        })
-                        this.snapshotIndex++
+            return
+        }
+
+        try {
+            const execute = () => {
+                if (this.pauseInterval) clearInterval(this.intervalRef)
+                if (useInterval && this.pauseInterval || this.snapshotIndex >= this.snapshots.length) return
+                this.props.updateLogAndLine(
+                    this.logs[this.snapshotIndex].log,
+                    this.logs[this.snapshotIndex].line,
+                    this.props.worldNumber)
+                this.setState({
+                    karel: this.snapshots[this.snapshotIndex].karel,
+                    beepers: this.snapshots[this.snapshotIndex].beepers
+                }, () => {
+                    this.snapshotIndex++
+                    if (this.snapshotIndex >= this.snapshots.length) {
+                        const solved = this.checkSolution()
+                        if (!solved && this.errorFound == "") this.errorFound = "Error: The level was not solved."
+                        if (solved && this.errorFound == "") this.errorFound = "Level was solved."
+                        if (this.errorFound != "") this.addErrorToLog()
+                        clearInterval(this.intervalRef)
+                        this.clearLog();
+                        this.props.completedLevel(solved)
+                        return
                     }
-                }, this.interval)
-            } else if (this.errorFound) this.addErrorToLog()
+                });
+            }
+            clearInterval(this.intervalRef)
+            if (useInterval) this.intervalRef = setInterval(async () => { execute() }, this.interval)
+            else execute()
         } catch (e) {
             this.props.updateLogAndLine(e, 0, this.props.worldNumber)
         }

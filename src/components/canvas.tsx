@@ -1,73 +1,73 @@
-import React, { useEffect, useRef, useCallback } from "react"
+import React, { useEffect, useState, useRef, useCallback } from "react"
 import type { ICanvasProps } from "../types/karel"
 
 const Canvas: React.FC<ICanvasProps> = (props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    let clientWidth = 300
+    const parentRef = useRef<HTMLDivElement>(null)
+
+    const [canvasWidth, setCanvasWidth] = useState(100);
 
     const draw = useCallback(() => {
-        if (props.walls === undefined || props.walls.length === 0 || props.walls[0] === undefined)
-            return
+        // Exceptions if the ref is not correctly set
+        if (props.walls === undefined || props.walls.length === 0 || props.walls[0] === undefined) return
+        if (canvasRef.current == null) return
+        const context: CanvasRenderingContext2D = canvasRef.current.getContext("2d")
+        if (context == null) return
 
+        // Setup sizes
+        if (parentRef.current.clientWidth < window.innerHeight) setCanvasWidth(parentRef.current.clientWidth - 100)
+        else setCanvasWidth(window.innerHeight - 100)
+        // Field size
         const yCount = props.walls.length
         const xCount = props.walls[0].length
         let teiler = yCount
-
-        if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
-        const canvasHeight = clientWidth / (xCount / yCount)
-
+        const canvasHeight = canvasWidth / (xCount / yCount)
         if (yCount < xCount) teiler = xCount
-        const currentBlockSize = clientWidth / teiler
+        const currentBlockSize = canvasWidth / teiler
+        // Canavs size
+        canvasRef.current.width = canvasWidth
+        canvasRef.current.height = canvasHeight
 
-        const canvas = canvasRef.current
-        if (canvas == null) return
-        const context = canvas.getContext("2d")
-        if (context == null) return
-
-        canvas.width = clientWidth
-        canvas.height = canvasHeight
-
-        // walls
+        // Draw all walls
         for (let y = 0; y < props.walls.length; y++) {
             if (props.walls == null && props.walls[y] == null) return
             for (let x = 0; x < props.walls[y].length; x++) {
                 if (props.walls[y][x] == null) break
                 context.fillStyle = "white"
                 context.fillRect(x * currentBlockSize + currentBlockSize * 0.5, y * currentBlockSize + currentBlockSize * 0.5, 2, 2)
-                drawWall(x, y, props.walls[y][x], currentBlockSize)
+                drawWall(x, y, props.walls[y][x], currentBlockSize, context)
             }
         }
-
-        // beepers
-        for (let i = 0; i < props.beepers.length; i++) {
-            const beeper = props.beepers[i]
-            if (beeper == null) return
-            let solved = false
+        // Draw all beepers
+        if (props.beepers) {
+            for (let i = 0; i < props.beepers.length; i++) {
+                const beeper = props.beepers[i]
+                if (beeper == null) return
+                let solved = false
+                for (let i = 0; i < props.solutions.length; i++) {
+                    const solution = props.solutions[i]
+                    if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
+                        solved = true
+                        break
+                    }
+                }
+                drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize, context)
+            }
+        }
+        // Draw all solution fields
+        if (props.solutions) {
             for (let i = 0; i < props.solutions.length; i++) {
                 const solution = props.solutions[i]
-                if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
-                    solved = true
-                    break
-                }
+                if (solution == null) return
+                drawSolutions(solution.x, solution.y, solution.count, currentBlockSize, context)
             }
-            drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize)
         }
-        for (let i = 0; i < props.solutions.length; i++) {
-            const solution = props.solutions[i]
-            if (solution == null) return
-            drawSolutions(solution.x, solution.y, solution.count, currentBlockSize)
-        }
-        drawKarel(props.karel, currentBlockSize)
-    }, [])
 
-    useEffect(() => {
-        draw()
-    }, [props.walls, props.beepers, props.solutions, draw])
-    const drawWall = (x: number, y: number, side: number, currentBlockSize: number) => {
-        const canvas = canvasRef.current
-        if (canvas == null) return
-        const context = canvas.getContext("2d")
-        if (context == null) return
+        // Draw karel
+        if (props.karel) drawKarel(props.karel, currentBlockSize, context)
+    }, [canvasWidth, props.beepers, props.karel, props.solutions, props.walls])
+
+    const drawWall = (x: number, y: number, side: number, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
         const maxX = minX + currentBlockSize
@@ -106,11 +106,8 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         context.restore()
     }
 
-    const drawBeeper = (x: number, y: number, count: number, solved: boolean, currentBlockSize: number) => {
-        const canvas = canvasRef.current
-        if (canvas == null) return
-        const context = canvas.getContext("2d")
-        if (context == null) return
+    const drawBeeper = (x: number, y: number, count: number, solved: boolean, currentBlockSize: number, context: CanvasRenderingContext2D) => {
+
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
         const midX = minX + currentBlockSize * 0.5
@@ -142,11 +139,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         }
     }
 
-    const drawSolutions = (x: number, y: number, count: number, currentBlockSize: number) => {
-        const canvas = canvasRef.current
-        if (canvas == null) return
-        const context = canvas.getContext("2d")
-        if (context == null) return
+    const drawSolutions = (x: number, y: number, count: number, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const minX = x * currentBlockSize
         const minY = y * currentBlockSize
         const midX = minX + currentBlockSize * 0.5
@@ -176,11 +169,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         }
     }
 
-    const drawKarel = (karel: { x: number; y: number; direction: number }, currentBlockSize: number) => {
-        const canvas = canvasRef.current
-        if (canvas == null) return
-        const context = canvas.getContext("2d")
-        if (context == null) return
+    const drawKarel = (karel: { x: number; y: number; direction: number }, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const karelImage = document.getElementById("img") as CanvasImageSource
         const minX = karel.x * currentBlockSize
         const minY = karel.y * currentBlockSize
@@ -194,67 +183,14 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         context.restore()
     }
 
-    useEffect(() => {
-        if (canvasRef.current) {
-            const canvas = canvasRef.current
-            const context = canvas.getContext("2d")
-            if (context) {
-                const yCount = props.walls.length
-                const xCount = props.walls[0].length
-                let teiler = yCount
-                if (typeof window !== "undefined") clientWidth = window.innerWidth * 0.33
-                const canvasHeight = clientWidth / (xCount / yCount)
-                if (yCount < xCount) teiler = xCount
-                const currentBlockSize = clientWidth / teiler
-
-                canvas.width = clientWidth
-                canvas.height = canvasHeight
-
-                // Walls
-                for (let y = 0; y < props.walls.length; y++) {
-                    if (props.walls == null || props.walls[y] == null) return
-                    for (let x = 0; x < props.walls[y].length; x++) {
-                        if (props.walls[y][x] == null) break
-                        context.fillStyle = "white"
-                        context.fillRect(
-                            x * currentBlockSize + currentBlockSize * 0.5,
-                            y * currentBlockSize + currentBlockSize * 0.5,
-                            2,
-                            2
-                        )
-                        drawWall(x, y, props.walls[y][x], currentBlockSize)
-                    }
-                }
-
-                // Beepers
-                for (let i = 0; i < props.beepers.length; i++) {
-                    const beeper = props.beepers[i]
-                    if (beeper == null) return
-                    let solved = false
-                    for (let i = 0; i < props.solutions.length; i++) {
-                        const solution = props.solutions[i]
-                        if (solution.x === beeper.x && solution.y === beeper.y && solution.count === beeper.count) {
-                            solved = true
-                            break
-                        }
-                    }
-                    drawBeeper(beeper.x, beeper.y, beeper.count, solved, currentBlockSize)
-                }
-                for (let i = 0; i < props.solutions.length; i++) {
-                    const solution = props.solutions[i]
-                    if (solution == null) return
-                    drawSolutions(solution.x, solution.y, solution.count, currentBlockSize)
-                }
-                drawKarel(props.karel, currentBlockSize)
-            }
-        }
-    }, [props.beepers, props.solutions, props.walls, props.karel])
+    useEffect(() => draw(), [props.walls, props.beepers, props.solutions, props.activeTab, props.displayHelper, draw])
 
     return (
-        <>{/* eslint-disable-next-line @next/next/no-img-element */}
+        <div ref={parentRef} className="w-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hidden" id="img" src="/karel.png" alt="" />
-            <canvas ref={canvasRef} />
-        </>
+            <canvas className="mx-auto" ref={canvasRef} />
+        </div>
     )
 }
 
