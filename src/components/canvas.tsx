@@ -15,8 +15,11 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         if (context == null) return
 
         // Setup sizes
-        if (parentRef.current.clientWidth < window.innerHeight) setCanvasWidth(parentRef.current.clientWidth - 100)
-        else setCanvasWidth(window.innerHeight - 100)
+        const sizeBasedOnWidth = parentRef.current.clientWidth - 100
+        const sizeBasedOnHeight = window.innerHeight - 220
+        if (sizeBasedOnWidth < sizeBasedOnHeight) setCanvasWidth(sizeBasedOnWidth)
+        else setCanvasWidth(sizeBasedOnHeight)
+
         // Field size
         const yCount = props.walls.length
         const xCount = props.walls[0].length
