@@ -10,6 +10,11 @@
 
 # Ideas
      - Users can save custom functions (across levels)
+
+# Preview
+
+The site is currently hosted at <https://learn-with-karel.netlify.app/>.
+     
 # Tickets
 PRIO
     - mongo schema
