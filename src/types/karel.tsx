@@ -37,30 +37,33 @@ export interface DashboardProps {
     code: string
     done: string
 }
-export interface DashboardState {
+export interface DashboardState extends ResetStateObject {
     currentLevel: number
     code: string
     karel: IKarel
-    runningCode: boolean
-    pauseCode: boolean
-    executionCompleted: boolean
-    worldCompletedCounter: number
-    worldCounter: number
     interval: number
     showLevelCompletedModal: boolean
-    firstLog: Array<string>
-    secondLog: Array<string>
-    activeLine: number
-    activeTab: number
     done: string
-    step: number
     commands: Commands
     displayHelper: boolean
     loading: boolean
     savedCode: number
+    worldCounter: number
+    activeTab: number
 }
 
+export type Log = Array<LogEntry>
+
+export interface LogEntry {
+    message: string
+    line: number
+    type: logType
+}
+
+export type logType = "success" | "error" | "returnedTrue" | "returnedFalse" | "normal" | "info"
+
 export type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
+
 export interface ILevel {
     code: string
     explanation: string
@@ -86,7 +89,7 @@ export interface ICodeProps {
     activeLine: number
 }
 export interface ILogProps {
-    log: Array<string>
+    log: Log
 }
 export interface ICommandProps {
     // code: string
@@ -128,7 +131,7 @@ export interface IWorldProps {
     step: number
     loading: boolean
     completedLevel(completed: boolean): void
-    updateLogAndLine(log: string, line: number, worldNumber: number): void
+    updateLogAndLine(log: string, line: number, type: logType, worldNumber: number): void
 }
 
 export interface ICanvasProps {
@@ -143,7 +146,7 @@ export interface ICanvasProps {
 export interface ILevelButtons {
     handleLevelChange(code: number): void
     executeCode(interval: number): void
-    handleResetCode(): void
+    handleResetExecution(): void
     handleStep(): void
     handleResetToDefaulftCode(): void
     handleIntervalPause(pause: boolean): void
@@ -206,8 +209,8 @@ export interface IAttempt {
 }
 
 export interface ResetStateObject {
-    firstLog: Array<string>
-    secondLog: Array<string>
+    firstLog: Log
+    secondLog: Log
     pauseCode: boolean
     runningCode: boolean
     executionCompleted: boolean
@@ -216,7 +219,7 @@ export interface ResetStateObject {
     step: number
 }
 export interface NextApiRequestBody extends NextApiRequest {
-    body: PutRequestBodyObject
+    body: string
 }
 // Mongo DB
 export interface GetLevelDbResponse {

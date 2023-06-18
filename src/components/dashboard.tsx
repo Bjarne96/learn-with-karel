@@ -12,7 +12,9 @@ import type {
     RestRequest,
     PutRequestBodyObject,
     ResetStateObject,
-    IUpdateLevelData
+    IUpdateLevelData,
+    LogEntry,
+    logType
 } from "../types/karel"
 //Data
 import levels from "../data/levels"
@@ -60,8 +62,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 pauseCode: false,
                 interval: 250,
                 showLevelCompletedModal: false,
-                firstLog: [] as string[],
-                secondLog: [] as string[],
+                firstLog: [] as LogEntry[],
+                secondLog: [] as LogEntry[],
                 activeLine: 0,
                 activeTab: 4,
                 done: done,
@@ -185,7 +187,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         setTimeout(() => this.debounceRunningCode = false, 300)
         // When the last execution is completed the state resets and is then set the to running
         if (this.state.executionCompleted) {
-            return this.setState(this.getResetRunningCodeObject(), () => this.setState({ interval: interval, runningCode: true }))
+            return this.setState(this.getResetRunningCodeObject(), () =>
+                this.setState({ interval: interval, runningCode: true, activeTab: 1 })
+            )
         }
         // The execution gets unpaused
         if (this.state.pauseCode) return this.setState({ pauseCode: false, interval: interval })
@@ -195,8 +199,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     getResetRunningCodeObject(): ResetStateObject {
         return {
-            firstLog: [] as string[],
-            secondLog: [] as string[],
+            firstLog: [] as LogEntry[],
+            secondLog: [] as LogEntry[],
             pauseCode: false,
             runningCode: false,
             executionCompleted: false,
@@ -206,7 +210,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
-    handleResetCode() { this.setState(this.getResetRunningCodeObject.bind(this)) }
+    handleResetExecution() { console.log('reset'); this.setState(this.getResetRunningCodeObject.bind(this)) }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
@@ -250,18 +254,20 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
 
-    updateLogAndLine(entry: string, line: number, worldNumber: number) {
+    updateLogAndLine(entry: string, line: number, type: logType, worldNumber: number) {
         //Work around to highlight the same line again
         if (this.state.activeLine == line) {
             const lineLater = line
+            // Highlights the line to a later point
             setTimeout(() => this.setState({ activeLine: lineLater }), 16)
+            //Sets the line to 0 to remove highlighting
             line = 0
         }
         //Update the necessary log
         if (entry == undefined) return
         let log = this.state.firstLog
         if (worldNumber == 2) log = this.state.secondLog
-        log.push(entry + "\n")
+        log.push({ line: line, message: entry, type: type })
         if (worldNumber == 1) this.setState({ firstLog: log, activeLine: line })
         if (worldNumber == 2) this.setState({ secondLog: log, activeLine: line })
     }
@@ -335,7 +341,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             worldCounter={this.state.worldCounter}
                             handleLevelChange={this.handleLevelChange.bind(this)}
                             executeCode={this.executeCode.bind(this)}
-                            handleResetCode={this.handleResetCode.bind(this)}
+                            handleResetExecution={this.handleResetExecution.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
                             handleStep={this.handleStep.bind(this)}
@@ -347,7 +353,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 <LevelModal
                     currentlevel={this.state.currentLevel}
                     handleLevelChange={this.handleLevelChange.bind(this)}
-                    handleResetCode={this.handleResetCode.bind(this)}
+                    handleResetExecution={this.handleResetExecution.bind(this)}
                     toggleModal={this.toggleModal.bind(this)}
                 />}
         </>

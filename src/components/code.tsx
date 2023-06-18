@@ -19,16 +19,26 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
 
     //Highlight active line
     useEffect(() => {
-        if (runningCode && activeLine != 0) {
-            setTimeout(() => {
-                try {
-                    document.getElementsByClassName("cm-content")[0]
-                        .children[(activeLine - 1)]
-                        .classList.add("highlighted-line")
-                } catch (e) { /* Prevent breaking when lines are removed. */ }
-            }, 16)
+        try {
+            if (runningCode && activeLine != 0) {
+                setTimeout(() => {
+                    try {
+                        document.getElementsByClassName("cm-content")[0]
+                            .children[(activeLine - 1)]
+                            .classList.add("highlighted-line")
+                    } catch (e) { /* Prevent breaking when lines are removed. */ }
+                }, 16)
 
-        }
+            }
+            // TODO: Check if highlighted lines stay in some edge cases
+            // else if (activeLine == 0) {
+            //     const highlightedLine = document.getElementsByClassName("highlighted-line")[0]
+            //     if (highlightedLine != undefined) {
+            //         highlightedLine.classList.remove("highlighted-line")
+            //     }
+            // }
+        } catch (e) { console.log('highlighted line error', e); }
+
     }, [runningCode, code, activeLine])
 
     //Using the editorContainer

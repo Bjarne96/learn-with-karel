@@ -1,6 +1,6 @@
-import { type MongoClient, type Db, ObjectId } from 'mongodb';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import type { PutRequestBodyObject, GetLevelObject, levelData, NextApiRequestBody } from '~/types/karel';
+import { type MongoClient, type Db, ObjectId } from 'mongodb'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { PutRequestBodyObject, GetLevelObject, levelData, NextApiRequestBody } from '~/types/karel'
 import {
     updateLevelBody,
     postAttemptBody,
@@ -11,7 +11,7 @@ import {
     hasKeys,
     getLevel,
     findLevel
-} from '~/types/requests';
+} from '~/types/requests'
 import clientPromise from '../../lib/mongodb'
 
 //Sorts the requests by type
@@ -19,13 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!process.env.DB_NAME) throw new Error('Invalid/Missing environment variable: "DB_NAME"')
 
     const db_name = process.env.DB_NAME
-    let db: Db;
-    let client: MongoClient;
+    let db: Db
+    let client: MongoClient
 
     try {
-        console.log('req.method', req.method);
-        client = await clientPromise;
-        db = client.db(db_name);
+        console.log('req.method', req.method)
+        client = await clientPromise
+        db = client.db(db_name)
     } catch (e) { return databaseError(res, e.toString()) }
     // if (req.method == "POST") return handlePost(req, res, db)
     if (req.method == "GET") return handleGet(req, res, db)
@@ -42,10 +42,10 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, db: Db) {
 }
 
 async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) {
-    const bodyObject: PutRequestBodyObject = req.body
     try {
+        const bodyObject: PutRequestBodyObject = JSON.parse(req.body) as PutRequestBodyObject
         const bodyLevel = bodyObject.level
-        if (!hasKeys(bodyLevel, updateLevelBody)) return userError(res, "Your request does not meet the specifications.")
+        if (!hasKeys(bodyLevel, updateLevelBody) || bodyLevel == undefined) return userError(res, "Your request does not meet the specifications.")
         const level: levelData = await findLevel(bodyObject, db) as levelData
         if (level == null) return userError(res, "Could not find your level.")
         if (level.id) {
@@ -58,7 +58,7 @@ async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) 
                     "stage": bodyObject.stage,
                     "timestamp": bodyObject.attempt.timestamp,
                     "code": bodyLevel.code,
-                });
+                })
                 if (!response.insertedId) return databaseError(res, "Could not insert Attempt.")
             }
             //Save into the levellog, when finished the first time
@@ -72,7 +72,7 @@ async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) 
                     "start": level.start,
                     "code": bodyLevel.code,
                     "done": bodyLevel.done
-                });
+                })
                 if (!response.insertedId) return databaseError(res, "Could not insert Level.")
             }
             const response = await db.collection("level").updateOne(

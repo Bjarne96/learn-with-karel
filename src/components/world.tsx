@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
-import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshots, Walls } from "../types/karel"
+import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, ISnapshots, Walls, logType, Log } from "../types/karel"
 import Canvas from "./canvas"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
@@ -17,7 +17,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     snapshotIndex = 0
     errorFound = ""
     snapshots: ISnapshots = []
-    logs: Array<{ log: string, line: number }> = []
+    logs: Log = []
     karel: IKarel
     beepers: Beepers
     step = 0
@@ -70,6 +70,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
+            // Updates the interval initally
+            if (this.interval != this.props.interval) this.interval = this.props.interval
             this.startedCode = true
             this.executeCode()
         }
@@ -178,16 +180,22 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (line) this.addLog(command, line, val)
         if (val != null) return val
     }
-
-    addErrorToLog() {
-        this.props.updateLogAndLine(this.errorFound, 0, this.props.worldNumber)
-        this.errorFound = ""
-    }
-
-    addLog(command: string, line: number, bool?: boolean) {
-        let log = `L ${line.toString()}:\t${command}`
-        if (bool != null || bool != undefined) log += ` = ${bool.toString()}`
-        this.logs.push({ log: log, line: line })
+    // Adds the log entry to logs array and modifies message and type
+    addLog(command: string, line: number, val?: boolean) {
+        // Default command
+        let type: logType = "normal"
+        let message = command + " ()"
+        // Command that returned true
+        if (val == true) {
+            type = "returnedTrue"
+            message = command + ": true"
+        }
+        // Command that returned false
+        else if (val == false) {
+            type = "returnedFalse"
+            message = command + ": false"
+        }
+        this.logs.push({ message: message, line: line, type: type })
     }
 
     clearLog() {
@@ -266,46 +274,63 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         }
         this.executeSnapshots()
     }
-
+    // useInterval is manually set to false, when the skip button is used to execute the next step
     executeSnapshots(useInterval = true) {
-        if (this.snapshots.length == 0) return
-        if (this.snapshots.length == 0 && this.errorFound) {
-            this.addErrorToLog()
-            this.props.completedLevel(this.checkSolution())
-            clearInterval(this.intervalRef)
-            return
-        }
-
         try {
+            // Edge case where only and an error was found and no snapshot was given
+            if (this.snapshots.length == 0 && this.errorFound != "") {
+                // Updates log and removes error
+                this.props.updateLogAndLine(this.errorFound, 0, "error", this.props.worldNumber)
+                this.errorFound == ""
+            }
+            // Return when no snapshots are given
+            if (this.snapshots.length == 0) return
             const execute = () => {
+                // Clear interval when paused
                 if (this.pauseInterval) clearInterval(this.intervalRef)
+                // Return when paused and interval is used (play,forward, fastforward) or snapshotIndex is out of bound
                 if (useInterval && this.pauseInterval || this.snapshotIndex >= this.snapshots.length) return
+                // Update logs
                 this.props.updateLogAndLine(
-                    this.logs[this.snapshotIndex].log,
+                    this.logs[this.snapshotIndex].message,
                     this.logs[this.snapshotIndex].line,
+                    this.logs[this.snapshotIndex].type,
                     this.props.worldNumber)
+                //update state from snapshot
                 this.setState({
                     karel: this.snapshots[this.snapshotIndex].karel,
                     beepers: this.snapshots[this.snapshotIndex].beepers
                 }, () => {
+                    // Count the index up
                     this.snapshotIndex++
+                    // When the last snapshot was used
                     if (this.snapshotIndex >= this.snapshots.length) {
-                        const solved = this.checkSolution()
-                        if (!solved && this.errorFound == "") this.errorFound = "Error: The level was not solved."
-                        if (solved && this.errorFound == "") this.errorFound = "Level was solved."
-                        if (this.errorFound != "") this.addErrorToLog()
+                        let lastLog = { message: this.errorFound, type: "error" as logType }
+                        // Check if the level was solved
+                        const solved = this.checkSolution() && lastLog.message == ""
+                        // When no error exist and the level was not solved an error is added
+                        if (!solved && lastLog.message == "") lastLog = { message: "The level was not solved.", type: "info" }
+                        // Add solved message when no error was found
+                        // TODO: Refactor log - misuse of error found variable
+                        if (solved) lastLog = { message: "The level was solved.", type: "success" }
+                        // Update log with error, unsolved or solved message
+                        this.props.updateLogAndLine(lastLog.message, 0, lastLog.type, this.props.worldNumber)
+                        // Clear interval and log at the end
                         clearInterval(this.intervalRef)
                         this.clearLog();
+                        // Give the result to the parent component
                         this.props.completedLevel(solved)
                         return
                     }
                 });
             }
+            // Always clear interval just in case
             clearInterval(this.intervalRef)
+            // Set up interval if play method was used to execute snapshots
             if (useInterval) this.intervalRef = setInterval(() => execute(), this.interval)
-            else execute()
+            else execute() // Just execute when skip was used
         } catch (e) {
-            this.props.updateLogAndLine(e.toString(), 0, this.props.worldNumber)
+            this.props.updateLogAndLine(e.toString(), 0, "error", this.props.worldNumber)
         }
     }
 
