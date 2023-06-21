@@ -52,6 +52,17 @@ export interface DashboardState extends ResetStateObject {
     activeTab: number
 }
 
+export interface ResetStateObject {
+    firstLog: Log
+    secondLog: Log
+    pauseCode: boolean
+    runningCode: boolean
+    executionCompleted: boolean
+    activeLine: number
+    worldCompletedCounter: number
+    step: number
+}
+
 export type Log = Array<LogEntry>
 
 export interface LogEntry {
@@ -82,6 +93,7 @@ export interface Beeper extends Coords {
 }
 export type Beepers = Array<Beeper>
 export type Walls = Array<Array<number>>
+
 export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
@@ -90,10 +102,10 @@ export interface ICodeProps {
 }
 export interface ILogProps {
     log: Log
+    worldCounter: number
+    logNumber: number
 }
 export interface ICommandProps {
-    // code: string
-    // onCodeChange(code: string): void
     commands: Commands
 }
 export interface ISelectLevelProps {
@@ -156,6 +168,7 @@ export interface ILevelButtons {
     currentLevel: number
     runningCode: boolean
     interval: number
+    pauseCode: boolean
 }
 
 export interface ISidebar {
@@ -165,7 +178,7 @@ export interface ISidebar {
     displayHelper: boolean
 }
 
-// Request
+// Requests
 export interface GetLevelApiResponse {
     id: string
     user_id: string
@@ -208,16 +221,6 @@ export interface IAttempt {
     timestamp: string
 }
 
-export interface ResetStateObject {
-    firstLog: Log
-    secondLog: Log
-    pauseCode: boolean
-    runningCode: boolean
-    executionCompleted: boolean
-    activeLine: number
-    worldCompletedCounter: number
-    step: number
-}
 export interface NextApiRequestBody extends NextApiRequest {
     body: string
 }

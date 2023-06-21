@@ -9,12 +9,12 @@ const Commands: React.FC<ICommandProps> = ({ commands }) => {
     const copyCommand = (e: React.MouseEvent, command: string) => {
         if (time != null) clearTimeout(time)
         void navigator.clipboard.writeText(command + "();")
-        const tooltipSpan = document.getElementById('command-tooltip');
+        const tooltipSpan = document.getElementById('command-tooltip')
         tooltipSpan.style.display = "block"
-        const x = e.clientX + 20,
-            y = e.clientY - 20;
-        tooltipSpan.style.top = y.toString() + `px`;
-        tooltipSpan.style.left = x.toString() + 'px';
+        const x = e.clientX + 20
+        const y = e.clientY - 20
+        tooltipSpan.style.top = y.toString() + `px`
+        tooltipSpan.style.left = x.toString() + 'px'
         time = setTimeout(() => tooltipSpan.style.display = "none", 1200)
     }
 
@@ -29,7 +29,6 @@ const Commands: React.FC<ICommandProps> = ({ commands }) => {
                 >
                     {command}<span className="pl-1 text-code-lightgrey">&nbsp;</span>
                     <svg
-
                         className={"cursor-pointer max-h-4 inline  "}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"

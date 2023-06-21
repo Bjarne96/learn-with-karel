@@ -120,7 +120,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
     //Updates the state to the level depeding on the props
     setLevel() {
-        const update = this.getUpdateFromProps();
+        const update = this.getUpdateFromProps()
         this.setState({
             karel: update.karel,
             beepers: update.beepers,
@@ -143,7 +143,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             walls: walls,
             currentLevel: currentLevel
         }
-        return stateFromProps;
+        return stateFromProps
     }
     /* END REACT FUNCTIONS */
 
@@ -222,7 +222,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.clearLog()
         this.snapshots = []
         this.snapshotIndex = 0
-        const update = this.getUpdateFromProps();
+        const update = this.getUpdateFromProps()
         this.karel = update.karel
         this.beepers = update.beepers
     }
@@ -261,28 +261,44 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         eval(commandList)
         try {
             //Add line indexing into the users code string
-            const codeArr = this.props.code.split(/\n/);
+            const codeArr = this.props.code.split(/\n/)
             let lineIndexedCodeString = ""
-            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g');
+            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g')
             for (let i = 0; i < codeArr.length; i++) {
-                lineIndexedCodeString = lineIndexedCodeString + "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()})`);
+                lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()})`)
             }
             //Execute user code from string
             eval(lineIndexedCodeString)
         } catch (e) {
-            this.errorFound = e.toString();
+            this.errorFound = e.toString()
         }
         this.executeSnapshots()
     }
+
+    completeWorld() {
+        let lastLog = { message: this.errorFound, type: "error" as logType }
+        // Check if the level was solved
+        const solved = this.checkSolution() && lastLog.message == ""
+        // When no error exist and the level was not solved an error is added
+        if (!solved && lastLog.message == "") lastLog = { message: "The level was not solved.", type: "info" }
+        // Add solved message when no error was found
+        // TODO: Refactor log - misuse of error found variable
+        if (solved) lastLog = { message: "The level was solved.", type: "success" }
+        // Update log with error, unsolved or solved message
+        this.props.updateLogAndLine(lastLog.message, 0, lastLog.type, this.props.worldNumber)
+        // Clear interval and log at the end
+        clearInterval(this.intervalRef)
+        this.clearLog()
+        // Give the result to the parent component
+        this.props.completedLevel(solved)
+    }
+
+
     // useInterval is manually set to false, when the skip button is used to execute the next step
     executeSnapshots(useInterval = true) {
         try {
             // Edge case where only and an error was found and no snapshot was given
-            if (this.snapshots.length == 0 && this.errorFound != "") {
-                // Updates log and removes error
-                this.props.updateLogAndLine(this.errorFound, 0, "error", this.props.worldNumber)
-                this.errorFound == ""
-            }
+            if (this.snapshots.length == 0 && this.errorFound != "") this.completeWorld()
             // Return when no snapshots are given
             if (this.snapshots.length == 0) return
             const execute = () => {
@@ -303,26 +319,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }, () => {
                     // Count the index up
                     this.snapshotIndex++
-                    // When the last snapshot was used
-                    if (this.snapshotIndex >= this.snapshots.length) {
-                        let lastLog = { message: this.errorFound, type: "error" as logType }
-                        // Check if the level was solved
-                        const solved = this.checkSolution() && lastLog.message == ""
-                        // When no error exist and the level was not solved an error is added
-                        if (!solved && lastLog.message == "") lastLog = { message: "The level was not solved.", type: "info" }
-                        // Add solved message when no error was found
-                        // TODO: Refactor log - misuse of error found variable
-                        if (solved) lastLog = { message: "The level was solved.", type: "success" }
-                        // Update log with error, unsolved or solved message
-                        this.props.updateLogAndLine(lastLog.message, 0, lastLog.type, this.props.worldNumber)
-                        // Clear interval and log at the end
-                        clearInterval(this.intervalRef)
-                        this.clearLog();
-                        // Give the result to the parent component
-                        this.props.completedLevel(solved)
-                        return
-                    }
-                });
+                    // Compelte the world when the last snapshot was used
+                    if (this.snapshotIndex >= this.snapshots.length) this.completeWorld()
+                })
             }
             // Always clear interval just in case
             clearInterval(this.intervalRef)
@@ -335,17 +334,14 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     checkSolution() {
-        const compareBeeper = (a: Beeper, b: Beeper) => {
-            return a.x === b.x && a.y === b.y && a.count === b.count
-        };
+        const compareBeeper = (a: Beeper, b: Beeper) => a.x === b.x && a.y === b.y && a.count === b.count
         let found = false
-
         if (this.state.beepers.length !== this.state.solutions.length) return false
 
         for (let j = 0; j < this.state.beepers.length; j++) {
             found = false
             for (let k = 0; k < this.state.solutions.length; k++) {
-                if (compareBeeper(this.state.beepers[j], this.state.solutions[k])) found = true;
+                if (compareBeeper(this.state.beepers[j], this.state.solutions[k])) found = true
             }
             if (!found) return false
         }
@@ -454,9 +450,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     move() {
-        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y, true)) {
-            this.karelMove()
-        }
+        if (this.canMove(this.karel.direction, this.karel.x, this.karel.y, true)) this.karelMove()
     }
 
     turnLeft() {
@@ -482,9 +476,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const y = this.karel.y
         let result = false
         this.beepers.forEach(function (beeper) {
-            if (beeper.x === x && beeper.y === y) {
-                result = true
-            }
+            if (beeper.x === x && beeper.y === y) result = true
         })
         return result
     }

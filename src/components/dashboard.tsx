@@ -25,6 +25,7 @@ import Log from "./log"
 import SelectLevel from "./levelselect"
 import Explanation from "./explanation"
 import Loading from "./loading"
+import Savecode from "./savingcode"
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -60,7 +61,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 worldCounter: levels[lastStage].worlds.length,
                 executionCompleted: false,
                 pauseCode: false,
-                interval: 250,
+                interval: 0,
                 showLevelCompletedModal: false,
                 firstLog: [] as LogEntry[],
                 secondLog: [] as LogEntry[],
@@ -76,7 +77,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     handleStep() {
-        if (this.state.pauseCode) this.setState({ step: this.state.step + 1 })
+        this.setState({ step: this.state.step + 1, runningCode: true, pauseCode: true, activeTab: this.state.worldCompletedCounter + 1 })
     }
 
     onCodeChange(code: string) {
@@ -94,7 +95,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let code: string = (' ' + (levels[level]?.code)).slice(1) //Deep Copy
         let done = ""
         await this.handleSaveLevel({ code: this.state.code })
-        // await new Promise((res) => setTimeout(() => res("p1"), 1000)); // Testing loading screen
+        // await new Promise((res) => setTimeout(() => res("p1"), 3000)); // Testing loading screen
         const res: GetLevelApiResponse | string = await this.getLevel(level)
         if (typeof res != "string") {
             code = res.code
@@ -285,24 +286,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         />
                     </div>
                     {{
-                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} />,
-                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} />,
+                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
+                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
                         3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
                         4: this.state.displayHelper && !this.state.loading && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
-
-                    <div className="w-full h-full bg-code-grey max-w-2xl">
-                        {
-                            this.state.loading ?
-                                <Loading />
-                                :
-                                <Code
-                                    code={this.state.code}
-                                    onCodeChange={this.onCodeChange.bind(this)}
-                                    runningCode={this.state.runningCode}
-                                    activeLine={this.state.activeLine}
-                                />
+                    <div className="w-full h-full bg-code-grey max-w-2xl relative">
+                        <Savecode savedCode={this.state.savedCode} />
+                        {this.state.loading ?
+                            <Loading />
+                            :
+                            <Code
+                                code={this.state.code}
+                                onCodeChange={this.onCodeChange.bind(this)}
+                                runningCode={this.state.runningCode}
+                                activeLine={this.state.activeLine}
+                            />
                         }
                     </div>
                     <div className="w-full h-full">
@@ -345,6 +345,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
                             handleStep={this.handleStep.bind(this)}
+                            pauseCode={this.state.pauseCode}
                         />
                     </div>
                 </div>

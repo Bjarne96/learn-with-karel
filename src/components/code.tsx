@@ -44,7 +44,9 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     //Using the editorContainer
     useEffect(() => { if (editorContainer.current) setContainer(editorContainer.current) }, [setContainer]);
 
-    return <div className="border-code-grey"><div ref={editorContainer}></div></div>
+    return <div className="border-code-grey z-0">
+        <div ref={editorContainer}></div>
+    </div>
 }
 
 export default Code
