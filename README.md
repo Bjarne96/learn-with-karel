@@ -11,8 +11,9 @@
 # Ideas
      - Users can save custom functions (across levels)
 # Tickets
+PRIO
+    - 
+LOW PRIO
     - user has "geführtes lernen tag"
-    - loading state
-    - indicate saving
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
     

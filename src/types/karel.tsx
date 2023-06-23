@@ -1,3 +1,6 @@
+import { type ObjectId } from "mongodb"
+import { type NextApiRequest } from "next"
+
 interface Coords {
     x: number
     y: number
@@ -7,13 +10,25 @@ export interface IKarel extends Coords {
     isSuper: boolean
     beeperCount?: number
 }
+export interface levelDataResponse extends levelData {
+    status: 200 | 300 | 400 | 500
+    level: levelData
+}
 export interface levelData {
     id: string
     user_id: string
     stage: number
     code: string
     default_world: IWorld
+    default_code: string
     done: string
+    start: string
+}
+export interface PageProps {
+    id: string
+}
+export interface DashboardPropsObject {
+    props: DashboardProps
 }
 export interface DashboardProps {
     id: string
@@ -22,30 +37,44 @@ export interface DashboardProps {
     code: string
     done: string
 }
-export interface DashboardState {
+export interface DashboardState extends ResetStateObject {
     currentLevel: number
     code: string
     karel: IKarel
-    runningCode: boolean
-    pauseCode: boolean
-    executionCompleted: boolean
-    worldCompletedCounter: number
-    worldCounter: number
     interval: number
     showLevelCompletedModal: boolean
-    firstLog: Array<string>
-    secondLog: Array<string>
-    activeLine: number
-    activeTab: number
     done: string
-    step: number
     commands: Commands
     displayHelper: boolean
     loading: boolean
     savedCode: number
+    worldCounter: number
+    activeTab: number
 }
 
-type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
+export interface ResetStateObject {
+    firstLog: Log
+    secondLog: Log
+    pauseCode: boolean
+    runningCode: boolean
+    executionCompleted: boolean
+    activeLine: number
+    worldCompletedCounter: number
+    step: number
+}
+
+export type Log = Array<LogEntry>
+
+export interface LogEntry {
+    message: string
+    line: number
+    type: logType
+}
+
+export type logType = "success" | "error" | "returnedTrue" | "returnedFalse" | "normal" | "info"
+
+export type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest">
+
 export interface ILevel {
     code: string
     explanation: string
@@ -57,13 +86,14 @@ export interface IWorld {
     beepers: Beepers
     karel: IKarel
     solutions: Beepers
-    walls: Array<Array<number>>
+    walls: Walls
 }
 export interface Beeper extends Coords {
     count: number
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Beepers extends Array<Beeper> { }
+export type Beepers = Array<Beeper>
+export type Walls = Array<Array<number>>
+
 export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
@@ -71,11 +101,11 @@ export interface ICodeProps {
     activeLine: number
 }
 export interface ILogProps {
-    log: Array<string>
+    log: Log
+    worldCounter: number
+    logNumber: number
 }
 export interface ICommandProps {
-    // code: string
-    // onCodeChange(code: string): void
     commands: Commands
 }
 export interface ISelectLevelProps {
@@ -87,7 +117,7 @@ export interface IWorldState {
     karel: IKarel
     beepers: Beepers
     solutions: Beepers
-    walls: Array<Array<number>>
+    walls: Walls
     currentLevel: number
 }
 
@@ -95,8 +125,7 @@ export interface ISnapshot {
     karel: IKarel
     beepers: Beepers
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ISnapshots extends Array<ISnapshot> { }
+export type ISnapshots = Array<ISnapshot>
 
 export interface IWorldProps {
     karel: IKarel
@@ -114,14 +143,14 @@ export interface IWorldProps {
     step: number
     loading: boolean
     completedLevel(completed: boolean): void
-    updateLogAndLine(log: string, line: number, worldNumber: number): void
+    updateLogAndLine(log: string, line: number, type: logType, worldNumber: number): void
 }
 
 export interface ICanvasProps {
     karel?: IKarel
     beepers?: Beepers
     solutions?: Beepers
-    walls: Array<Array<number>>
+    walls: Walls
     activeTab: number
     displayHelper: boolean
 }
@@ -129,7 +158,7 @@ export interface ICanvasProps {
 export interface ILevelButtons {
     handleLevelChange(code: number): void
     executeCode(interval: number): void
-    handleResetCode(): void
+    handleResetExecution(): void
     handleStep(): void
     handleResetToDefaulftCode(): void
     handleIntervalPause(pause: boolean): void
@@ -139,6 +168,7 @@ export interface ILevelButtons {
     currentLevel: number
     runningCode: boolean
     interval: number
+    pauseCode: boolean
 }
 
 export interface ISidebar {
@@ -148,8 +178,7 @@ export interface ISidebar {
     displayHelper: boolean
 }
 
-// Request
-
+// Requests
 export interface GetLevelApiResponse {
     id: string
     user_id: string
@@ -166,33 +195,48 @@ export interface RestRequest {
     body?: string
 }
 
-export interface GetObject {
-    level: {
-        stage: number,
-        user_id: string
-    }
+export interface GetLevelObject {
+    id?: string
+    stage?: number,
+    user_id?: string
 }
-export interface IUpdateLevelRequest {
+export interface GetUserObject {
+    id?: string
+}
+export interface IUpdateLevelData {
     code?: string
     done?: string
+}
+export interface IUpdateLevelRequest extends IUpdateLevelData {
+    user_id: string
+    stage: number
 }
 export interface PutRequestBodyObject {
     user_id: string,
     stage: number,
-    level: IUpdateLevelRequest,
+    level: IUpdateLevelData,
     attempt?: IAttempt
 }
 export interface IAttempt {
     timestamp: string
 }
 
-export interface ResetStateObject {
-    firstLog: Array<string>
-    secondLog: Array<string>
-    pauseCode: boolean
-    runningCode: boolean
-    executionCompleted: boolean
-    activeLine: number
-    worldCompletedCounter: number
-    step: number
+export interface NextApiRequestBody extends NextApiRequest {
+    body: string
+}
+// Mongo DB
+export interface GetLevelDbResponse {
+    _id: ObjectId
+    user_id: string
+    stage: number
+    start: string
+    default_world: IWorld
+    default_code: string
+    code: string
+    done: string
+    inactive: number
+}
+export interface GetUserDbResponse {
+    _id: ObjectId
+    lastStage: number
 }

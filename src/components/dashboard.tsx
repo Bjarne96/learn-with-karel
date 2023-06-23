@@ -4,7 +4,18 @@ import Commands from "./commands"
 import Code from "./code"
 import World from "./world"
 //Interfaces
-import type { DashboardProps, DashboardState, IKarel, GetLevelApiResponse, RestRequest, PutRequestBodyObject, IUpdateLevelRequest, ResetStateObject } from "../types/karel"
+import type {
+    DashboardProps,
+    DashboardState,
+    IKarel,
+    GetLevelApiResponse,
+    RestRequest,
+    PutRequestBodyObject,
+    ResetStateObject,
+    IUpdateLevelData,
+    LogEntry,
+    logType
+} from "../types/karel"
 //Data
 import levels from "../data/levels"
 import LevelButtons from "./levelbuttons"
@@ -14,6 +25,7 @@ import Log from "./log"
 import SelectLevel from "./levelselect"
 import Explanation from "./explanation"
 import Loading from "./loading"
+import Savecode from "./savingcode"
 
 
 export default class Dashboard extends React.Component<DashboardProps, DashboardState> {
@@ -49,10 +61,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 worldCounter: levels[lastStage].worlds.length,
                 executionCompleted: false,
                 pauseCode: false,
-                interval: 250,
+                interval: 0,
                 showLevelCompletedModal: false,
-                firstLog: [] as string[],
-                secondLog: [] as string[],
+                firstLog: [] as LogEntry[],
+                secondLog: [] as LogEntry[],
                 activeLine: 0,
                 activeTab: 4,
                 done: done,
@@ -65,13 +77,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     handleStep() {
-        if (this.state.pauseCode) this.setState({ step: this.state.step + 1 })
+        this.setState({ step: this.state.step + 1, runningCode: true, pauseCode: true, activeTab: this.state.worldCompletedCounter + 1 })
     }
 
     onCodeChange(code: string) {
         clearTimeout(this.saveCode)
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.saveCode = setTimeout(() => this.handleSaveLevel({ code: this.state.code }, true), 5000)
+        this.saveCode = setTimeout(() => void this.handleSaveLevel({ code: this.state.code }), 5000)
         if (this.state.runningCode) this.setState({ ...this.getResetRunningCodeObject(), ...{ code: code } })
         else this.setState({ code: code })
     }
@@ -84,8 +95,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let code: string = (' ' + (levels[level]?.code)).slice(1) //Deep Copy
         let done = ""
         await this.handleSaveLevel({ code: this.state.code })
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        // await new Promise((res) => setTimeout(() => res("p1"), 1000)); // Testing loading screen
+        // await new Promise((res) => setTimeout(() => res("p1"), 3000)); // Testing loading screen
         const res: GetLevelApiResponse | string = await this.getLevel(level)
         if (typeof res != "string") {
             code = res.code
@@ -149,7 +159,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         })
     }
 
-    async handleSaveLevel(updateLevel: IUpdateLevelRequest, attempt?: boolean): Promise<boolean> {
+    async handleSaveLevel(updateLevel: IUpdateLevelData, attempt?: boolean): Promise<boolean> {
         if (!this.userId) return false
         if (this.debounceSaveCode) return false
         this.debounceSaveCode = true
@@ -178,7 +188,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         setTimeout(() => this.debounceRunningCode = false, 300)
         // When the last execution is completed the state resets and is then set the to running
         if (this.state.executionCompleted) {
-            return this.setState(this.getResetRunningCodeObject(), () => this.setState({ interval: interval, runningCode: true }))
+            return this.setState(this.getResetRunningCodeObject(), () =>
+                this.setState({ interval: interval, runningCode: true, activeTab: 1 })
+            )
         }
         // The execution gets unpaused
         if (this.state.pauseCode) return this.setState({ pauseCode: false, interval: interval })
@@ -188,8 +200,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     getResetRunningCodeObject(): ResetStateObject {
         return {
-            firstLog: [] as string[],
-            secondLog: [] as string[],
+            firstLog: [] as LogEntry[],
+            secondLog: [] as LogEntry[],
             pauseCode: false,
             runningCode: false,
             executionCompleted: false,
@@ -199,7 +211,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
-    handleResetCode() { this.setState(this.getResetRunningCodeObject.bind(this)) }
+    handleResetExecution() { console.log('reset'); this.setState(this.getResetRunningCodeObject.bind(this)) }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
@@ -227,7 +239,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         //Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
             done = new Date().toString()
-            void this.handleSaveLevel({ done: done, code: this.state.code })
+            void this.handleSaveLevel({ done: done, code: this.state.code }, true)
         }
         let showModal = false
         if (this.state.done == "" && completed) showModal = true
@@ -243,18 +255,20 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
 
-    updateLogAndLine(entry: string, line: number, worldNumber: number) {
+    updateLogAndLine(entry: string, line: number, type: logType, worldNumber: number) {
         //Work around to highlight the same line again
         if (this.state.activeLine == line) {
             const lineLater = line
+            // Highlights the line to a later point
             setTimeout(() => this.setState({ activeLine: lineLater }), 16)
+            //Sets the line to 0 to remove highlighting
             line = 0
         }
         //Update the necessary log
         if (entry == undefined) return
         let log = this.state.firstLog
         if (worldNumber == 2) log = this.state.secondLog
-        log.push(entry + "\n")
+        log.push({ line: line, message: entry, type: type })
         if (worldNumber == 1) this.setState({ firstLog: log, activeLine: line })
         if (worldNumber == 2) this.setState({ secondLog: log, activeLine: line })
     }
@@ -272,24 +286,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         />
                     </div>
                     {{
-                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} />,
-                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} />,
+                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
+                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
                         3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
                         4: this.state.displayHelper && !this.state.loading && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
-
-                    <div className="w-full h-full bg-code-grey">
-                        {
-                            this.state.loading ?
-                                <Loading />
-                                :
-                                <Code
-                                    code={this.state.code}
-                                    onCodeChange={this.onCodeChange.bind(this)}
-                                    runningCode={this.state.runningCode}
-                                    activeLine={this.state.activeLine}
-                                />
+                    <div className="w-full h-full bg-code-grey max-w-2xl relative">
+                        <Savecode savedCode={this.state.savedCode} />
+                        {this.state.loading ?
+                            <Loading />
+                            :
+                            <Code
+                                code={this.state.code}
+                                onCodeChange={this.onCodeChange.bind(this)}
+                                runningCode={this.state.runningCode}
+                                activeLine={this.state.activeLine}
+                            />
                         }
                     </div>
                     <div className="w-full h-full">
@@ -328,10 +341,11 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             worldCounter={this.state.worldCounter}
                             handleLevelChange={this.handleLevelChange.bind(this)}
                             executeCode={this.executeCode.bind(this)}
-                            handleResetCode={this.handleResetCode.bind(this)}
+                            handleResetExecution={this.handleResetExecution.bind(this)}
                             handleResetToDefaulftCode={this.handleResetToDefaulftCode.bind(this)}
                             handleIntervalPause={this.handleIntervalPause.bind(this)}
                             handleStep={this.handleStep.bind(this)}
+                            pauseCode={this.state.pauseCode}
                         />
                     </div>
                 </div>
@@ -340,7 +354,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 <LevelModal
                     currentlevel={this.state.currentLevel}
                     handleLevelChange={this.handleLevelChange.bind(this)}
-                    handleResetCode={this.handleResetCode.bind(this)}
+                    handleResetExecution={this.handleResetExecution.bind(this)}
                     toggleModal={this.toggleModal.bind(this)}
                 />}
         </>

@@ -17,6 +17,7 @@ if (process.env.NODE_ENV === 'development') {
         _mongoClientPromise?: Promise<MongoClient>
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     if (!globalWithMongo._mongoClientPromise) {
         client = new MongoClient(uri, options)
         globalWithMongo._mongoClientPromise = client.connect()
