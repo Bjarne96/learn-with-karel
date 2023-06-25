@@ -360,9 +360,9 @@ putBeeper();`,
         name: "Walk Across - Off-by-one Loops",
         explanation: `Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt. Manchmal möchte man aber auch einen Beeper aufheben, ohne sich danach zu bewegen. Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, respektive bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. (Vielleicht lohnt es sich, deinen Code aus dem vorherigen Level kopieren, um darauf aufzubauen.)`,
         code: `for (let i = 0; i < 5; i++) {
-pickBeeper();
-move();
-        }`,
+    pickBeeper();
+    move();
+}`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -465,6 +465,34 @@ pickBeeper();`,
                 beepers: [{ x: 4, y: 1, count: 1 }],
                 solutions: [{ x: 5, y: 1, count: 1 }],
                 karel: { x: 3, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        name: "Clean up 0 - Different Conditions, Using If",
+        explanation: `Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. Mit beeperIsPresent() können wir abfragen, ob Pfeili sich auf einem Beeper befindet. Es wird genauso in die runden Klammern nach dem if() eingesetzt, wie frontIsBlocked()`,
+        code: ``,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [],
+                solutions: [],
+                karel: { x: 2, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
@@ -747,7 +775,7 @@ stepAmount = 5; //<- Wert zuweisen ("mit Inhalt füllen")
 move();
 pickBeeper();
 
-for (let i = 0; i < stepAmount; i++) {
+for (let i = 0; i < stepAmount; i++) { //<- Hier wird der gespeicherte Wert genutzt
     move();
 }
 
@@ -847,7 +875,7 @@ for (let i = 0; i < schrittAnzahl; i++) {
 }
 
 pickBeeper();
-schrittAnzahl = 4; //<-hier wird die Variable neu zugewiesen
+schrittAnzahl = 4; //<-hier wird der Variable ein neuer Wert zugewiesen
 
 for (let i = 0; i < schrittAnzahl; i++) {
     move();
