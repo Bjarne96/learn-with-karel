@@ -148,13 +148,14 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    executeCommand(command: string, line: number) {
+    executeCommand(command: string, line: number, param: string) {
         //Max snapshot length to protect the browser from crashing
         if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
         if (typeof this[command as keyof this] == undefined) return
         let val: boolean = null
         // MOVEMENT COMMANDS
         if (command == "move") this.move()
+        if (command == "moveAmount") this.moveAmount(line, Number(param))
         if (command == "turnRight") this.turnRight()
         if (command == "turnLeft") this.turnLeft()
         if (command == "turnAround") this.turnAround()
@@ -230,7 +231,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     executeCode() {
         let commandList = ""
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = (line) => this.executeCommand('" + this.props.commands[i] + "', line);"
+            commandList = commandList + "\n" + this.props.commands[i] + " = (line, param) => this.executeCommand('" + this.props.commands[i] + "', line, param);"
         }
         // Commands
         let move
@@ -257,15 +258,37 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let notFacingSouth
         let facingWest
         let notFacingWest
+        let moveAmount
+        let isWorld1
+        let isWorld2
+        let isWorld
         //Binds all available functions
         eval(commandList)
+
+        function getCommandParams(string: string): string | null {
+            const paramterFunctions = ["moveAmount"]
+            const regexPattern = new RegExp(paramterFunctions.join('|'), 'g');
+            const matches = string.match(regexPattern);
+            if (matches != null) {
+                const regex = new RegExp(`${matches[0]}\\s*\\(([^\\)]+)\\)`, 'i');
+                const match = regex.exec(string);
+                if (match && match.length >= 2) {
+                    const parameters = match[1].split(',').map(param => param.trim())
+                    return parameters[0]
+                } else {
+                    throw `The command ${matches[0]} needs a paramter.`
+                }
+            } else return null
+        }
+
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/)
             let lineIndexedCodeString = ""
-            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\(\\)`, 'g')
+            const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\([^)]*\\)`, 'g')
             for (let i = 0; i < codeArr.length; i++) {
-                lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()})`)
+                const param = getCommandParams(codeArr[i])
+                lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
             //Execute user code from string
             eval(lineIndexedCodeString)
@@ -405,8 +428,29 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const noTopWall = (nextWall & this.topWall) == 0
         return noBottomWall && noTopWall
     }
+    /* CUSTOM COMMANDS */
+
+    isWorld1() {
+        if (this.props.worldNumber == 1) return true
+        return false
+    }
+
+    isWorld2() {
+        if (this.props.worldNumber == 2) return true
+        return false
+    }
+
+    isWorld() {
+        return this.props.worldNumber
+    }
 
     /* MOVEMENT COMMANDS */
+
+    moveAmount(line: number, steps: number) {
+        for (let i = 1; i <= steps; i++) {
+            this.executeCommand("move", line, null)
+        }
+    }
 
     putBeeper() {
         if (this.karel.beeperCount > 0) {

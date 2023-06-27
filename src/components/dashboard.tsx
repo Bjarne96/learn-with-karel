@@ -216,7 +216,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
-    handleResetExecution() { console.log('reset'); this.setState(this.getResetRunningCodeObject.bind(this)) }
+    handleResetExecution() { this.setState(this.getResetRunningCodeObject.bind(this)) }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
@@ -261,15 +261,22 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
 
     updateLogAndLine(entry: string, line: number, type: logType, worldNumber: number) {
-        //Work around to highlight the same line again
+        // Work around to highlight the same line again
         if (this.state.activeLine == line) {
-            const lineLater = line
-            // Highlights the line to a later point
-            setTimeout(() => this.setState({ activeLine: lineLater }), 16)
-            //Sets the line to 0 to remove highlighting
-            line = 0
+            this.setState({ activeLine: 0 }, () => {
+                setTimeout(() => {
+                    // Update the necessary log
+                    if (entry == undefined) return
+                    let log = this.state.firstLog
+                    if (worldNumber == 2) log = this.state.secondLog
+                    log.push({ line: line, message: entry, type: type })
+                    if (worldNumber == 1) this.setState({ firstLog: log, activeLine: line })
+                    if (worldNumber == 2) this.setState({ secondLog: log, activeLine: line })
+                }, (this.state.interval / 2));
+            })
+            return
         }
-        //Update the necessary log
+        // Update the necessary log
         if (entry == undefined) return
         let log = this.state.firstLog
         if (worldNumber == 2) log = this.state.secondLog
