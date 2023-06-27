@@ -9,6 +9,38 @@ export interface IUnusedLevel {
 }
 export const levels: Array<IUnusedLevel> = [
     {
+        name: "Obtain Artifact - Defining functions 2",
+        explanation: `Versuche die Funktion zu vervollständigen.`,
+        code: `function walkHalfCircle(){
+move();
+//Hier weiteren Code einfügen...
+}
+          
+walkHalfCircle();
+pickBeeper();
+walkHalfCircle();
+putBeeper();`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 4, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 5, y: 3, count: 1 }],
+                solutions: [{ x: 2, y: 3, count: 1 }],
+                karel: { x: 2, y: 3, direction: 3, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+
         code: "",
         name: "Get two sticks - Reuse code with functions 2",
         worlds: [
@@ -198,67 +230,7 @@ putBeeper();`,
     {
         name: "T-Crossing - Seeing Variables",
         explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Hier wird eine Variable mit dem Namen "istOberesLevel" erstellt, der Name ist frei wählbar.`,
-        code: `//Manchmal müssen wir uns eine Information merken,
-//um diese im späteren Verlauf des Programms wieder
-//abzurufen. Zu diesem zweck können wir Variablen
-//nutzen. Variablen sind zunächst wie ein leerer
-//Container, den wir mit einem Namen versehen und
-//nach belieben mit Inhalt füllen können. Hier wird
-//eine Variable mit dem Namen "istOberesLevel" erstellt, 
-//der Name ist frei wählbar.
-//Hier haben wir das obere Level für Pfeili extra
-//mit einem Beeper markiert, damit er es vom unteren
-//unterscheiden kann.
-
-var istOberesLevel;
-istOberesLevel = beeperIsPresent(); //<- Die Variable wird entweder mit dem Wert "true" oder "false" gefüllt.
-move();
-move();
-move();
-move();
-move();
-if(istOberesLevel){ //<- Hier wird der gespeicherte Wert abgefragt.
-    turnLeft();
-}
-else{
-    turnRight();
-}
-move();
-putBeeper();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
-        worlds: [
-            {
-                walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [{ x: 0, y: 1, count: 1 }],
-                solutions: [{ x: 5, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-            {
-                walls: [
-                    [2, 2, 2, 2, 6, 12, 0],
-                    [2, 2, 2, 2, 2, 4, 0],
-                    [0, 0, 0, 0, 4, 6, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-                beepers: [],
-                solutions: [{ x: 5, y: 2, count: 1 }],
-                karel: { x: 0, y: 1, direction: 0, isSuper: true, beeperCount: 1 }
-            },
-        ],
-    },
-    {
-        name: "T-Crossing - Using Variables",
-        explanation: ``,
-        code: `//Versuche nun selbst, eine Variable zu nutzen.
-//Zur Erinnerung, so wird eine Variable verwendet:
-//var meineVariable;
-//meineVariable = zugewiesenerWert;
-//if(meineVariable){...`,
+        code: ``,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "beeperIsPresent"],
         worlds: [
             {
