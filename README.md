@@ -9,11 +9,13 @@
     Run "npm run build" to test your changes before you push / merge them on main (mainly for es lint errors)
 
 # Ideas
-     - Users can save custom functions (across levels)
+    - Users can save custom functions (across levels)
+
 # Tickets
 PRIO
     - 
 LOW PRIO
     - user has "geführtes lernen tag"
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
+    - window location history for selects
     

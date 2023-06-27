@@ -63,8 +63,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 pauseCode: false,
                 interval: 0,
                 showLevelCompletedModal: false,
-                firstLog: [] as LogEntry[],
-                secondLog: [] as LogEntry[],
+                firstLog: [],
+                secondLog: [],
                 activeLine: 0,
                 activeTab: 4,
                 done: done,
@@ -77,7 +77,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     handleStep() {
-        this.setState({ step: this.state.step + 1, runningCode: true, pauseCode: true, activeTab: this.state.worldCompletedCounter + 1 })
+        this.setState({
+            step: this.state.step + 1,
+            runningCode: true,
+            pauseCode: true,
+            activeTab: this.state.worldCompletedCounter + 1
+        })
     }
 
     onCodeChange(code: string) {
