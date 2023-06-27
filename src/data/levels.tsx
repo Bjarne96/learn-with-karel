@@ -398,8 +398,20 @@ putBeeper();`,
     {
         name: "Corridors Zig Zag - If/Else",
         explanation: ``,
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        code: `for (let i = 0; i < 2; i++) {
+    move();
+    if(leftIsClear())
+    {
+        turnLeft();
+    }
+    else
+    {
+        turnRight();
+    }
+    move();
+    pickBeeper();
+}`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear"],
         worlds: [
             {
                 walls: [
@@ -407,19 +419,19 @@ putBeeper();`,
                     [0, 3, 12, 0, 9, 6, 0],
                     [0, 0, 3, 10, 6, 0, 0],
                 ],
-                beepers: [{ x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 4, y: 0, count: 1 },],
+                beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 0, count: 1 }],
                 solutions: [],
-                karel: { x: 0, y: 2, direction: 3, isSuper: false, beeperCount: 0 }
+                karel: { x: 0, y: 0, direction: 4, isSuper: false, beeperCount: 0 }
             },
             {
                 walls: [
-                    [0, 0, 3, 10, 6, 0, 0],
-                    [0, 12, 3, 0, 6, 9, 0],
-                    [11, 12, 0, 0, 9, 9, 14],
+                    [0, 0, 9, 10, 12, 0, 0],
+                    [0, 9, 6, 0, 3, 12, 0],
+                    [11, 6, 0, 0, 0, 3, 14],
                 ],
-                beepers: [{ x: 0, y: 2, count: 1 }, { x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
+                beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 0, count: 1 }, { x: 4, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 2, count: 1 }],
                 solutions: [],
-                karel: { x: 0, y: 0, direction: 3, isSuper: false, beeperCount: 0 }
+                karel: { x: 0, y: 2, direction: 4, isSuper: false, beeperCount: 0 }
             },
         ],
     },
