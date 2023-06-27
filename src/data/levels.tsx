@@ -366,6 +366,36 @@ putBeeper();`,
         ],
     },
     {
+        name: "Corridors - If",
+        explanation: ``,
+        code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 13],
+                    [0, 0, 0, 0, 5],
+                    [13, 0, 0, 0, 5],
+                    [3, 10, 10, 10, 6],
+                ],
+                beepers: [{ x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 4, y: 0, count: 1 },],
+                solutions: [],
+                karel: { x: 0, y: 2, direction: 3, isSuper: false, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [13, 0, 0, 0, 0],
+                    [5, 0, 0, 0, 0],
+                    [5, 0, 0, 0, 13],
+                    [3, 10, 10, 10, 6],
+                ],
+                beepers: [{ x: 0, y: 2, count: 1 }, { x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
+                solutions: [],
+                karel: { x: 0, y: 0, direction: 3, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
         name: "Corner - Seeing If",
         explanation: `<b>If-Statements</b><br>
         wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
