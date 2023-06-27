@@ -366,7 +366,7 @@ putBeeper();`,
         ],
     },
     {
-        name: "Corridors - If",
+        name: "Corridors Leftturn - If",
         explanation: ``,
         code: ``,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
@@ -388,6 +388,34 @@ putBeeper();`,
                     [5, 0, 0, 0, 0],
                     [5, 0, 0, 0, 13],
                     [3, 10, 10, 10, 6],
+                ],
+                beepers: [{ x: 0, y: 2, count: 1 }, { x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
+                solutions: [],
+                karel: { x: 0, y: 0, direction: 3, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Corridors Zig Zag - If/Else",
+        explanation: ``,
+        code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [11, 12, 0, 0, 0, 9, 14],
+                    [0, 3, 12, 0, 9, 6, 0],
+                    [0, 0, 3, 10, 6, 0, 0],
+                ],
+                beepers: [{ x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 4, y: 0, count: 1 },],
+                solutions: [],
+                karel: { x: 0, y: 2, direction: 3, isSuper: false, beeperCount: 0 }
+            },
+            {
+                walls: [
+                    [0, 0, 3, 10, 6, 0, 0],
+                    [0, 12, 3, 0, 6, 9, 0],
+                    [11, 12, 0, 0, 9, 9, 14],
                 ],
                 beepers: [{ x: 0, y: 2, count: 1 }, { x: 1, y: 3, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
                 solutions: [],
