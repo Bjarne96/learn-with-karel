@@ -1,7 +1,7 @@
 import type { ILevel } from "../types/karel";
 export const levels: Array<ILevel> = [
     {
-        name: "Start - Functions",
+        name: "Start - Commands & UI",
         explanation: `<b>Willkommen beim Learnlab!</b><br>
         Dies ist ein Spiel, mit dem Du Programmieren lernen kannst. Die verwendete Programmiersprache trägt den Namen JavaScript, aber die erlernten Konzepte finden sich auch in allen anderen Programmiersprachen wieder.<br><br>
         
@@ -9,46 +9,91 @@ export const levels: Array<ILevel> = [
         In der Mitte siehst du ein großes Textfeld, in das Du Anweisungen schreiben kannst.<br><br>
         
         <b>Das Spielfeld</b><br>
-        Rechts davon ist ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf den Play-Knopf unter dem Spielfeld klickst, dann wird Pfeili die Anweisungen im Textfeld ausführen.<br><br>
+        Rechts davon ist ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf den Play-Knopf unter dem Spielfeld klickst, dann wird Pfeili die Anweisungen im Textfeld ausführen und sich bewegen und Dinge aufheben oder ablegen.<br><br>
         
         <b>Das Ziel</b><br>
-        Jedes Level ist ein Puzzle. Um es zu lösen, musst du Anweisungen in das Textfeld schreiben und diese danach ausführen. Dabei müssen zwei Bedingungen erfüllt werden:<br> 
-        1. Alle Beeper außerhalb von Zielzonen (Die roten Rauten) müssen aufgesammelt werden.<br>
-        2. In allen markierten Zielzonen müssen Beeper abgelegt werden (diese erscheinen dann als grüne Rauten).<br><br>
+        Die Rauten die du im Spielfeld siehst, heißen Beeper. Deine Aufgabe besteht darin, Beeper an bestimmten Stellen aufzusammeln oder abzulegen:<br> 
+        1. Alle roten Beeper müssen aufgesammelt werden. Alle Beeper außerhalb der Zielzonen erscheinen als rot.<br>
+        2. In allen Zielzonen (= farblose Rauten) müssen Beeper abgelegt werden. Diese erscheinen dann grün.<br><br>
+
+        <b>Zurücksetzen</b><br>
+        Um ein Level auf den Startzustand zurückzusetzen drücke einfach auf den kreisförmigen Pfeil unter dem Spielfeld. Alles kann rückgängig gemacht werden, also probiere einfach drauf los. Es gibt zwei Bedingungen die dazu führen, dass die Ausführung des Codes gestoppt wird und du das level zurücksetzen musst:<br>
+        <em>1. Ungültiger Befehl:</em> Du versuchst du einen Befehl auszuführen, der in dieser Situation nicht ausführbar ist (zum Beispiel wenn du versuchst durch eine Wand zu laufen).<br>
+        <em>2. Ziel nicht erreicht:</em> Alle Befehle wurden ausgeführt, ohne alle Beeper korrekt zu platzieren.<br><br>
         
         <b>Los geht's</b><br>
-        In diesem Fall wurden die korrekten Anweisungen bereits eingefügt. Drücke auf den Play-Knopf und sieh was passiert.<br><br>
-
-        Nun musst du selbst Befehle einfügen, um den roten Beeper aufzuheben und ihn in der Zielzone abzulegen. Links siehst du die verfügbaren Befehle. Du kannst diese entweder per Hand weiter unten in dieses Textfeld schreiben, oder sie links in der Liste anklicken, um sie direkt einzufügen.<br><br>
+        Kopiere die folgenden Befehle in das Textfeld. Drücke dann auf den Play-Knopf und sieh was passiert:<br><br>
+        
+        move();<br>
+        pickBeeper();<br>
+        move();<br>
+        putBeeper();<br>`,
+        code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 2, count: 1 },],
+                solutions: [{ x: 3, y: 2, count: 1 },],
+                karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Start - Commands & UI",
+        explanation: `Weiter unten findest du eine vollständige Beschreibung der Benutzeroberfläche. Wenn du fertig gelesen hast, dann versuche das Level zu lösen, indem du Befehle in das Textfeld schreibst und dann auf den Play-Knopf drückst.<br><br>
 
         <b>Die Befehle</b><br>
-        <em>move()</em> Pfeili bewegt sich ein Feld vorwärts
-        in aktueller Blickrichtung.<br>
-        <em>turnLeft()</em> Pfeili dreht sich 90° gegen den
-        Uhrzeigersinn.<br>
+        Die zur Verfügung stehenden Befehle können sich in jedem Level ändern. Fast immer solltest du allerdings folgende Befehle zur Verfügung haben:<br>
+        <em>move()</em> Pfeili bewegt sich in aktueller Blickrichtung ein Feld vorwärts (sofern keine Wand im Weg ist).<br>
+        <em>turnLeft()</em> Pfeili dreht sich 90° gegen den Uhrzeigersinn.<br>
         <em>putBeeper()</em> Pfeili legt einen Beeper auf dem Feld ab, auf dem er sich momentan befindet (sofern Pfeili noch genügend Beeper im Rucksack hat).<br>
-        <em>pickBeeper()</em> Pfeili hebt einen Beeper  vom momentanen Feld auf (sofern sich dort einer befindet).<br><br>
-
-        <b>Fehlschlag</b><br>
-        <em>Ungültiger Befehl:</em> Versuchst du einen Befehl auszuführen, der in dieser Situation nicht ausführbar ist (zum Beispiel wenn du versuchst, durch eine Wand zu laufen), wird die Ausführung des Programms abbrechen. Dann setzt du das Level zurück auf Anfang und versuchst es erneut.<br>
-        <em>Ziel nicht erreicht:</em> Wenn alle Befehle ausgeführt worden sind und das Ziel des Levels noch nicht erreicht wurde, dann kannst du das Level genauso auf Anfang zurücksetzen.<br><br>
-
-        <b>Die linke Menüleiste</b><br>
+        <em>pickBeeper()</em> Pfeili hebt einen Beeper vom Feld auf, auf dem Pfeili momentan steht (sofern sich dort ein Beeper befindet).<br><br>
+        
+        <b>Erklärungstext & Command-Log</b><br>
         Ganz links am Rand ist eine vertikale Leiste mit drei Menüpunkten:<br>
         1. <em>Der Erklärungstext.</em> Hier befindest Du dich gerade.<br>
         2. <em>Die verfügbaren Befehle.</em> Dies sind die grundlegenden Befehle, welche für Pfeili zur Verfügung stehen. Diese können zwischen den Leveln variieren.<br>
         3. <em>Der Command-Log.</em> Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es ein Fehler mit dem Programm gibt, dann wird dieser hier erscheinen.<br><br>
         
-        <b>Die Knöpfe unter dem Spielfeld</b><br>
-        1. <em>Wiedergabegeschwindigkeiten</em>: Es gibt insgesamt vier Wiedergabegeschwindigkeiten (wenn man den Pause-Knopf mitrechnet).<br>
+        <b>Geschwindigkeit & Zurücksetzen</b><br>
+        Unter dem Spielfeld gibt es eine ganze Reihe von Knöpfen:<br>
+        1. <em>Wiedergabegeschwindigkeiten</em>: Es gibt insgesamt vier Wiedergabegeschwindigkeiten. Ein Pfeil, zwei Pfeile, drei Pfeile und Pause.<br>
         2. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br>
-        3. <em>Zurücksetzen</em>: Der Knopf mit dem kreisförmigen Pfeil setzt das Level in den Ausgangszustand zurück.
+        3. <em>Zurücksetzen</em>: Der Knopf mit dem kreisförmigen Pfeil setzt das Level in den Ausgangszustand zurück.<br>
         4. <em>Fortschrittsanzeige</em>: Das Symbol ganz rechts in der Reihe von Knöpfen kann man nicht drücken. Es zeigt Dir nur an, ob du das momentan ausgewählte Level schon abgeschlossen hast.<br><br>
         
-        <b>Die Knöpfe über dem Spielfeld</b><br>
-        Über dem Spielfeld wird der Name des Aktuellen Levels angezeigt. Die Kannst die Pfeile links und rechts des Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>      
-        
-        Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>
+        <b>Level-Selektion</b><br>
+        Über dem Spielfeld wird der Name des Aktuellen Levels angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
+        code:
+            ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 },],
+                solutions: [{ x: 3, y: 2, count: 1 }, { x: 5, y: 2, count: 1 },],
+                karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Start - Functions",
+        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>
 
         Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
         
@@ -66,13 +111,7 @@ export const levels: Array<ILevel> = [
         <b>Tasten-Komination für die {}-Klammern</b><br>
         Windows: AltGr + 7 / AltGr + 0<br>
         Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
-        code:
-            `turnRight();
-move();
-pickBeeper();
-turnRight();
-move();
-putBeeper();`,
+        code: ``,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -83,12 +122,74 @@ putBeeper();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
                 ],
                 beepers: [{ x: 2, y: 2, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
                 solutions: [{ x: 3, y: 2, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 5, y: 2, count: 1 },],
                 karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Beeper Line - Loops",
+        explanation: ``,
+        code: `for (let i = 0; i < 5; i++) {
+    pickBeeper();
+    move();
+}`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 0, y: 2, count: 1 },],
+                solutions: [{ x: 7, y: 3, count: 1 },],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Beeper Line - Loops",
+        explanation: ``,
+        code: `for (let i = 0; i < 5; i++) {
+    pickBeeper();
+    move();
+}`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                beepers: [{ x: 0, y: 2, count: 1 },
+                { x: 1, y: 2, count: 1 },
+                { x: 2, y: 2, count: 1 },
+                { x: 3, y: 2, count: 1 },
+                { x: 4, y: 2, count: 1 },
+                { x: 5, y: 2, count: 1 },
+                { x: 6, y: 2, count: 1 },],
+                solutions: [{ x: 1, y: 3, count: 1 },
+                { x: 2, y: 3, count: 1 },
+                { x: 3, y: 3, count: 1 },
+                { x: 4, y: 3, count: 1 },
+                { x: 5, y: 3, count: 1 },
+                { x: 6, y: 3, count: 1 },
+                { x: 7, y: 3, count: 1 },],
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
             },
         ],
     },
