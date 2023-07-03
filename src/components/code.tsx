@@ -30,13 +30,6 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
                 }, 16)
 
             }
-            // TODO: Check if highlighted lines stay in some edge cases
-            // else if (activeLine == 0) {
-            //     const highlightedLine = document.getElementsByClassName("highlighted-line")[0]
-            //     if (highlightedLine != undefined) {
-            //         highlightedLine.classList.remove("highlighted-line")
-            //     }
-            // }
         } catch (e) { console.log('highlighted line error', e); }
 
     }, [runningCode, code, activeLine])
