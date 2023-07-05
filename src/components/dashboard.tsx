@@ -313,7 +313,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 code={this.state.code}
                                 onCodeChange={this.onCodeChange.bind(this)}
                                 runningCode={this.state.runningCode}
-                                activeLine={this.state.activeLine}
+                                activeLineProp={this.state.activeLine}
                             />
                         }
                     </div>

@@ -98,7 +98,7 @@ export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
     runningCode: boolean
-    activeLine: number
+    activeLineProp: number
 }
 export interface ILogProps {
     log: Log
