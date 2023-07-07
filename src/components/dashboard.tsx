@@ -57,8 +57,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
+                worldSuccessfullyCompletedCounter: 0,
                 worldCompletedCounter: 0,
                 worldCounter: levels[lastStage].worlds.length,
+                executionSuccessfullyCompleted: false,
                 executionCompleted: false,
                 pauseCode: false,
                 interval: 0,
@@ -81,7 +83,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             step: this.state.step + 1,
             runningCode: true,
             pauseCode: true,
-            activeTab: this.state.worldCompletedCounter + 1
+            activeTab: this.state.worldSuccessfullyCompletedCounter + 1
         })
     }
 
@@ -194,13 +196,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         // When the last execution is completed the state resets and is then set the to running
         if (this.state.executionCompleted) {
             return this.setState(this.getResetRunningCodeObject(), () =>
-                this.setState({ interval: interval, runningCode: true, activeTab: 1 })
+                this.setState({ interval: interval, runningCode: true })
             )
         }
         // The execution gets unpaused
         if (this.state.pauseCode) return this.setState({ pauseCode: false, interval: interval })
         // Execute the code
-        this.setState({ runningCode: true, interval: interval, activeTab: 1 })
+        this.setState({ runningCode: true, interval: interval })
     }
 
     getResetRunningCodeObject(): ResetStateObject {
@@ -209,8 +211,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             secondLog: [] as LogEntry[],
             pauseCode: false,
             runningCode: false,
+            executionSuccessfullyCompleted: false,
             executionCompleted: false,
             activeLine: 0,
+            worldSuccessfullyCompletedCounter: 0,
             worldCompletedCounter: 0,
             step: 0
         }
@@ -225,23 +229,26 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     completedLevel(completed: boolean) {
+        let worldSuccessfullyCompletedCounter = this.state.worldSuccessfullyCompletedCounter
         let worldCompletedCounter = this.state.worldCompletedCounter
-        //If the level was already completed at some point before,
-        // there is only to the executionCompleted state has to be set
-        if ((this.state.done != "" && this.state.worldCounter == 1)
-            || (this.state.worldCounter == 2 && completed == false)) {
-            return this.setState({ executionCompleted: true })
-        }
-        //Check if all worlds have completed
+        let executionCompleted = false
+        // If the level was already completed at some point before, so
+        // there is only the executionSuccessfullyCompleted state that has to be set
+        if ((this.state.done != "" && this.state.worldCounter == 1)) return this.setState({ executionSuccessfullyCompleted: true })
+        // Check if there are multiple worlds and count up if one of the is finished
+        if (this.state.worldCounter > 1) worldCompletedCounter++
+        // Check if all worlds have completed
         if (this.state.worldCounter > 1 && completed) {
-            //Counts up, because one world was completed
-            worldCompletedCounter++
-            //Resets when all where completed successfully
-            if (this.state.worldCounter == worldCompletedCounter) worldCompletedCounter = (this.state.worldCounter - 1)
-            else completed = false //Sets to false, when they didnt match the count
+            // Counts up, because one world was completed
+            worldSuccessfullyCompletedCounter++
+            // Resets when all where completed successfully
+            if (this.state.worldCounter == worldSuccessfullyCompletedCounter) worldSuccessfullyCompletedCounter = (this.state.worldCounter - 1)
+            else completed = false // Sets to false, when they didn't match the count
         }
+        // Was the level executed till the end, then the execution is completed
+        if (this.state.worldCounter == worldCompletedCounter) executionCompleted = true
         let done = this.state.done
-        //Handle first time completed and saves the code and the done date to database
+        // Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
             done = new Date().toString()
             void this.handleSaveLevel({ done: done, code: this.state.code }, true)
@@ -250,11 +257,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (this.state.done == "" && completed) showModal = true
         this.setState({
             done: done,
-            executionCompleted: completed,
+            executionSuccessfullyCompleted: completed,
+            executionCompleted: executionCompleted,
             showLevelCompletedModal: showModal,
+            worldSuccessfullyCompletedCounter: worldSuccessfullyCompletedCounter,
             worldCompletedCounter: worldCompletedCounter,
-            activeTab: worldCompletedCounter + 1,
-            step: 0
+            step: 0,
+            activeLine: 0
         })
     }
 
@@ -272,7 +281,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     log.push({ line: line, message: entry, type: type })
                     if (worldNumber == 1) this.setState({ firstLog: log, activeLine: line })
                     if (worldNumber == 2) this.setState({ secondLog: log, activeLine: line })
-                }, (this.state.interval / 2));
+                }, (32));
             })
             return
         }
@@ -314,6 +323,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 onCodeChange={this.onCodeChange.bind(this)}
                                 runningCode={this.state.runningCode}
                                 activeLineProp={this.state.activeLine}
+                                executionCompleted={this.state.executionCompleted}
                             />
                         }
                     </div>
@@ -326,6 +336,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             <World
                                 key={i}
                                 worldNumber={i + 1}
+                                worldSuccessfullyCompletedCounter={this.state.worldSuccessfullyCompletedCounter}
                                 worldCompletedCounter={this.state.worldCompletedCounter}
                                 currentLevel={this.state.currentLevel}
                                 code={this.state.code}
