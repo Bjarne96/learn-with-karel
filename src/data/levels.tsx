@@ -63,14 +63,13 @@ export const levels: Array<ILevel> = [
         2. <em>Die verfügbaren Befehle.</em> Dies sind die grundlegenden Befehle, welche für Pfeili zur Verfügung stehen. Diese können zwischen den Leveln variieren.<br>
         3. <em>Der Command-Log.</em> Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es ein Fehler mit dem Programm gibt, dann wird dieser hier erscheinen.<br><br>
         
-        <b>Geschwindigkeit & Zurücksetzen</b><br>
-        Unter dem Spielfeld gibt es eine ganze Reihe von Knöpfen:<br>
-        1. <em>Wiedergabegeschwindigkeiten</em>: Es gibt insgesamt vier Wiedergabegeschwindigkeiten. Ein Pfeil, zwei Pfeile, drei Pfeile und Pause.<br>
-        2. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br>
-        3. <em>Zurücksetzen</em>: Der Knopf mit dem kreisförmigen Pfeil setzt das Level in den Ausgangszustand zurück.<br>
-        4. <em>Fortschrittsanzeige</em>: Das Symbol ganz rechts in der Reihe von Knöpfen kann man nicht drücken. Es zeigt Dir nur an, ob du das momentan ausgewählte Level schon abgeschlossen hast.<br><br>
+        <b>Wiedergabegeschwindigkeit Einstellen</b><br>
+        Unter dem Spielfeld, gibt es vier verschiedene Pfeil-Icons und einen Pause-Knopf. Mit diesen Kannst du einstellen, in welchem Tempo der Code ausgeführt wird.<br>
+        1. <em>Wiedergabegeschwindigkeiten</em>: Es gibt insgesamt drei Wiedergabegeschwindigkeiten. Ein Pfeil, zwei Pfeile, drei Pfeile.<br>
+        2. <em>Pause</em>: Damit pausierst du die Wiedergabe, ohne sie ganz zu stoppen.<br>
+        2. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br><br>
         
-        <b>Level-Selektion</b><br>
+        <b>Level überspringen oder das vorherige Level nochmal anschauen</b><br>
         Über dem Spielfeld wird der Name des Aktuellen Levels angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
         code:
             ``,
@@ -93,20 +92,43 @@ export const levels: Array<ILevel> = [
     },
     {
         name: "Start - Functions",
-        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>
-
-        Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
-        
-        <b>Anmerkungen im Code</b><br>
-        Manchmal möchte man Notizen direkt im Code schreiben, die aber bei der Ausführung ignoriert werden sollen. In diesem Fall schreibt man // und sämtlicher Code der in der selben Zeile dahinter steht, wird ausgegraut angezeigt und in der Ausführung des Codes ignoriert.<br><br>
-        
-        Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat.
-        Versuche nun die Funktion "turnRight" selbst zu definieren.<br><br>
-        
-        <b>Aufbau einer Funktion</b><br>
-        function deinFunktionsName(){<br>
-        dein Code für die Funktion...<br>
+        explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>`,
+        code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }],
+                solutions: [{ x: 4, y: 1, count: 1 }],
+                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Start - Functions",
+        explanation: `Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
+               
+                
+        <b>Definieren einer Funktion</b><br>
+        function turnRight(){<br>
+        turnLeft();<br>
+        turnLeft();<br>
+        turnLeft();<br>
         }<br><br>
+
+        So wird eine Funktion definiert. "turnRight" ist in diesem Fall der Name der Funktion, der frei wählbar ist. Zwischen die geschwungenen Klammer "{}" können wir so viele andere Befehle schreiben wie wir wollen. Wenn man eine Funktion definiert, passiert dadurch allerdings noch nichts. Dafür müssen wir die Funktion noch aufrufen.<br><br>
+
+        <b>Aufrufen einer Funktion</b><br>
+        turnRight();<br><br>
+
+        Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. Das praktische: jetzt können wir die Funktion so häufig wie wir wollen aufrufen und müssen jedes Mal nur noch eine Zeile statt drei Zeilen schreiben. Wir müssen nur darauf achten, den gleichen Namen wie in der vorher definierten Funktion zu verwenden. In diesem Fall also "turnRight".<br><br>
+        
 
         <b>Tasten-Komination für die {}-Klammern</b><br>
         Windows: AltGr + 7 / AltGr + 0<br>
@@ -116,26 +138,65 @@ export const levels: Array<ILevel> = [
         worlds: [
             {
                 walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 4, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
                 ],
-                beepers: [{ x: 2, y: 2, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 4, y: 2, count: 1 },],
-                solutions: [{ x: 3, y: 2, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 5, y: 2, count: 1 },],
-                karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 }
+                beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
+                solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
+                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 }
+            },
+        ],
+    },
+    {
+        name: "Start - Functions",
+        explanation: `Wie gesagt kann man so viele Befehle in einer Funktion ausführen wie man möchte. Man kann also vor oder nach den drei "turnLeft" Befehlen z.B. auch "move" oder "pickBeeper" aufrufen. Wenn du deine Funktion richtig anpasst, dann kannst du das ganze Level nach der Definition deiner Funktion mit nur drei Aufrufen der Funktion lösen. Aber natürlich kannst du das Level lösen wie du möchtest.<br><br>
+               
+        <b>Definieren einer Funktion</b><br>
+        function turnRight(){<br>
+        turnLeft();<br>
+        turnLeft();<br>
+        turnLeft();<br>
+        }<br><br>
+
+        <b>Aufrufen einer Funktion</b><br>
+        turnRight();<br><br>
+
+        <b>Tasten-Komination für die {}-Klammern</b><br>
+        Windows: AltGr + 7 / AltGr + 0<br>
+        Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
+        code: ``,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
+                ],
+                beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
+                solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
+                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 }
             },
         ],
     },
     {
         name: "Beeper Line - Loops",
-        explanation: ``,
-        code: `for (let i = 0; i < 5; i++) {
-    pickBeeper();
+        explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf den Play-Knopf und sieh was passiert.<br></br>
+        
+        <b>Anzahl der Schleifen-Durchläufe Ändern</b><br>
+        Wenn du die "5" in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern.<br><br>
+
+        <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>`,
+        code: `pickBeeper();
+for (let i = 0; i < 5; i++) {
     move();
-}`,
+}
+putBeeper();`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -157,7 +218,19 @@ export const levels: Array<ILevel> = [
     },
     {
         name: "Beeper Line - Loops",
-        explanation: ``,
+        explanation: `Innerhalb der Geschweiften Klammern "{}" der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
+        
+        Unter das "move()" könntest du also z.B. noch "pickBeeper()" schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>
+        
+        <b>Aufbau einer For-Loop</b><br>
+        for (let zählIndex = 0; zählIndex < anzahlDerDurchläufe; zählIndex++) {<br>
+            einBefehl();<br>
+            zweiterBefehl();<br>
+            beliebigVieleBefehle();<br>
+        }<br><br>
+        
+        <em>"zählIndex"</em> kann durch einen beliebigen Namen (aus Buchstaben) ersetzt werden. Meistens einfach "i". Hiermit merkt sich die Schleife, wie häufig sie schon durchgelaufen ist.<br>
+        <em>"anzahlDerDurchläufe"</em> wird durch eine Zahl ersetzt, die festlegt, wie häufig die Schleife durchgeführt wird, also zum Beispiel "5".<br><br>`,
         code: `for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
@@ -195,30 +268,11 @@ export const levels: Array<ILevel> = [
     },
     {
         name: "Beeper Line - Loops",
-        explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf "Run Code" und sieh was passiert.<br></br>
+        explanation: `Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt.<br><br>
         
-        <b>Jetzt versuche es selbst</b><br>
-        Kannst du die Schleife so anpassen, dass Pfeili zur anderen Seite des Levels läuft? Wenn du dir nicht sicher bist, dann drückenochmal auf "Run Code" und sieh, ob dir ein Zusammenhang zwischen dem Code und Pfeilis Bewegung auffällt.<br><br>
-
-        <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>
+        Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Wenn Pfeili ganz rechts angekommen ist, muss er z.B. noch einen Beeper aufheben ohne sich danach zu bewegen (Da er sonst gegen den Rand des Levels läuft).<br><br>
         
-        <b>Ich verstehe nur Bahnhof.</b><br>
-        Es ist völlig normal, wenn du an dieser Stelle noch nicht verstehst, was die ganzen Einzelteile in der Schleife bedeuten. Probiere einfach erstmal etwas herum. Schleifen werden später noch in mehr Tiefe erklärt.<br><br>
-        
-        <b>Aufbau einer For-Loop</b><br>
-        <em>"zählIndex"</em> kann durch einen beliebigen Namen (aus Buchstaben) ersetzt werden. Meistens einfach "i".<br>
-        <em>"anzahlDerDurchläufe"</em> wird durch eine Zahl ersetzt, die festlegt, wie häufig die Schleife durchgeführt wird, also zum Beispiel "5".<br><br>
-
-        for (let zählIndex = 0; zählIndex < anzahlDerDurchläufe; zählIndex++) {<br>
-            einBefehl();<br>
-            zweiterBefehl();<br>
-            beliebigVieleBefehle();<br>
-        }<br><br>
-
-        <b>Ich will jetzt schon alle Details verstehen!</b><br>
-        "zählIndex" ist eine sogenannte Variable, dieses Konzept wird später noch ausführlich erklärt TO DO: TEXT FERTIG SCHREIBEN<br><br>
-        
-        Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt. Manchmal möchte man aber auch einen Beeper aufheben, ohne sich danach zu bewegen. Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, respektive bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. (Vielleicht lohnt es sich, deinen Code aus dem vorherigen Level kopieren, um darauf aufzubauen.)`,
+        Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, entsprechend bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. Als Referenz kannst du zwei Level zurückspringen.`,
         code: `for (let i = 0; i < 5; i++) {
     pickBeeper();
     move();
@@ -483,7 +537,10 @@ move();`,
         }<br>
         else{<br>
         code der ausgeführt wird, wenn keine der vorherigen Bedingungen wahr ist.<br>
-        }<br><br>`,
+        }<br><br>
+        
+        <b>Anmerkungen im Code</b><br>
+        Manchmal möchte man Notizen direkt im Code schreiben, die aber bei der Ausführung ignoriert werden sollen. In diesem Fall schreibt man // und sämtlicher Code der in der selben Zeile dahinter steht, wird ausgegraut angezeigt und in der Ausführung des Codes ignoriert.<br><br>`,
         code: `for (let i = 0; i < 18; i++) {
     if(frontIsClear())
     {
@@ -498,7 +555,7 @@ move();`,
 
     //Beeper aufsammeln?
 }`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "isWorld1", "isWorld2"],
         worlds: [
             {
                 walls: [
@@ -523,22 +580,31 @@ move();`,
         ],
     },
     {
-        name: "Lanes 1 - Variables",
-        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container oder ein unbeschriebener Notizblock, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
+        name: "Lanes - Variables",
+        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
         
-        Der Name der Variable ist beliebig, muss nur zwischen Deklaration und Nutzung übereinstimmen<br><br>
-        
-        Können auch neue Werte zugewiesen werden, danach gilt dann der neue Wert<br><br> 
-        
-        Deklaration und Zuweisung kann in einem Schritt passieren<br><br>
-        
-        Zuweisung kann an beliebiger Stelle geschehen, wie zB ein move Command<br><br>
-        
-        Warum Variablen?<br>
-        1. Um Code flexibler zu machen, nur an einer Stelle neuen Wert für Variable zuweisen, alles andere Funktioniert direkt
-        2. Um uns Dinge zu merken`,
-        code: ``,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        <b>Deklaration einer Variable</b><br>
+        var distance;<br><br>
+
+        hier wird nur ein leerer Container eröffnet und mit einem beliebigen Namen versehen (in diesem Fall "distance").<br><br>
+
+        <b>Zuweisung einer Variable</b><br>
+        distance = 2;<br><br>
+
+        hier wird der Container mit Inhalt gefüllt, achte darauf den vorher definierten Namen zu nutzen.<br><br>
+
+        <b>Abruf einer Variable</b><br>
+        moveAmount(distance);<br><br>
+
+        hier wird der Inhalt des Containers abgerufen, der Name "distance" ist nur noch als Platzhalter für den Wert im Container anzusehen (in diesem Fall "2").<br><br>`,
+        code: `//Dies hier...
+moveAmount(2);
+
+//Macht das gleiche wie dies hier:
+var distance;
+distance = 2;
+moveAmount(distance);`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount", "isWorld1", "isWorld2"],
         worlds: [
             {
                 walls: [
@@ -547,7 +613,47 @@ move();`,
                     [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
                 beepers: [{ x: 6, y: 0, count: 1 },],
-                solutions: [{ x: 0, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }, { x: 0, y: 2, count: 1 }],
+                solutions: [{ x: 0, y: 0, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
+        name: "Lanes - Variables",
+        explanation: `Können auch neue Werte zugewiesen werden, danach gilt dann der neue Wert<br><br> 
+        
+        Zuweisung kann an beliebiger Stelle geschehen, wie zB ein move Command<br><br>
+        
+       `,
+        code: `//Version 1
+if(isWorld1())
+{
+    moveAmount(3);
+}
+else if (isWorld2())
+{
+    moveAmount(2);
+}
+
+//Version 2 (macht genau das gleiche)
+var distance;
+if(isWorld1()){
+    distance = 3;
+}
+else if(isWorld2()){
+    distance = 2;
+}
+moveAmount(distance);`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount", "isWorld1", "isWorld2"],
+        worlds: [
+            {
+                walls: [
+                    [0, 2, 2, 2, 2, 2, 2, 2],
+                    [0, 2, 2, 2, 2, 2, 2, 2],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 6, y: 0, count: 1 },],
+                solutions: [{ x: 0, y: 0, count: 1 }],
                 karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 1 }
             },
             {
@@ -557,28 +663,34 @@ move();`,
                     [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
                 beepers: [{ x: 5, y: 0, count: 1 },],
-                solutions: [{ x: 0, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }, { x: 0, y: 2, count: 1 }],
+                solutions: [{ x: 0, y: 0, count: 1 }],
                 karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        name: "Lanes 2 - Variables",
-        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container oder ein unbeschriebener Notizblock, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
-        
-        Der Name der Variable ist beliebig, muss nur zwischen Deklaration und Nutzung übereinstimmen<br><br>
-        
-        Können auch neue Werte zugewiesen werden, danach gilt dann der neue Wert<br><br> 
-        
-        Deklaration und Zuweisung kann in einem Schritt passieren<br><br>
-        
-        Zuweisung kann an beliebiger Stelle geschehen, wie zB ein move Command<br><br>
-        
-        Warum Variablen?<br>
-        1. Um Code flexibler zu machen, nur an einer Stelle neuen Wert für Variable zuweisen, alles andere Funktioniert direkt
-        2. Um uns Dinge zu merken`,
-        code: ``,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        name: "Lanes - Variables",
+        explanation: ``,
+        code: `var distance;
+if(isWorld1()) distance = 5;
+else distance = 4;
+
+jump(distance);
+pickBeeper();
+turnAround();
+jump(distance);
+putBeeper();
+
+turnLeft();
+move();
+turnLeft();
+
+jump(distance);
+pickBeeper();
+turnAround();
+jump(distance);
+putBeeper();`,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount"],
         worlds: [
             {
                 walls: [
@@ -597,91 +709,33 @@ move();`,
                     [2, 2, 2, 2, 2, 2, 2, 2],
                 ],
                 beepers: [{ x: 5, y: 0, count: 1 }, { x: 5, y: 1, count: 1 },],
-                solutions: [{ x: 0, y: 0, count: 1 }, { x: 0, y: 1, count: 1 }, { x: 0, y: 2, count: 1 }],
+                solutions: [{ x: 0, y: 0, count: 1 }, { x: 0, y: 1, count: 1 },],
                 karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 1 }
             },
         ],
     },
     {
-        name: "Lanes 3 - Variables",
-        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container oder ein unbeschriebener Notizblock, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
-        
-        Der Name der Variable ist beliebig, muss nur zwischen Deklaration und Nutzung übereinstimmen<br><br>
-        
-        Können auch neue Werte zugewiesen werden, danach gilt dann der neue Wert<br><br> 
-        
-        Deklaration und Zuweisung kann in einem Schritt passieren<br><br>
-        
-        Zuweisung kann an beliebiger Stelle geschehen, wie zB ein move Command<br><br>
+        name: "Lanes - Variables",
+        explanation: `Deklaration und Zuweisung kann in einem Schritt passieren<br><br>
         
         Warum Variablen?<br>
-        1. Um Code flexibler zu machen, nur an einer Stelle neuen Wert für Variable zuweisen, alles andere Funktioniert direkt
-        2. Um uns Dinge zu merken`,
-        code: `function jump(stepAmount) {
-    for (let i = 0; i < stepAmount; i++) {
-        move();
-    }
-}
-
-/////////////////////////////////
-//TASK 1
-if(isWorld1())
-{
-    jump(5);
-    //...
-}
-else
-{
-    jump(4);
-    //...
-}
-
-//////////////////////////////////
-//INFO
-var distance;
-distance = 5;
-jump(distance);
-
-//////////////////////////////////
-//INFO
-var distance;
-if(isWorld1()){
-    distance = 2;
-}
-else{
-    distance = 3;
-}
-jump(distance);
-
-//////////////////////////////////
-//TASK 2
-
-var distance;
-if(isWorld1()) distance = 5;
-else distance = 4;
-
-jump(distance);
-pickBeeper();
-turnAround();
-jump(distance);
-putBeeper();
-
-turnLeft();
-move();
-turnLeft();
-
-jump(distance);
-pickBeeper();
-turnAround();
-jump(distance);
-putBeeper();
-
-//////////////////////////////////
+        1. Um Code flexibler zu machen, nur an einer Stelle neuen Wert für Variable zuweisen, alles andere Funktioniert direkt<br>
+        2. Um uns Dinge zu merken<br><br>`,
+        code: `//////////////////////////////////
 //INFO
 var distance;
 distance = 2;
 jump(distance);
 jump(distance + 1);
+
+//////////////////////////////////
+//INFO
+var distance;
+var farDistance;
+distance = 2;
+farDistance = 3;
+jump(distance);
+jump(farDistance);
 
 ////////////////////////////////////
 //TASK 3
@@ -698,19 +752,19 @@ turnLeft();
 move();
 turnLeft();
 
-jump(distance + 1);
+jump(distance);
 pickBeeper();
 turnAround();
-jump(distance + 1);
+jump(distance);
 putBeeper();
 turnLeft();
 move();
 turnLeft();
 
-jump(distance + 2);
+jump(distance + 1);
 pickBeeper();
 turnAround();
-jump(distance + 2);
+jump(distance + 1);
 putBeeper();
 turnLeft();
 move();
@@ -724,7 +778,7 @@ distance = 3;
 someOtherName = 2;
 jump(distance);
 jump(someOtherName);`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear"],
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount", "isWorld1", "isWorld2"],
         worlds: [
             {
                 walls: [
