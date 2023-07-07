@@ -9,13 +9,15 @@
     Run "npm run build" to test your changes before you push / merge them on main (mainly for es lint errors)
 
 # Ideas
-    - Users can save custom functions (across levels)
+    - Users can save cusstom functions (across levels)
 
 # Tickets
 PRIO
-    - 
+    - async await logic with regex on world code
 LOW PRIO
+    - 
     - user has "geführtes lernen tag"
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
     - window location history for selects
+    - change cryptic numbers to properties that are intuitive for walls, karel and other world related objects
     

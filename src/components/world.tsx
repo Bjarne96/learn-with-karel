@@ -67,6 +67,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.clearSnapshotsAndVariables()
             this.setLevel()
         }
+        // Return when the world is not active
         if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
@@ -152,7 +153,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         //Max snapshot length to protect the browser from crashing
         if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
         if (typeof this[command as keyof this] == undefined) return
-        let val: boolean = null
+        let val: boolean | number = null
         // MOVEMENT COMMANDS
         if (command == "move") this.move()
         if (command == "moveAmount") this.moveAmount(line, Number(param))
@@ -176,25 +177,30 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (command == "notFacingEast") val = this.notFacingEast()
         if (command == "rightIsBlocked") val = this.rightIsBlocked()
         if (command == "rightIsClear") val = this.rightIsClear()
+        if (command == "isWorld1") val = this.isWorld1()
+        if (command == "isWorld2") val = this.isWorld2()
+        if (command == "isWorld") val = this.isWorld()
         // ADD SNAPSHOT + LOG
         this.addSnapshot(this.karel, this.beepers)
         if (line) this.addLog(command, line, val)
         if (val != null) return val
     }
     // Adds the log entry to logs array and modifies message and type
-    addLog(command: string, line: number, val?: boolean) {
+    addLog(command: string, line: number, val?: boolean | number) {
         // Default command
         let type: logType = "normal"
         let message = command + " ()"
         // Command that returned true
-        if (val == true) {
+        if (val === true) {
             type = "returnedTrue"
             message = command + ": true"
         }
         // Command that returned false
-        else if (val == false) {
+        else if (val === false) {
             type = "returnedFalse"
             message = command + ": false"
+        } else if (typeof val === "number") {
+            message = command + ": " + val.toString()
         }
         this.logs.push({ message: message, line: line, type: type })
     }
@@ -313,7 +319,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         clearInterval(this.intervalRef)
         this.clearLog()
         // Give the result to the parent component
-        this.props.completedLevel(solved)
+        setTimeout(() => {
+            this.props.completedLevel(solved)
+        }, this.interval)
     }
 
 
