@@ -232,9 +232,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let worldSuccessfullyCompletedCounter = this.state.worldSuccessfullyCompletedCounter
         let worldCompletedCounter = this.state.worldCompletedCounter
         let executionCompleted = false
-        // If the level was already completed at some point before, so
-        // there is only the executionSuccessfullyCompleted state that has to be set
-        if ((this.state.done != "" && this.state.worldCounter == 1)) return this.setState({ executionSuccessfullyCompleted: true })
+        // If the level was already completed at some point, the execution is completed
+        if ((this.state.done != "" && this.state.worldCounter == 1)) return this.setState({ executionSuccessfullyCompleted: completed, executionCompleted: true, })
         // Check if there are multiple worlds and count up if one of the is finished
         if (this.state.worldCounter > 1) worldCompletedCounter++
         // Check if all worlds have completed
