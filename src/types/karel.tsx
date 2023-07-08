@@ -57,8 +57,10 @@ export interface ResetStateObject {
     secondLog: Log
     pauseCode: boolean
     runningCode: boolean
+    executionSuccessfullyCompleted: boolean
     executionCompleted: boolean
     activeLine: number
+    worldSuccessfullyCompletedCounter: number
     worldCompletedCounter: number
     step: number
 }
@@ -98,7 +100,8 @@ export interface ICodeProps {
     code: string
     onCodeChange(code: string): void
     runningCode: boolean
-    activeLine: number
+    executionCompleted: boolean
+    activeLineProp: number
 }
 export interface ILogProps {
     log: Log
@@ -135,6 +138,7 @@ export interface IWorldProps {
     code: string
     currentLevel: number
     worldCompletedCounter: number
+    worldSuccessfullyCompletedCounter: number
     worldNumber: number
     commands: Commands
     interval: number

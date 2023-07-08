@@ -3,9 +3,11 @@ import { useCodeMirror } from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import type { ICodeProps } from '../types/karel'
 
-const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLine }) => {
+const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLineProp, executionCompleted }) => {
 
     const editorContainer = useRef<HTMLDivElement>(null);
+
+    const activeLine = useRef(0);
 
     const { setContainer } = useCodeMirror({
         container: editorContainer.current,
@@ -17,29 +19,33 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
         extensions: [javascript({ jsx: true })],
     });
 
-    //Highlight active line
+    function changeHighlighting(remove = false) {
+        setTimeout(() => {
+            try {
+                const line = document.getElementsByClassName("cm-content")[0].children[activeLine.current].classList
+                if (remove) line.remove("highlighted-line")
+                if (!remove) line.add("highlighted-line")
+            } catch (e) { console.warn('e', e); }
+        }, 16)
+    }
+
+    //Line highlighting
     useEffect(() => {
-        try {
-            if (runningCode && activeLine != 0) {
-                setTimeout(() => {
-                    try {
-                        document.getElementsByClassName("cm-content")[0]
-                            .children[(activeLine - 1)]
-                            .classList.add("highlighted-line")
-                    } catch (e) { /* Prevent breaking when lines are removed. */ }
-                }, 16)
+        if (runningCode && activeLineProp >= 1 && editorContainer.current) {
+            activeLine.current = activeLineProp - 1
+            // Add highlighting -> change line to active
+            changeHighlighting()
+        } else if (executionCompleted && activeLineProp == 0) {
+            // Remove highlighting -> cange active line to inactive
+            changeHighlighting(true)
+        }
 
-            }
-        } catch (e) { console.log('highlighted line error', e); }
-
-    }, [runningCode, code, activeLine])
+    }, [runningCode, code, activeLineProp, executionCompleted])
 
     //Using the editorContainer
     useEffect(() => { if (editorContainer.current) setContainer(editorContainer.current) }, [setContainer]);
 
-    return <div className="border-code-grey z-0">
-        <div ref={editorContainer}></div>
-    </div>
+    return <div className="border-code-grey z-0"><div ref={editorContainer}></div></div>
 }
 
 export default Code
