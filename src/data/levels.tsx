@@ -328,7 +328,7 @@ if(leftIsClear())
     turnLeft();
 }
 move();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear"],
+        commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -371,7 +371,7 @@ if(leftIsClear())
     turnLeft();
 }
 move();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear"],
+        commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -406,7 +406,7 @@ if(leftIsClear())
     turnLeft();
 }
 move();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear"],
+        commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -452,7 +452,7 @@ else
     turnRight();
 }
 move();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "frontIsClear", "beeperIsPresent"],
+        commands: ["leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -497,7 +497,7 @@ else
     turnRight();
 }
 move();`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "frontIsClear", "beeperIsPresent"],
+        commands: ["leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -555,7 +555,7 @@ move();`,
 
     //Beeper aufsammeln?
 }`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "isWorld1", "isWorld2"],
+        commands: ["leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
@@ -580,8 +580,31 @@ move();`,
         ],
     },
     {
+        name: "Lanes - Functions with Parametres",
+        explanation: `Die Runden Klammern in hinter den Funktionen haben tatsächlich einen Zweck. Bei einigen Befehlen kann man Werte, z.B. Zahlen, in die Runden Klammern schreiben, die dann von der Funktion verwendet werden. In diesem Beispiel siehst du "moveAmount(2)". Statt "2" kannst du eine beliebige Zahl einsetzen. Pfeili wird sich entsprechend viele Schritte bewegen.<br><br>
+        
+        <b>Befehle mit Parameter</b><br>
+        nameDesBefehls(meinParameter);<br><br>
+
+        Den Übergebenen Wert nennt man auch Parameter. Je nach Befehl wird "meinParameter" durch eine Zahl, ein Wort oder sonst einen Datentyp ersetzt.<br><br>`,
+        code: `moveAmount(2);`,
+        commands: ["moveAmount", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper",],
+        worlds: [
+            {
+                walls: [
+                    [0, 2, 2, 2, 2, 2, 2, 2],
+                    [0, 2, 2, 2, 2, 2, 2, 2],
+                    [2, 2, 2, 2, 2, 2, 2, 2],
+                ],
+                beepers: [{ x: 6, y: 0, count: 1 },],
+                solutions: [{ x: 0, y: 0, count: 1 }],
+                karel: { x: 0, y: 0, direction: 0, isSuper: true, beeperCount: 1 }
+            },
+        ],
+    },
+    {
         name: "Lanes - Variables",
-        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
+        explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir sogenannte Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
         
         <b>Deklaration einer Variable</b><br>
         var distance;<br><br>
@@ -597,14 +620,10 @@ move();`,
         moveAmount(distance);<br><br>
 
         hier wird der Inhalt des Containers abgerufen, der Name "distance" ist nur noch als Platzhalter für den Wert im Container anzusehen (in diesem Fall "2").<br><br>`,
-        code: `//Dies hier...
-moveAmount(2);
-
-//Macht das gleiche wie dies hier:
-var distance;
+        code: `var distance;
 distance = 2;
 moveAmount(distance);`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount", "isWorld1", "isWorld2"],
+        commands: ["moveAmount", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper",],
         worlds: [
             {
                 walls: [
@@ -625,18 +644,7 @@ moveAmount(distance);`,
         Zuweisung kann an beliebiger Stelle geschehen, wie zB ein move Command<br><br>
         
        `,
-        code: `//Version 1
-if(isWorld1())
-{
-    moveAmount(3);
-}
-else if (isWorld2())
-{
-    moveAmount(2);
-}
-
-//Version 2 (macht genau das gleiche)
-var distance;
+        code: `var distance;
 if(isWorld1()){
     distance = 3;
 }
@@ -644,7 +652,7 @@ else if(isWorld2()){
     distance = 2;
 }
 moveAmount(distance);`,
-        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear", "moveAmount", "isWorld1", "isWorld2"],
+        commands: ["moveAmount", "isWorld1", "isWorld2", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper", "frontIsClear",],
         worlds: [
             {
                 walls: [
