@@ -606,20 +606,23 @@ move();`,
         name: "Lanes - Variables",
         explanation: `Manchmal müssen wir uns eine Information merken, um diese im späteren Verlauf des Programms wieder abzurufen. Zu diesem Zweck können wir sogenannte Variablen nutzen. Variablen sind zunächst wie ein leerer Container, den wir mit einem Namen versehen und nach belieben mit Inhalt füllen können. Unter dem Namen können wir dann immer auf den Inhalt zugreifen.<br><br>
         
-        <b>Deklaration einer Variable</b><br>
-        var distance;<br><br>
+        <b>Auf die Reihenfolge kommt es an!</b><br>
+        Um Variablen zu nutzen sind drei Schritte Notwendig, die eine bestimmte Reihenfolge einhalten müssen:<br><br>
 
-        hier wird nur ein leerer Container eröffnet und mit einem beliebigen Namen versehen (in diesem Fall "distance").<br><br>
+        <b>1. Deklaration</b><br>
+        var meineVariable;<br><br>
 
-        <b>Zuweisung einer Variable</b><br>
-        distance = 2;<br><br>
+        hier wird nur ein leerer Container eröffnet und mit einem beliebigen Namen versehen (in diesem Fall "meineVaraiable").<br><br>
 
-        hier wird der Container mit Inhalt gefüllt, achte darauf den vorher definierten Namen zu nutzen.<br><br>
+        <b>2. Zuweisung eines Wertes</b><br>
+        meineVaraiable = 2;<br><br>
 
-        <b>Abruf einer Variable</b><br>
-        moveAmount(distance);<br><br>
+        hier wird der Container mit Inhalt gefüllt, in diesem Fall mit der "2". Bevor man einen Container mit Inhalt füllen kann, muss der Container überhaupt erst existieren, also kann dieser Schritt erst nach der Deklaration stattfinden.<br><br>
 
-        hier wird der Inhalt des Containers abgerufen, der Name "distance" ist nur noch als Platzhalter für den Wert im Container anzusehen (in diesem Fall "2").<br><br>`,
+        <b>Abruf des Wertes</b><br>
+        moveAmount(meineVariable);<br><br>
+
+        hier wird der Inhalt des Containers abgerufen, der Name "meineVariable" ist nur noch als Platzhalter für den Inhalt im Container anzusehen (in diesem Fall "2"). Bevor man den Inhalt abrufen kann, muss es überhaupt einen Inhalt geben. Also kann dieser Schritt erst stattfinden, nachdem der Variable ein Wert zugewiesen wurde.<br><br>`,
         code: `var distance;
 distance = 2;
 moveAmount(distance);`,
