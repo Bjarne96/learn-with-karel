@@ -149,9 +149,27 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    executeCommand(command: string, line: number, param: string) {
+    pauseCodeExecution(waitingTime: number, paused: boolean) {
+        //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
+        if (paused) {
+            return new Promise(resolve => {
+                btn = document.getElementById("Continue");
+                btn.addEventListener('click', function (e) {
+                    resolve();
+                }, { once: true }); //Event listener wird nach einem Aufruf wieder entfernt
+            });
+        }
+        //Sonst nach bestimmten zeitintervall weiter machen.
+        else {
+            return new Promise(resolve => {
+                setTimeout(resolve, waitingTime)
+            });
+        }
+    }
+
+    async executeCommand(command: string, line: number, param: string) {
         //Max snapshot length to protect the browser from crashing
-        if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
+        //if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
         if (typeof this[command as keyof this] == undefined) return
         let val: boolean | number = null
         // MOVEMENT COMMANDS
@@ -181,9 +199,11 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (command == "isWorld2") val = this.isWorld2()
         if (command == "isWorld") val = this.isWorld()
         // ADD SNAPSHOT + LOG
-        this.addSnapshot(this.karel, this.beepers)
-        if (line) this.addLog(command, line, val)
+        //this.addSnapshot(this.karel, this.beepers)
+        //if (line) this.addLog(command, line, val)
         if (val != null) return val
+
+        await this.pauseCodeExecution(this.interval, this.pauseInterval);
     }
     // Adds the log entry to logs array and modifies message and type
     addLog(command: string, line: number, val?: boolean | number) {
@@ -287,24 +307,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             } else return null
         }
 
-        function pauseCodeExecution(waitingTime: number, paused: boolean) {
-            //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
-            if (paused) {
-                return new Promise(resolve => {
-                    btn = document.getElementById("Continue");
-                    btn.addEventListener('click', function (e) {
-                        resolve();
-                    }, { once: true }); //Event listener wird nach einem Aufruf wieder entfernt
-                });
-            }
-            //Sonst nach bestimmten zeitintervall weiter machen.
-            else {
-                return new Promise(resolve => {
-                    setTimeout(resolve, waitingTime)
-                });
-            }
-        }
-
         function insertAsynchAwait(inputCode: string) {
             //(?<=something) ist ein look-ahead, der nur matches returned, wenn "something" vor dem eigentlichen Match steht. "something" wird aber nicht als Match returned, nur der darauffolgende String.
             //(?<!something) ist ein negativer look-ahead, der nur ein Match returned, wenn "something" NICHT davor steht.
@@ -333,7 +335,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         } catch (e) {
             this.errorFound = e.toString()
         }
-        this.executeSnapshots()
+        //this.executeSnapshots()
     }
 
     completeWorld() {
