@@ -287,6 +287,37 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             } else return null
         }
 
+        function pauseCodeExecution(waitingTime: number, paused: boolean) {
+            //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
+            if (paused) {
+                return new Promise(resolve => {
+                    btn = document.getElementById("Continue");
+                    btn.addEventListener('click', function (e) {
+                        resolve();
+                    }, { once: true }); //Event listener wird nach einem Aufruf wieder entfernt
+                });
+            }
+            //Sonst nach bestimmten zeitintervall weiter machen.
+            else {
+                return new Promise(resolve => {
+                    setTimeout(resolve, waitingTime)
+                });
+            }
+        }
+
+        function insertAsynchAwait(inputCode: string) {
+            //(?<=something) ist ein look-ahead, der nur matches returned, wenn "something" vor dem eigentlichen Match steht. "something" wird aber nicht als Match returned, nur der darauffolgende String.
+            //(?<!something) ist ein negativer look-ahead, der nur ein Match returned, wenn "something" NICHT davor steht.
+
+            const funcDefPattern = new RegExp(/(?<=\bfunction\s+)\b(\w+)\b/, 'g'); //returned Funktionsnamen, bei Funktionsdefinition
+            const funcCallPattern = new RegExp(/(?<!\bfunction\s+)\b(\w+)\b(?=\([^)]*\))/, 'g'); //returned Funktionsnamen, bei Funktionsaufruf
+
+            const output = inputCode
+                .replace(funcCallPattern, 'await $1')
+                .replace(funcDefPattern, 'async $1');
+            return output;
+        }
+
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/)
@@ -296,6 +327,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 const param = getCommandParams(codeArr[i])
                 lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
+            insertAsynchAwait(lineIndexedCodeString);
             //Execute user code from string
             eval(lineIndexedCodeString)
         } catch (e) {
