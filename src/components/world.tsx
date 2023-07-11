@@ -154,9 +154,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
         if (paused) {
             return new Promise<void>(resolve => {
-                this.bindedContinue = () => {
-                    resolve()
-                }
+                this.bindedContinue = resolve
             });
         }
         //Sonst nach bestimmten zeitintervall weiter machen.
@@ -204,7 +202,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (line) this.addLog(command, line, val)
         if (val != null) return val
 
-        await this.pauseCodeExecution(this.interval, this.pauseInterval);
+        //update state
+        this.setState({ //TO DO: UPDATED BIS JETZT NUR NACH DEM ERSTEN COMMAND; DANACH NICHT MEHR
+            karel: this.karel,
+            beepers: this.beepers
+        })
+
+        await this.pauseCodeExecution(1000, false) //TO DO: korrekte parameter übergeben
     }
     // Adds the log entry to logs array and modifies message and type
     addLog(command: string, line: number, val?: boolean | number) {
@@ -257,22 +261,18 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     async executeCode() {
         let commandList = ""
-        /**
-         * async function (line, param) {
-         *  return  await this.executeCommand("move", 269, null)
-         * }
-         * 
-         */
-        // move = async (line, param) => await this.executeCommand("..")
-        // move();
+
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = async (line, param) => await this.executeCommand('" + this.props.commands[i] + "', line, param);" //TODO: add "async"
+            commandList = commandList + "\n" + this.props.commands[i] + " = async (line, param) => await this.executeCommand('" + this.props.commands[i] + "', line, param);"
         }
+        // Example Output:
+        // let move = async function (line, param) {
+        //  return  await this.executeCommand("move", 5, null)
+        // }
+
         // Commands
-        // move();
-        // await move()
-        let move
-        let turnLeft
+        let move //= async (line, param) => await this.executeCommand("move", line, param)
+        let turnLeft //= async (line, param) => await this.executeCommand("turnLeft", line, param)
         let putBeeper
         let pickBeeper
         let turnRight
@@ -341,8 +341,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             }
             lineIndexedCodeString = insertAsynchAwait(lineIndexedCodeString);
             //Execute user code from string
-            console.log('lineIndexedCodeString', lineIndexedCodeString);
-            eval(lineIndexedCodeString)
+            await eval("(async () => {" + lineIndexedCodeString + "})()")
         } catch (e) {
             this.errorFound = e.toString()
         }
