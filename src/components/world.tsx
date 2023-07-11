@@ -16,7 +16,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     startedCode = false
     snapshotIndex = 0
     errorFound = ""
-    bindedContinue = null
+    bindedContinue: () => void = null
     snapshots: ISnapshots = []
     logs: Log = []
     karel: IKarel
@@ -75,7 +75,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             // Updates the interval initally
             if (this.interval != this.props.interval) this.interval = this.props.interval
             this.startedCode = true
-            this.executeCode()
+            void this.executeCode()
         }
         // Level changed
         if (this.props.currentLevel != this.state.currentLevel && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
@@ -87,18 +87,18 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (this.pauseInterval != this.props.pauseCode) {
             this.pauseInterval = this.props.pauseCode
             this.interval = this.props.interval
-            if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.executeSnapshots()
+            if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.bindedContinue()
         }
         // Unpausing Interval or changing speed
         if (this.interval != this.props.interval) {
             this.interval = this.props.interval
-            if (!this.finishedCode && this.startedCode) this.executeSnapshots()
+            if (!this.finishedCode && this.startedCode) this.bindedContinue()
         }
         // Skip to the next execution step
         if (this.props.pauseCode && this.props.step != this.step) {
             this.step = this.props.step
             clearInterval(this.intervalRef)
-            if (!this.finishedCode && this.startedCode) this.executeSnapshots(false)
+            if (!this.finishedCode && this.startedCode) this.bindedContinue()
         }
     }
 
@@ -150,19 +150,31 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* END REACT FUNCTIONS */
 
     /* WORLD FUNCTIONS */
-    pauseCodeExecution(waitingTime: number, paused: boolean) {
-        //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
-        if (paused) {
-            return new Promise<void>(resolve => {
-                this.bindedContinue = resolve
-            });
-        }
-        //Sonst nach bestimmten zeitintervall weiter machen.
-        else {
-            return new Promise(resolve => {
-                setTimeout(resolve, waitingTime)
-            });
-        }
+    pauseCodeExecution() {
+        return new Promise<void>(resolve => {
+            //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
+            if (this.props.pauseCode) {
+                this.bindedContinue = () => resolve()
+            }
+            else {
+                //Sonst nach bestimmten zeitintervall weiter machen.
+                setTimeout(() => {
+                    if (this.props.pauseCode) {
+                        this.bindedContinue = () => resolve()
+                    } else {
+                        resolve()
+                    }
+                }, this.props.interval)
+            }
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async updateState(state: any) {
+        return new Promise<void>((resolve) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            this.setState({ ...state }, () => resolve())
+        })
     }
 
     async executeCommand(command: string, line: number, param: string) {
@@ -173,7 +185,12 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let val: boolean | number = null
         // MOVEMENT COMMANDS
         if (command == "move") this.move()
-        if (command == "moveAmount") this.moveAmount(line, Number(param))
+        if (command == "moveAmount") {
+            // Nur so damit man versteht an welchem punkt es im log ankommt
+            if (line) this.updateLog("start " + command, line, val)
+            await this.moveAmount(line, Number(param))
+            command = "end " + command
+        }
         if (command == "turnRight") this.turnRight()
         if (command == "turnLeft") this.turnLeft()
         if (command == "turnAround") this.turnAround()
@@ -197,21 +214,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (command == "isWorld1") val = this.isWorld1()
         if (command == "isWorld2") val = this.isWorld2()
         if (command == "isWorld") val = this.isWorld()
-        // ADD SNAPSHOT + LOG
-        //this.addSnapshot(this.karel, this.beepers)
-        if (line) this.addLog(command, line, val)
         if (val != null) return val
-
-        //update state
-        this.setState({ //TO DO: UPDATED BIS JETZT NUR NACH DEM ERSTEN COMMAND; DANACH NICHT MEHR
+        //update state and log
+        if (line) this.updateLog(command, line, val)
+        await this.updateState({
             karel: this.karel,
             beepers: this.beepers
         })
-
-        await this.pauseCodeExecution(1000, false) //TO DO: korrekte parameter übergeben
+        await this.pauseCodeExecution()
     }
     // Adds the log entry to logs array and modifies message and type
-    addLog(command: string, line: number, val?: boolean | number) {
+    updateLog(command: string, line: number, val?: boolean | number) {
         // Default command
         let type: logType = "normal"
         let message = command + " ()"
@@ -227,7 +240,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         } else if (typeof val === "number") {
             message = command + ": " + val.toString()
         }
-        this.logs.push({ message: message, line: line, type: type })
+        this.props.updateLogAndLine(message, line, type, this.props.worldNumber)
     }
 
     clearLog() {
@@ -260,6 +273,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     async executeCode() {
+        console.log('exe');
         let commandList = ""
 
         for (let i = 0; i < this.props.commands.length; i++) {
@@ -340,12 +354,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
             lineIndexedCodeString = insertAsynchAwait(lineIndexedCodeString);
+            console.log('lineIndexedCodeString', lineIndexedCodeString)
             //Execute user code from string
             await eval("(async () => {" + lineIndexedCodeString + "})()")
+            console.log('END exe');
+            this.completeWorld()
+            console.log('complete world');
         } catch (e) {
             this.errorFound = e.toString()
         }
-        //this.executeSnapshots()
     }
 
     completeWorld() {
@@ -498,9 +515,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     /* MOVEMENT COMMANDS */
 
-    moveAmount(line: number, steps: number) {
+    async moveAmount(line: number, steps: number) {
+        // Fürs feeling, damit die move amount sich im log / highlighting / execution wie ein eigenes command anfühlt
+        function timeout(ms: number) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        if (!this.props.pauseCode) await timeout(this.interval)
+        // end feeling
         for (let i = 1; i <= steps; i++) {
-            this.executeCommand("move", line, null)
+            await this.executeCommand("move", line, null)
         }
     }
 
