@@ -16,6 +16,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     startedCode = false
     snapshotIndex = 0
     errorFound = ""
+    bindedContinue = null
     snapshots: ISnapshots = []
     logs: Log = []
     karel: IKarel
@@ -152,11 +153,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     pauseCodeExecution(waitingTime: number, paused: boolean) {
         //Wenn pausiert, dann auf Knopfdruck warten, um weiter zu machen.
         if (paused) {
-            return new Promise(resolve => {
-                btn = document.getElementById("Continue");
-                btn.addEventListener('click', function (e) {
-                    resolve();
-                }, { once: true }); //Event listener wird nach einem Aufruf wieder entfernt
+            return new Promise<void>(resolve => {
+                this.bindedContinue = () => {
+                    resolve()
+                }
             });
         }
         //Sonst nach bestimmten zeitintervall weiter machen.
@@ -168,6 +168,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     async executeCommand(command: string, line: number, param: string) {
+        console.log('command', command);
         //Max snapshot length to protect the browser from crashing
         //if (this.snapshots.length >= 10000) throw "Error: Max Snapshot length reached."
         if (typeof this[command as keyof this] == undefined) return
@@ -200,7 +201,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (command == "isWorld") val = this.isWorld()
         // ADD SNAPSHOT + LOG
         //this.addSnapshot(this.karel, this.beepers)
-        //if (line) this.addLog(command, line, val)
+        if (line) this.addLog(command, line, val)
         if (val != null) return val
 
         await this.pauseCodeExecution(this.interval, this.pauseInterval);
@@ -254,12 +255,22 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         this.beepers = update.beepers
     }
 
-    executeCode() {
+    async executeCode() {
         let commandList = ""
+        /**
+         * async function (line, param) {
+         *  return  await this.executeCommand("move", 269, null)
+         * }
+         * 
+         */
+        // move = async (line, param) => await this.executeCommand("..")
+        // move();
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = (line, param) => this.executeCommand('" + this.props.commands[i] + "', line, param);"
+            commandList = commandList + "\n" + this.props.commands[i] + " = async (line, param) => await this.executeCommand('" + this.props.commands[i] + "', line, param);" //TODO: add "async"
         }
         // Commands
+        // move();
+        // await move()
         let move
         let turnLeft
         let putBeeper
@@ -306,18 +317,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }
             } else return null
         }
-
-        function insertAsynchAwait(inputCode: string) {
+        const insertAsynchAwait = (inputCode: string) => {
             //(?<=something) ist ein look-ahead, der nur matches returned, wenn "something" vor dem eigentlichen Match steht. "something" wird aber nicht als Match returned, nur der darauffolgende String.
             //(?<!something) ist ein negativer look-ahead, der nur ein Match returned, wenn "something" NICHT davor steht.
 
-            const funcDefPattern = new RegExp(/(?<=\bfunction\s+)\b(\w+)\b/, 'g'); //returned Funktionsnamen, bei Funktionsdefinition
+            const funcDefPattern = new RegExp(/(?<=\bfunction\s+)\b(\w+)\b/, 'g') //returned Funktionsnamen, bei Funktionsdefinition
             const funcCallPattern = new RegExp(/(?<!\bfunction\s+)\b(\w+)\b(?=\([^)]*\))/, 'g'); //returned Funktionsnamen, bei Funktionsaufruf
 
             const output = inputCode
                 .replace(funcCallPattern, 'await $1')
-                .replace(funcDefPattern, 'async $1');
-            return output;
+                .replace(funcDefPattern, 'async $1')
+            return output
         }
 
         try {
@@ -329,8 +339,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 const param = getCommandParams(codeArr[i])
                 lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
-            insertAsynchAwait(lineIndexedCodeString);
+            lineIndexedCodeString = insertAsynchAwait(lineIndexedCodeString);
             //Execute user code from string
+            console.log('lineIndexedCodeString', lineIndexedCodeString);
             eval(lineIndexedCodeString)
         } catch (e) {
             this.errorFound = e.toString()
