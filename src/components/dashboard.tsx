@@ -82,8 +82,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         this.setState({
             step: this.state.step + 1,
             runningCode: true,
-            pauseCode: true,
-            activeTab: this.state.worldSuccessfullyCompletedCounter + 1
+            pauseCode: true
         })
     }
 
