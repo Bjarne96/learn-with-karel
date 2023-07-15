@@ -68,7 +68,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
 
         // Draw karel
         if (props.karel) drawKarel(props.karel, currentBlockSize, context)
-    }, [canvasWidth, props.beepers, props.karel, props.solutions, props.walls])
+    }, [canvasWidth, props.updateCanvas, props.beepers, props.karel, props.solutions, props.walls])
 
     const drawWall = (x: number, y: number, side: number, currentBlockSize: number, context: CanvasRenderingContext2D) => {
         const minX = x * currentBlockSize
@@ -186,7 +186,7 @@ const Canvas: React.FC<ICanvasProps> = (props) => {
         context.restore()
     }
 
-    useEffect(() => draw(), [props.walls, props.beepers, props.solutions, props.activeTab, props.displayHelper, draw])
+    useEffect(() => draw(), [props.updateCanvas, props.walls, props.beepers, props.solutions, props.activeTab, props.displayHelper, draw])
 
     return (
         <div ref={parentRef} className="w-full">

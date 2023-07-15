@@ -29,7 +29,7 @@ export const levels: Array<ILevel> = [
         move();<br>
         putBeeper();<br>`,
         code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper", "moveAmount"],
         worlds: [
             {
                 walls: [

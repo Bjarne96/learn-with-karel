@@ -122,6 +122,7 @@ export interface IWorldState {
     solutions: Beepers
     walls: Walls
     currentLevel: number
+    updateCanvas: number
 }
 
 export interface ISnapshot {
@@ -154,6 +155,7 @@ export interface ICanvasProps {
     karel?: IKarel
     beepers?: Beepers
     solutions?: Beepers
+    updateCanvas?: number
     walls: Walls
     activeTab: number
     displayHelper: boolean
