@@ -197,7 +197,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         await this.updateCanvas({
             karel: this.karel,
             beepers: this.beepers,
-            updateCanvas: (this.state.updateCanvas + 1)
+            updateCanvas: this.state.updateCanvas + Number(1)
         })
         await this.pauseCodeExecution()
         if (val != null) return val
@@ -216,7 +216,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         else if (val === false) {
             type = "returnedFalse"
             message = command + ": false"
-        } else if (param != null) {
+        } else if (param != null && param != 0) {
             message = command + " (" + param.toString() + ")"
         }
         this.props.updateLogAndLine(message, line, type, this.props.worldNumber)
@@ -236,36 +236,20 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         // Example Output:
         // let move = async (line, param) => await this.executeCommand("move", 5, null)
 
-        // Commands
-        let move //= async (line, param) => await this.executeCommand("move", line, param)
-        let turnLeft //= async (line, param) => await this.executeCommand("turnLeft", line, param)
-        let putBeeper
-        let pickBeeper
-        let turnRight
-        let turnAround
-        let frontIsClear
-        let frontIsBlocked
-        let leftIsClear
-        let leftIsBlocked
-        let rightIsClear
-        let rightIsBlocked
-        let beeperIsPresent
-        let noBeeperIsPresent
-        let beepersInBag
-        let noBeepersInBag
-        let facingNorth
-        let notFacingNorth
-        let facingEast
-        let notFacingEast
-        let facingSouth
-        let notFacingSouth
-        let facingWest
-        let notFacingWest
-        let moveAmount
-        let isWorld1
-        let isWorld2
-        let isWorld
-        //Binds all available functions
+        /* *** Commands *** */
+        // Moving karel
+        let move, turnLeft, putBeeper, pickBeeper, turnRight, turnAround, moveAmount
+        // Check if something is clear or blocked
+        let frontIsClear, frontIsBlocked, leftIsClear, leftIsBlocked, rightIsClear, rightIsBlocked
+        // Check for beepers
+        let beeperIsPresent, noBeeperIsPresent, beepersInBag, noBeepersInBag
+        // Check the direction
+        let facingNorth, notFacingNorth, facingEast, notFacingEast, facingSouth, notFacingSouth, facingWest, notFacingWest
+        // Help to determine the world
+        let isWorld1, isWorld2, isWorld
+
+        // Eval binds all available functions like this:
+        // move = async (line, param) => await this.executeCommand("move", line, param)
         eval(commandList)
 
         function getCommandParams(string: string): string | null {
@@ -283,18 +267,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 }
             } else return null
         }
-        const insertAsynchAwait = (inputCode: string) => {
-            //(?<=something) ist ein look-ahead, der nur matches returned, wenn "something" vor dem eigentlichen Match steht. "something" wird aber nicht als Match returned, nur der darauffolgende String.
-            //(?<!something) ist ein negativer look-ahead, der nur ein Match returned, wenn "something" NICHT davor steht.
 
-            const funcDefPattern = new RegExp(/(?<=\bfunction\s+)\b(\w+)\b/, 'g') //returned Funktionsnamen, bei Funktionsdefinition
-            const funcCallPattern = new RegExp(/(?<!\bfunction\s+)\b(\w+)\b(?=\([^)]*\))/, 'g'); //returned Funktionsnamen, bei Funktionsaufruf
-
-            const output = inputCode
-                .replace(funcCallPattern, 'await $1')
-                .replace(funcDefPattern, 'async $1')
-            return output
-        }
 
         try {
             //Add line indexing into the users code string
@@ -305,11 +278,29 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 const param = getCommandParams(codeArr[i])
                 lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
-            lineIndexedCodeString = insertAsynchAwait(lineIndexedCodeString);
-            //Execute user code from string
+            // Create an array to gather all functions
+            const allFunctions: Array<string> = [...this.props.commands]
+            // Regex Pattern to find all function declarations
+            const funcDefPattern = /\b(function\s+)(\w+)(\s*\([^)]*\)\s*)/g;
+            lineIndexedCodeString = lineIndexedCodeString
+                // Puts a callback function into the replace-function to get all params
+                // group1 = function + whitespace character
+                // group2 = functionname
+                // group3 = params + whitespaces
+                .replace(funcDefPattern, (match: string, group1: string, group2: string, group3: string) => {
+                    //Add function names to the allFunctions array
+                    allFunctions.push(group2)
+                    //Returns the string to replace in the user code string with an addtional async
+                    return `async ${group1}${group2}${group3}`
+                })
+            // Finds all function calls that are allowed and declared by the user and adds an await to them
+            const activeFunctions = new RegExp(`(?<!function\\s+)((${allFunctions.join('|')}))\\s*(?=\\([^)]*\\))`, 'g')
+            lineIndexedCodeString = lineIndexedCodeString.replace(activeFunctions, (match) => "await " + match)
+            //Execute user code from string as an async function
             await eval("(async () => {" + lineIndexedCodeString + "})()")
             this.completeWorld()
         } catch (e) {
+            console.log('e', e);
             this.errorFound = e.toString()
         }
     }
