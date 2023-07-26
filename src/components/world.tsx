@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
-import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, Walls, logType, Log } from "../types/karel"
+import type { Beepers, Beeper, IWorldProps, IWorldState, IKarel, Walls, logType, Log, Commands } from "../types/karel"
 import Canvas from "./canvas"
 
 export default class World extends React.Component<IWorldProps, IWorldState> {
@@ -84,18 +84,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         if (this.pauseInterval != this.props.pauseCode) {
             this.pauseInterval = this.props.pauseCode
             this.interval = this.props.interval
-            if (!this.pauseInterval && !this.finishedCode && this.startedCode) this.boundContinue()
+            if (!this.pauseInterval && !this.finishedCode && this.startedCode && this.boundContinue) this.boundContinue()
         }
         // Unpausing Interval or changing speed
         if (this.interval != this.props.interval) {
             this.interval = this.props.interval
-            if (!this.finishedCode && this.startedCode) this.boundContinue()
+            if (!this.finishedCode && this.startedCode && this.boundContinue) this.boundContinue()
         }
         // Skip to the next execution step
         if (this.props.pauseCode && this.props.step != this.step) {
             this.step = this.props.step
-            clearInterval(this.intervalRef)
-            if (!this.finishedCode && this.startedCode) this.boundContinue()
+            if (!this.finishedCode && this.startedCode && this.boundContinue) this.boundContinue()
         }
     }
     //Updates the state to the level depeding on the props
@@ -218,6 +217,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             message = command + ": false"
         } else if (param != null && param != 0) {
             message = command + " (" + param.toString() + ")"
+        } else if (line == 0) {
+            type = "error"
+            message = command
         }
         this.props.updateLogAndLine(message, line, type, this.props.worldNumber)
     }
@@ -228,10 +230,16 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     async executeCode() {
-        let commandList = ""
-
+        let commandBindingString = ""
+        // Adds functionality to all commands that are allowed
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandList = commandList + "\n" + this.props.commands[i] + " = async (line, param) => await this.executeCommand('" + this.props.commands[i] + "', line, param);"
+            commandBindingString = `${commandBindingString}\n${this.props.commands[i]} = async (line, param) => {await this.executeCommand('${this.props.commands[i]}', line, param);}`
+        }
+        // Adds error handling for the commands that are not allowed
+        const allCommands: Commands = ["move", "turnLeft", "putBeeper", "pickBeeper", "turnRight", "turnAround", "frontIsClear", "frontIsBlocked", "leftIsClear", "leftIsBlocked", "rightIsClear", "rightIsBlocked", "beeperIsPresent", "noBeeperIsPresent", "beepersInBag", "noBeepersInBag", "facingNorth", "notFacingNorth", "facingEast", "notFacingEast", "facingSouth", "notFacingSouth", "facingWest", "notFacingWest", "moveAmount", "isWorld1", "isWorld2", "isWorld"]
+        const unusedCommands = allCommands.filter((command) => !this.props.commands.includes(command))
+        for (let i = 0; i < unusedCommands.length; i++) {
+            commandBindingString = `${commandBindingString}\n ${unusedCommands[i]} = () => {throw 'You can not use "${unusedCommands[i]}" in this level.'}`
         }
         // Example Output:
         // let move = async (line, param) => await this.executeCommand("move", 5, null)
@@ -248,9 +256,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         // Help to determine the world
         let isWorld1, isWorld2, isWorld
 
-        // Eval binds all available functions like this:
+        // Binds all available functions like this, because only eval does dynamic binding.
         // move = async (line, param) => await this.executeCommand("move", line, param)
-        eval(commandList)
+        eval(commandBindingString)
 
         function getCommandParams(string: string): string | null {
             const paramterFunctions = ["moveAmount"]
@@ -272,17 +280,17 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         try {
             //Add line indexing into the users code string
             const codeArr = this.props.code.split(/\n/)
-            let lineIndexedCodeString = ""
+            let codeString = ""
             const regex = new RegExp(`(${this.props.commands.join('|')})\\s*\\([^)]*\\)`, 'g')
             for (let i = 0; i < codeArr.length; i++) {
                 const param = getCommandParams(codeArr[i])
-                lineIndexedCodeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
+                codeString += "\n" + codeArr[i].replace(regex, `$1(${(i + 1).toString()}, ${param})`)
             }
             // Create an array to gather all functions
             const allFunctions: Array<string> = [...this.props.commands]
             // Regex Pattern to find all function declarations
             const funcDefPattern = /\b(function\s+)(\w+)(\s*\([^)]*\)\s*)/g;
-            lineIndexedCodeString = lineIndexedCodeString
+            codeString = codeString
                 // Puts a callback function into the replace-function to get all params
                 // group1 = function + whitespace character
                 // group2 = functionname
@@ -295,13 +303,14 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                 })
             // Finds all function calls that are allowed and declared by the user and adds an await to them
             const activeFunctions = new RegExp(`(?<!function\\s+)((${allFunctions.join('|')}))\\s*(?=\\([^)]*\\))`, 'g')
-            lineIndexedCodeString = lineIndexedCodeString.replace(activeFunctions, (match) => "await " + match)
+            codeString = codeString.replace(activeFunctions, (match) => "await " + match)
             //Execute user code from string as an async function
-            await eval("(async () => {" + lineIndexedCodeString + "})()")
-            this.completeWorld()
+            codeString = "\n(async () => {\n" + codeString + "\n})()"
+            await eval(codeString)
         } catch (e) {
-            console.log('e', e);
             this.errorFound = e.toString()
+        } finally {
+            this.completeWorld()
         }
     }
 
@@ -317,12 +326,9 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         // Update log with error, unsolved or solved message
         this.props.updateLogAndLine(lastLog.message, 0, lastLog.type, this.props.worldNumber)
         // Clear interval and log at the end
-        //clearInterval(this.intervalRef)
         this.clearLog()
         // Give the result to the parent component
-        setTimeout(() => {
-            this.props.completedLevel(solved)
-        }, this.interval)
+        setTimeout(() => { this.props.completedLevel(solved) }, this.interval)
     }
 
     checkSolution() {

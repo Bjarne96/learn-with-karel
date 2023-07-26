@@ -13,9 +13,6 @@
 
 # Tickets
 PRIO
-    - regex on user string (combine matches and await only known functions)
-    - clear log bug
-    - when bound logic before boundContinue() calls
     - 
 LOW PRIO
     - 
