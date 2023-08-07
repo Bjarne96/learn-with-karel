@@ -242,7 +242,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             commandBindingString = `${commandBindingString}\n ${unusedCommands[i]} = () => {throw 'You can not use "${unusedCommands[i]}" in this level.'}`
         }
         // Example Output:
-        // let move = async (line, param) => return await this.executeCommand("move", 5, null)
+        // let move = async (line, param) => {return await this.executeCommand("move", 5, null);}
 
         /* *** Commands *** */
         // Moving karel
