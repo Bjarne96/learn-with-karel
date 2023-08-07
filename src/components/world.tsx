@@ -233,7 +233,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let commandBindingString = ""
         // Adds functionality to all commands that are allowed
         for (let i = 0; i < this.props.commands.length; i++) {
-            commandBindingString = `${commandBindingString}\n${this.props.commands[i]} = async (line, param) => {await this.executeCommand('${this.props.commands[i]}', line, param);}`
+            commandBindingString = `${commandBindingString}\n${this.props.commands[i]} = async (line, param) => {return await this.executeCommand('${this.props.commands[i]}', line, param);}`
         }
         // Adds error handling for the commands that are not allowed
         const allCommands: Commands = ["move", "turnLeft", "putBeeper", "pickBeeper", "turnRight", "turnAround", "frontIsClear", "frontIsBlocked", "leftIsClear", "leftIsBlocked", "rightIsClear", "rightIsBlocked", "beeperIsPresent", "noBeeperIsPresent", "beepersInBag", "noBeepersInBag", "facingNorth", "notFacingNorth", "facingEast", "notFacingEast", "facingSouth", "notFacingSouth", "facingWest", "notFacingWest", "moveAmount", "isWorld1", "isWorld2", "isWorld"]
@@ -242,7 +242,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             commandBindingString = `${commandBindingString}\n ${unusedCommands[i]} = () => {throw 'You can not use "${unusedCommands[i]}" in this level.'}`
         }
         // Example Output:
-        // let move = async (line, param) => await this.executeCommand("move", 5, null)
+        // let move = async (line, param) => return await this.executeCommand("move", 5, null)
 
         /* *** Commands *** */
         // Moving karel
