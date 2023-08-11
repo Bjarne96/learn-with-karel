@@ -501,5 +501,26 @@ putBeeper();`,
             },
         ],
     },
+    {
+        name: "Maze",
+        explanation: ``,
+        code: ``,
+        commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [2, 0, 2, 0, 6, 0],
+                    [0, 6, 0, 0, 1, 2],
+                    [4, 0, 6, 6, 4, 0],
+                    [4, 2, 2, 4, 2, 0],
+                    [0, 6, 0, 2, 4, 0],
+                    [4, 0, 0, 4, 0, 0]
+                ],
+                beepers: [{ x: 5, y: 0, count: 1 }],
+                solutions: [],
+                karel: { x: 0, y: 5, direction: 0, isSuper: true }
+            },
+        ]
+    },
 ];
 export default levels;
