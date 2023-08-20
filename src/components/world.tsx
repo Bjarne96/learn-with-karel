@@ -118,8 +118,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     // Deep copies all the props and returns them
     getUpdateFromProps() {
         const karel = JSON.parse(JSON.stringify(this.props.world.karel)) as IKarel
-        const beepers = JSON.parse(JSON.stringify(this.props.world.beepers)) as Beepers
-        const solutions = JSON.parse(JSON.stringify(this.props.world.solutions)) as Beepers
+        const beepers = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask].beepers)) as Beepers
+        const solutions = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask].solutions)) as Beepers
         const walls = JSON.parse(JSON.stringify(this.props.world.walls)) as Walls
         const currentLevel = JSON.parse(JSON.stringify(this.props.currentLevel)) as number
         const stateFromProps: IWorldState = {
@@ -307,6 +307,13 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             //Execute user code from string as an async function
             codeString = "\n(async () => {\n" + codeString + "\n})()"
             await eval(codeString)
+            // if (normalMode) {
+            //     await eval(codeString)
+            // }
+            // if (playGroundMode) {
+            //     leftIsPressed();
+            // }
+
         } catch (e) {
             this.errorFound = e.toString()
         } finally {

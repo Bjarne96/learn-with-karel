@@ -1,5 +1,5 @@
 import { type Db, ObjectId } from 'mongodb';
-import levels from "../data/levels"
+import levels from "../data/idk_somelevels"
 import type { NextApiResponse } from "next"
 import { type GetUserDbResponse, type GetLevelDbResponse, type GetLevelObject, type levelData } from './karel';
 

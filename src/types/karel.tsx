@@ -50,6 +50,7 @@ export interface DashboardState extends ResetStateObject {
     savedCode: number
     worldCounter: number
     activeTab: number
+    activeTask: number
 }
 
 export interface ResetStateObject {
@@ -84,6 +85,29 @@ export interface ILevel {
     worlds: Array<IWorld>
     commands: Commands
 }
+export interface INewLevel {
+    code: string
+    name: string
+    worlds: Array<INewWorld>
+    commands: Commands
+    explanations: Array<IExplanation>
+}
+export interface IExplanation {
+    title: string,
+    explanation: string
+}
+export interface INewWorld {
+    karel: IKarel
+    walls: Walls
+    tasks: Array<ITask>
+}
+
+export interface ITask {
+    beepers: Beepers
+    solutions: Beepers
+}
+
+
 export interface IWorld {
     beepers: Beepers
     karel: IKarel
@@ -133,7 +157,7 @@ export type ISnapshots = Array<ISnapshot>
 
 export interface IWorldProps {
     karel: IKarel
-    world: IWorld
+    world: INewWorld
     runningCode: boolean
     pauseCode: boolean
     code: string
@@ -147,6 +171,7 @@ export interface IWorldProps {
     displayHelper: boolean
     step: number
     loading: boolean
+    activeTask: number
     completedLevel(completed: boolean): void
     updateLogAndLine(log: string, line: number, type: logType, worldNumber: number): void
 }

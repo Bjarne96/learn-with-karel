@@ -17,7 +17,7 @@ import type {
     logType
 } from "../types/karel"
 //Data
-import levels from "../data/levels"
+import levels from "../data/idk_somelevels"
 import LevelButtons from "./levelbuttons"
 import LevelModal from "./modal"
 import Sidebar from "./sidebar"
@@ -73,10 +73,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 displayHelper: true,
                 step: 0,
                 loading: false,
-                savedCode: 0
+                savedCode: 0,
+                activeTask: 0
             }
         }
     }
+
+    setActiveTask(task: number) { this.setState({ activeTask: task }) }
 
     handleStep() {
         this.setState({
@@ -308,7 +311,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
                         2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
                         3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && !this.state.loading && <Explanation explanation={levels[this.state.currentLevel].explanation} />,
+                        4: this.state.displayHelper && !this.state.loading && <Explanation setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
                     <div className="w-full h-full bg-code-grey max-w-2xl relative">
@@ -343,6 +346,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 interval={this.state.interval}
                                 karel={this.state.karel}
                                 world={world}
+                                activeTask={this.state.activeTask}
                                 commands={this.state.commands}
                                 activeTab={this.state.activeTab}
                                 displayHelper={this.state.displayHelper}

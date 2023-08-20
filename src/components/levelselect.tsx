@@ -1,6 +1,6 @@
 import React from "react";
-import type { ISelectLevelProps, ILevel } from "../types/karel";
-import levels from "../data/levels";
+import type { ISelectLevelProps, ILevel, INewLevel } from "../types/karel";
+import levels from "../data/idk_somelevels";
 
 const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelChange }) => {
 
@@ -42,7 +42,7 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
                 onChange={(e) => handleLevelChange(Number(e.target.value))}
                 title="Select a level."
             >
-                {levels.map((level: ILevel, i: number) => (
+                {levels.map((level: INewLevel, i: number) => (
                     <option value={i} key={i}>
                         {i + 1}. {level.name}
                     </option>
