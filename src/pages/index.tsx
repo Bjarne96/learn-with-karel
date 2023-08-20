@@ -7,6 +7,8 @@ import type { DashboardProps, GetUserDbResponse, levelData, levelDataResponse } 
 import { getLevel } from "~/types/requests";
 import React from 'react';
 
+const db_name = process.env.DB_NAME
+
 const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, done: done, user_id: user_id }) => {
     return (
         <>
@@ -27,10 +29,11 @@ interface query {
 
 export async function getServerSideProps(context: query) {
     const id = context.query.id
+
     if (id == "" || id == null) return { props: { id: "" } }
     try {
         const client = await clientPromise;
-        const db = client.db("karel");
+        const db = client.db(db_name);
         const user: GetUserDbResponse = await db
             .collection("user")
             .findOne({ _id: new ObjectId(id) }) as GetUserDbResponse

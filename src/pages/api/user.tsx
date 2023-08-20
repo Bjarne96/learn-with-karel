@@ -7,9 +7,11 @@ import type { GetUserObject } from '~/types/karel';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     let db;
     let client;
+
+    const db_name = process.env.DB_NAME
     try {
         client = await clientPromise;
-        db = client.db("karel");
+        db = client.db(db_name);
     } catch (e) { return res.status(501).json({ "error": "Can not connect to Database.", "status": 501 }) }
     // if (req.method == "POST") return handlePost(req, res, db)
     // if (req.method == "PUT") return handlePut(req, res, db)
