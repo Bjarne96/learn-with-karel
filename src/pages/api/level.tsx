@@ -43,7 +43,12 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, db: Db) {
 
 async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) {
     try {
-        const bodyObject: PutRequestBodyObject = JSON.parse(req.body) as PutRequestBodyObject
+        let bodyObject: PutRequestBodyObject;
+        if (typeof req.body == "string") {
+            bodyObject = JSON.parse(req.body) as PutRequestBodyObject
+        } else if (typeof req.body == "object") {
+            bodyObject = req.body as PutRequestBodyObject
+        }
         const bodyLevel = bodyObject.level
         if (!hasKeys(bodyLevel, updateLevelBody) || bodyLevel == undefined) return userError(res, "Your request does not meet the specifications.")
         const level: levelData = await findLevel(bodyObject, db) as levelData
@@ -62,19 +67,25 @@ async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) 
                 if (!response.insertedId) return databaseError(res, "Could not insert Attempt.")
             }
             //Save into the levellog, when finished the first time
-            if (level.done == "" && bodyLevel.done != null && bodyLevel.done != "") {
+            const tasks = bodyLevel["tasks"]
+            let newProgress = false
+            if (tasks != null) {
+                tasks.forEach((taskObject, i) => {
+                    if (level.tasks[i - 1].done == "" && taskObject.done != "") newProgress = true
+                })
+            }
+            if (newProgress) {
                 const response = await db.collection("levellog").insertOne({
                     "_id": new ObjectId(level.id),
                     "user_id": level.user_id,
                     "stage": level.stage,
-                    "default_code": level.default_code,
-                    "default_world": level.default_world,
-                    "start": level.start,
                     "code": bodyLevel.code,
-                    "done": bodyLevel.done
+                    "tasks": bodyLevel.tasks
                 })
                 if (!response.insertedId) return databaseError(res, "Could not insert Level.")
             }
+
+
             const response = await db.collection("level").updateOne(
                 {
                     _id: new ObjectId(level.id),

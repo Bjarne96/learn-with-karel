@@ -14,7 +14,8 @@ import type {
     ResetStateObject,
     IUpdateLevelData,
     LogEntry,
-    logType
+    logType,
+    taskData
 } from "../types/karel"
 //Data
 import levels from "../data/idk_somelevels"
@@ -42,10 +43,23 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let lastStage = 0
         let done = ""
         let code = levels[lastStage].code
+        let tasks: Array<taskData> = []
+        let activeTask = 1
         if (props.id && props.id.length) {
             this.userId = props.id
             this.isLoggedIn = true
-            done = props.done
+            tasks = props.tasks
+            let lowestTask = Number.MAX_SAFE_INTEGER
+            let foundOneItems = 0
+            tasks.forEach((taskObject) => {
+                if ((taskObject.start != "" && taskObject.done != "")) foundOneItems++
+                if (taskObject.task < lowestTask && (taskObject.start == "" || taskObject.done == "")) {
+                    lowestTask = taskObject.task
+                    activeTask = taskObject.task
+                }
+            })
+            if (foundOneItems == tasks.length) activeTask = tasks.length
+            done = tasks[activeTask - 1].done
             lastStage = props.stage
             code = props.code
         }
@@ -74,12 +88,18 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 step: 0,
                 loading: false,
                 savedCode: 0,
-                activeTask: 0
+                activeTask: activeTask,
+                tasks: tasks
             }
         }
     }
 
-    setActiveTask(task: number) { this.setState({ activeTask: task }) }
+    setActiveTask(task: number) {
+        this.setState({
+            activeTask: task,
+            done: this.state.tasks[task - 1].done
+        })
+    }
 
     handleStep() {
         this.setState({
@@ -252,7 +272,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         // Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
             done = new Date().toString()
-            void this.handleSaveLevel({ done: done, code: this.state.code }, true)
+            // void this.handleSaveLevel({ done: done, code: this.state.code }, true)
         }
         let showModal = false
         if (this.state.done == "" && completed) showModal = true

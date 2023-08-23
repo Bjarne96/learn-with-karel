@@ -1,7 +1,7 @@
 import { type Db, ObjectId } from 'mongodb';
 import levels from "../data/idk_somelevels"
 import type { NextApiResponse } from "next"
-import { type GetUserDbResponse, type GetLevelDbResponse, type GetLevelObject, type levelData } from './karel';
+import { type GetUserDbResponse, type GetLevelDbResponse, type GetLevelObject, type levelData, type taskData } from './karel';
 
 export const postLevelBody = {
     user_id: "642161d67a4a6ac23c5b0fe5",
@@ -10,13 +10,15 @@ export const postLevelBody = {
 }
 export const updateLevelBody = {
     user_id: "642161d67a4a6ac23c5b0fe5",
-    default_code: "long line of code",
-    default_world: {},
     stage: 1,
     code: "long line of code",
-    done: "",
-    start: "Wed Mar 29 2023 13:10:09 GMT+0200 (Mitteleuropäische Sommerzeit)",
-    inactive: 5
+    tasks: [
+        {
+            "task": 1,
+            "start": "Sun Aug 20 2023 13:25:17 GMT+0200 (Mitteleuropäische Sommerzeit)",
+            "done": "Sun Aug 20 2023 13:27:17 GMT+0200 (Mitteleuropäische Sommerzeit)"
+        }
+    ]
 }
 export const postAttemptBody = {
     timestamp: "Wed Mar 29 2023 13:10:09 GMT+0200 (Mitteleuropäische Sommerzeit)",
@@ -33,17 +35,25 @@ export const getLevelBody = {
     id: "642161d67a4a6ac23c5b0fe5"
 }
 
-export async function createLevel(user_id: string, stage: number, start: string, db: Db) {
+export async function createLevel(user_id: string, stage: number, db: Db) {
     if (levels[(stage)] == null) return { insertedId: "" }
+    const tasks: Array<taskData> = []
+    const taskLength = levels[stage].worlds[0].tasks.length
+    if (levels[stage].explanations.length != taskLength) return { status: 500, msg: "Could not insert Level." }
+    for (let i = 1; i <= taskLength; i++) {
+        let start = ""
+        if (i == 1) start = new Date().toString()
+        tasks.push({
+            task: i,
+            start: start,
+            done: ""
+        })
+    }
     return await db.collection("level").insertOne({
         "user_id": user_id,
         "stage": Number(stage),
-        "default_code": levels[stage].code,
-        "default_world": levels[stage].worlds[0],
         "code": levels[stage].code,
-        "start": start,
-        "done": "",
-        "inactive": 0
+        "tasks": tasks
     });
 }
 //Finds the level, when given id or user_id and stage
@@ -64,11 +74,8 @@ export async function findLevel(bodyObject: GetLevelObject, db: Db) {
                 id: dbLevel._id.toString(),
                 user_id: dbLevel.user_id,
                 code: dbLevel.code,
-                done: dbLevel.done,
                 stage: dbLevel.stage,
-                start: dbLevel.start,
-                default_world: dbLevel.default_world,
-                default_code: dbLevel.default_code
+                tasks: dbLevel.tasks
             }
             return level
         } else {
@@ -89,7 +96,8 @@ export async function getLevel(body: GetLevelObject, db: Db) {
         if (level == null) {
             const user: GetUserDbResponse = await db.collection("user").findOne({ _id: new ObjectId(body.user_id) }) as GetUserDbResponse
             if (user == null) return { status: 300, msg: "You are not registered or you have not used your user specific link." }
-            const response = await createLevel(body["user_id"], body["stage"], new Date().toString(), db)
+
+            const response = await createLevel(body["user_id"], body["stage"], db)
             if (!response["insertedId"]) return { status: 500, msg: "Could not insert Level." }
             const levelRes = await findLevel({ id: response.insertedId.toString() }, db)
             level = levelRes

@@ -9,7 +9,7 @@ import React from 'react';
 
 const db_name = process.env.DB_NAME
 
-const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, done: done, user_id: user_id }) => {
+const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, user_id: user_id, tasks: tasks }) => {
     return (
         <>
             <Head>
@@ -17,7 +17,7 @@ const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, done
                 <meta name="description" content="Learn how to code with Karel." />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Dashboard id={id} stage={stage} code={code} done={done} user_id={user_id} />
+            <Dashboard id={id} stage={stage} code={code} user_id={user_id} tasks={tasks} />
         </>
     );
 };
@@ -47,8 +47,8 @@ export async function getServerSideProps(context: query) {
                     id: id,
                     stage: Number(level.stage),
                     code: level.code,
-                    done: level.done,
-                    user_id: level.user_id
+                    user_id: level.user_id,
+                    tasks: level.tasks
                 }
             }
         } else {

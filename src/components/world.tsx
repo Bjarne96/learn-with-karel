@@ -45,7 +45,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             solutions: JSON.parse(JSON.stringify(stateFromProps.solutions)) as Beepers,
             walls: JSON.parse(JSON.stringify(stateFromProps.walls)) as Walls,
             currentLevel: JSON.parse(JSON.stringify(stateFromProps.currentLevel)) as number,
-            updateCanvas: 0
+            updateCanvas: 0,
+            activeTask: this.props.activeTask
         }
     }
 
@@ -76,7 +77,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             void this.executeCode()
         }
         // Level changed
-        if (this.props.currentLevel != this.state.currentLevel && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
+        if (((this.props.currentLevel != this.state.currentLevel) || this.props.activeTask != this.state.activeTask) && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
             this.resetLevel()
             this.setLevel()
         }
@@ -105,7 +106,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             beepers: update.beepers,
             solutions: update.solutions,
             walls: update.walls,
-            currentLevel: update.currentLevel
+            currentLevel: update.currentLevel,
+            activeTask: update.activeTask
         })
     }
     //TO DO: can this be combined with setLevel?
@@ -118,8 +120,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     // Deep copies all the props and returns them
     getUpdateFromProps() {
         const karel = JSON.parse(JSON.stringify(this.props.world.karel)) as IKarel
-        const beepers = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask].beepers)) as Beepers
-        const solutions = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask].solutions)) as Beepers
+        const beepers = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask - 1].beepers)) as Beepers
+        const solutions = JSON.parse(JSON.stringify(this.props.world.tasks[this.props.activeTask - 1].solutions)) as Beepers
         const walls = JSON.parse(JSON.stringify(this.props.world.walls)) as Walls
         const currentLevel = JSON.parse(JSON.stringify(this.props.currentLevel)) as number
         const stateFromProps: IWorldState = {
@@ -129,6 +131,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             walls: walls,
             currentLevel: currentLevel,
             updateCanvas: 0,
+            activeTask: this.props.activeTask
         }
         return stateFromProps
     }

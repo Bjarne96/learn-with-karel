@@ -19,10 +19,13 @@ export interface levelData {
     user_id: string
     stage: number
     code: string
-    default_world: IWorld
-    default_code: string
-    done: string
+    tasks: Array<taskData>
+}
+
+export interface taskData {
+    task: number,
     start: string
+    done: string
 }
 export interface PageProps {
     id: string
@@ -35,7 +38,7 @@ export interface DashboardProps {
     user_id: string
     stage: number
     code: string
-    done: string
+    tasks: Array<taskData>
 }
 export interface DashboardState extends ResetStateObject {
     currentLevel: number
@@ -51,6 +54,7 @@ export interface DashboardState extends ResetStateObject {
     worldCounter: number
     activeTab: number
     activeTask: number
+    tasks: Array<taskData>
 }
 
 export interface ResetStateObject {
@@ -147,6 +151,7 @@ export interface IWorldState {
     walls: Walls
     currentLevel: number
     updateCanvas: number
+    activeTask: number
 }
 
 export interface ISnapshot {
@@ -236,7 +241,7 @@ export interface GetUserObject {
 }
 export interface IUpdateLevelData {
     code?: string
-    done?: string
+    tasks?: Array<taskData>
 }
 export interface IUpdateLevelRequest extends IUpdateLevelData {
     user_id: string
@@ -260,12 +265,8 @@ export interface GetLevelDbResponse {
     _id: ObjectId
     user_id: string
     stage: number
-    start: string
-    default_world: IWorld
-    default_code: string
     code: string
-    done: string
-    inactive: number
+    tasks: Array<taskData>
 }
 export interface GetUserDbResponse {
     _id: ObjectId
