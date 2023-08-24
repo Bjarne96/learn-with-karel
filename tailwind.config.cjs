@@ -8,7 +8,9 @@ const config = {
             'code-lightgrey': '#7d8799',
             'code-blue' : '#61afef',
             'custom-blue' : '#0e3a60',
-            'custom-darkblue' : '#082238'
+            'custom-darkblue' : '#082238',
+            'tasks-blue': '#135185',
+            "tasks-lightblue": '#1f7fd2'
         }
     }
   },

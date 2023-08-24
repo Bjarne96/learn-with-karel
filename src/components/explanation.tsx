@@ -1,18 +1,56 @@
 import React from 'react'
-import { type IExplanation } from '~/types/karel'
+import { type taskData, type IExplanation } from '~/types/karel'
 
 interface explanation {
     explanations: Array<IExplanation>
+    tasks: Array<taskData>
     activeTask: number
     setActiveTask(task: number): void
 }
 
-const Explanation: React.FC<explanation> = ({ explanations, activeTask, setActiveTask }) => {
+const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, setActiveTask }) => {
+
+    function returnTasks(task: taskData, index: number, disabled: boolean) {
+        let classname = "m-auto h-12 flex flex-row w-full rounded-md mb-3 "
+        const titleClassname = "p-0 font-semibold whitespace-pre-wrap text-white ml-3 mt-2"
+        let checkmark = <svg
+            className={"ml-auto fill-white"}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+        >
+            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+        </svg>
+        if (task.done == "") checkmark = <></>
+        if ((index + 1) == activeTask) {
+            classname += " cursor-default "
+            if (!disabled) classname += " bg-tasks-lightblue border-l-4 border-white "
+        } else {
+            if (disabled) classname += " bg-code-grey cursor-default"
+            else if (index != Number.MAX_SAFE_INTEGER) classname += " bg-tasks-blue cursor-pointer"
+        }
+        if (index == Number.MAX_SAFE_INTEGER) classname += " cursor-default bg-tasks-blue"
+
+        return <div key={index} className={classname} onClick={() => { if (index != Number.MAX_SAFE_INTEGER && !disabled) setActiveTask(index + 1) }}>
+            {
+                index != Number.MAX_SAFE_INTEGER ?
+                    <h1 className={titleClassname}>{explanations[index].title}</h1>
+                    :
+                    <h1 className={titleClassname}>All Tasks</h1>
+            }
+            <div className={"w-6 h-8 ml-auto mt-2 mr-3"} title={"This task has been completed."}>{checkmark}</div>
+        </div>
+    }
+    const allTasksTask: taskData = {
+        done: tasks[tasks.length - 1].done,
+        start: "",
+        task: 0
+    }
     return <div className={"h-[100vh] p-8 text-white tracking-wide w-full max-w-lg"}>
-        {/* <p className="break-word pb-4 font-semibold whitespace-pre-wrap text-white">Task Explanation</p> */}
-        {explanations.map((explanationObject, i) => {
-            if ((i + 1) == activeTask) return <div key={i} className={"m-auto h-12 cursor-default "} dangerouslySetInnerHTML={{ __html: explanationObject.title }}></div>
-            else return <div className={"m-auto h-12 cursor-pointer"} onClick={() => setActiveTask(i + 1)} key={i} dangerouslySetInnerHTML={{ __html: explanationObject.title }}></div>
+        {returnTasks(allTasksTask, Number.MAX_SAFE_INTEGER, false)}
+        {tasks.map((task, index) => {
+            let disabled = false
+            if (index > 0 && tasks[index - 1].done == "") disabled = true
+            return returnTasks(task, index, disabled)
         })}
         {explanations.map((explanationObject, i) => {
             if ((i + 1) == activeTask) return <div key={i} >

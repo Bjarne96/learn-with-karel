@@ -177,7 +177,7 @@ export interface IWorldProps {
     step: number
     loading: boolean
     activeTask: number
-    completedLevel(completed: boolean): void
+    completedWorld(completed: boolean): void
     updateLogAndLine(log: string, line: number, type: logType, worldNumber: number): void
 }
 
@@ -219,10 +219,8 @@ export interface GetLevelApiResponse {
     id: string
     user_id: string
     stage: number
-    start: string
-    default_world: IWorld
     code: string
-    done: string
+    tasks: Array<taskData>
 }
 
 export interface RestRequest {

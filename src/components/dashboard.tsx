@@ -49,13 +49,13 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             this.userId = props.id
             this.isLoggedIn = true
             tasks = props.tasks
-            let lowestTask = Number.MAX_SAFE_INTEGER
+            let highestTask = 1
             let foundOneItems = 0
             tasks.forEach((taskObject) => {
-                if ((taskObject.start != "" && taskObject.done != "")) foundOneItems++
-                if (taskObject.task < lowestTask && (taskObject.start == "" || taskObject.done == "")) {
-                    lowestTask = taskObject.task
-                    activeTask = taskObject.task
+                if (taskObject.done != "") foundOneItems++
+                if (taskObject.task > highestTask && taskObject.done == "") {
+                    highestTask = taskObject.task
+                    // activeTask = taskObject.task
                 }
             })
             if (foundOneItems == tasks.length) activeTask = tasks.length
@@ -96,8 +96,11 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
 
     setActiveTask(task: number) {
         this.setState({
-            activeTask: task,
-            done: this.state.tasks[task - 1].done
+            ...this.getResetRunningCodeObject(),
+            ...{
+                activeTask: task,
+                done: this.state.tasks[task - 1].done
+            }
         })
     }
 
@@ -123,12 +126,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         const karel: IKarel = JSON.parse(JSON.stringify(levels[level]?.worlds[0]?.karel)) as IKarel //Deep Copy
         let code: string = (' ' + (levels[level]?.code)).slice(1) //Deep Copy
         let done = ""
+        let tasks: Array<taskData> = []
         await this.handleSaveLevel({ code: this.state.code })
         // await new Promise((res) => setTimeout(() => res("p1"), 3000)); // Testing loading screen
         const res: GetLevelApiResponse | string = await this.getLevel(level)
         if (typeof res != "string") {
             code = res.code
-            done = res.done
+            done = res.tasks[0].done
+            tasks = res.tasks
         }
         this.setState({
             ...this.getResetRunningCodeObject(),
@@ -139,8 +144,10 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 code: code,
                 done: done,
                 activeTab: 4,
+                activeTask: 1,
                 worldCounter: levels[level].worlds.length,
-                loading: false
+                loading: false,
+                tasks: tasks
             }
         })
     }
@@ -250,7 +257,22 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (level >= 0 && level < levels.length) void this.setLevel(level)
     }
 
-    completedLevel(completed: boolean) {
+    updateActiveTasks(task: taskData) {
+        const tasks = [...this.state.tasks]
+        const newTask = { ...tasks[this.state.activeTask - 1] }
+        newTask.done = task.done
+        newTask.start = task.start
+        newTask.task = task.task
+
+        let index = Number.MAX_SAFE_INTEGER
+        this.state.tasks.forEach((task, i) => {
+            if (this.state.activeTask == task.task) index = i
+        })
+        tasks[index] = newTask
+        return tasks
+    }
+
+    completedWorld(completed: boolean) {
         let worldSuccessfullyCompletedCounter = this.state.worldSuccessfullyCompletedCounter
         let worldCompletedCounter = this.state.worldCompletedCounter
         let executionCompleted = false
@@ -269,22 +291,50 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         // Was the level executed till the end, then the execution is completed
         if (this.state.worldCounter == worldCompletedCounter) executionCompleted = true
         let done = this.state.done
+        let tasks = this.state.tasks
+        let activeTask = this.state.activeTask
+        const resetObject = {}
         // Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
+            // set new active task
+            if (this.state.activeTask < this.state.tasks.length) activeTask++
+            // set new done value
             done = new Date().toString()
-            // void this.handleSaveLevel({ done: done, code: this.state.code }, true)
+            // save to database
+
+            // update tasks
+            // const newTask: taskData = { ...this.state.tasks[this.state.activeTask - 1] }
+
+            let newTask: taskData = {
+                done: "",
+                start: "",
+                task: Number.MAX_SAFE_INTEGER
+            }
+            this.state.tasks.forEach((task) => {
+                if (this.state.activeTask == task.task) newTask = { ...task }
+            })
+            newTask.done = done
+            if (newTask.task != Number.MAX_SAFE_INTEGER) tasks = this.updateActiveTasks(newTask)
+            void this.handleSaveLevel({ tasks: tasks, code: this.state.code }, true)
+            // resetObject = this.getResetRunningCodeObject()
         }
         let showModal = false
-        if (this.state.done == "" && completed) showModal = true
+
+        if (this.state.tasks[tasks.length - 1].done != "" && completed) showModal = true
         this.setState({
-            done: done,
-            executionSuccessfullyCompleted: completed,
-            executionCompleted: executionCompleted,
-            showLevelCompletedModal: showModal,
-            worldSuccessfullyCompletedCounter: worldSuccessfullyCompletedCounter,
-            worldCompletedCounter: worldCompletedCounter,
-            step: 0,
-            activeLine: 0
+            ...resetObject,
+            ...{
+                done: done,
+                executionSuccessfullyCompleted: completed,
+                executionCompleted: executionCompleted,
+                showLevelCompletedModal: showModal,
+                worldSuccessfullyCompletedCounter: worldSuccessfullyCompletedCounter,
+                worldCompletedCounter: worldCompletedCounter,
+                step: 0,
+                activeLine: 0,
+                // activeTask: activeTask,
+                tasks: tasks
+            }
         })
     }
 
@@ -331,7 +381,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
                         2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
                         3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && !this.state.loading && <Explanation setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
+                        4: this.state.displayHelper && !this.state.loading && <Explanation tasks={this.state.tasks} setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
                     <div className="w-full h-full bg-code-grey max-w-2xl relative">
@@ -370,7 +420,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 commands={this.state.commands}
                                 activeTab={this.state.activeTab}
                                 displayHelper={this.state.displayHelper}
-                                completedLevel={this.completedLevel.bind(this)}
+                                completedWorld={this.completedWorld.bind(this)}
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
                                 step={this.state.step}
                                 loading={this.state.loading}

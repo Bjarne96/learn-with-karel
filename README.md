@@ -13,10 +13,10 @@
 
 # Tickets
 PRIO
-    - 
+    - change default task behavior in contructor
+    - userflag for free usage of tasks
+    - playmode
 LOW PRIO
-    - 
-    - user has "geführtes lernen tag"
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
     - window location history for selects
     - change cryptic numbers to properties that are intuitive for walls, karel and other world related objects

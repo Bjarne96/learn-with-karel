@@ -338,7 +338,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         // Clear interval and log at the end
         this.clearLog()
         // Give the result to the parent component
-        setTimeout(() => { this.props.completedLevel(solved) }, this.interval)
+        setTimeout(() => { this.props.completedWorld(solved) }, this.interval)
     }
 
     checkSolution() {

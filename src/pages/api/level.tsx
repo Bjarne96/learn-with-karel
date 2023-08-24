@@ -71,21 +71,19 @@ async function handlePut(req: NextApiRequestBody, res: NextApiResponse, db: Db) 
             let newProgress = false
             if (tasks != null) {
                 tasks.forEach((taskObject, i) => {
-                    if (level.tasks[i - 1].done == "" && taskObject.done != "") newProgress = true
+                    if (level.tasks[i].done == "" && taskObject.done != "") newProgress = true
                 })
             }
             if (newProgress) {
                 const response = await db.collection("levellog").insertOne({
-                    "_id": new ObjectId(level.id),
+                    "level_id": level.id,
                     "user_id": level.user_id,
                     "stage": level.stage,
                     "code": bodyLevel.code,
-                    "tasks": bodyLevel.tasks
+                    "tasks": tasks
                 })
                 if (!response.insertedId) return databaseError(res, "Could not insert Level.")
             }
-
-
             const response = await db.collection("level").updateOne(
                 {
                     _id: new ObjectId(level.id),
