@@ -25,11 +25,11 @@ export const postAttemptBody = {
 }
 export const findLevelBody = {
     user_id: "642161d67a4a6ac23c5b0fe5",
-    stage: 1
+    stage: 0
 }
 export const updateUserBody = {
     id: "642161d67a4a6ac23c5b0fe5",
-    lastStage: 1
+    lastStage: 0
 }
 export const getLevelBody = {
     id: "642161d67a4a6ac23c5b0fe5"

@@ -11,11 +11,17 @@
 # Ideas
     - Users can save cusstom functions (across levels)
 
+# URLs
+    - Survey-User-Links: http://localhost:3000/?survey_id=642878085&type=7cb458
+    - Normal-User-Links: http://localhost:3000/?id=64e1f72a423d104bcb6bc433
+# Questions
+    - what is supposed to ne written in task 1 and 2 into the key "done", when i finish task 3
+    - what exactly should be written in the task modal
 # Tickets
 PRIO
-    - change default task behavior in contructor
-    - userflag for free usage of tasks
-    - playmode
+    - modal after user finishes task
+    - log unter dem code
+    - playmode with regex 
 LOW PRIO
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks
     - window location history for selects

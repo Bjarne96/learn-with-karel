@@ -39,6 +39,7 @@ export interface DashboardProps {
     stage: number
     code: string
     tasks: Array<taskData>
+    restrictedTasks: boolean
 }
 export interface DashboardState extends ResetStateObject {
     currentLevel: number
@@ -80,7 +81,7 @@ export interface LogEntry {
 
 export type logType = "success" | "error" | "returnedTrue" | "returnedFalse" | "normal" | "info"
 
-export type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest" | "moveAmount" | "isWorld1" | "isWorld2" | "isWorld">
+export type Commands = Array<"move" | "turnLeft" | "putBeeper" | "pickBeeper" | "turnRight" | "turnAround" | "frontIsClear" | "frontIsBlocked" | "leftIsClear" | "leftIsBlocked" | "rightIsClear" | "rightIsBlocked" | "beeperIsPresent" | "noBeeperIsPresent" | "beepersInBag" | "noBeepersInBag" | "facingNorth" | "notFacingNorth" | "facingEast" | "notFacingEast" | "facingSouth" | "notFacingSouth" | "facingWest" | "notFacingWest" | "moveAmount" | "isWorld1" | "isWorld2" | "isWorld" | "rightIsPressed" | "leftIsPressed" | "upIsPressed" | "downIsPressed">
 
 export interface ILevel {
     code: string

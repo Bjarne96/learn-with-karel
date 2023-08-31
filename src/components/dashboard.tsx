@@ -20,7 +20,7 @@ import type {
 //Data
 import levels from "../data/idk_somelevels"
 import LevelButtons from "./levelbuttons"
-import LevelModal from "./modal"
+import LevelModal from "./levelModal"
 import Sidebar from "./sidebar"
 import Log from "./log"
 import SelectLevel from "./levelselect"
@@ -34,6 +34,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     debounceRunningCode = false
     debounceSaveCode = false
     isLoggedIn = false
+    restrictedTasks = true
     userId = ""
     saveCode: ReturnType<typeof setTimeout> = null
 
@@ -46,6 +47,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let tasks: Array<taskData> = []
         let activeTask = 1
         if (props.id && props.id.length) {
+            this.restrictedTasks = props.restrictedTasks
             this.userId = props.id
             this.isLoggedIn = true
             tasks = props.tasks
@@ -90,14 +92,29 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
+    getGivenTask(taskNumber: number): taskData {
+        let returntask: taskData
+        this.state.tasks.forEach((task) => { if (taskNumber == task.task) returntask = task })
+        return { ...returntask }
+    }
+
     setActiveTask(task: number) {
+        const toUpdateTask = this.getGivenTask(task)
+        let tasks = [...this.state.tasks]
+        if (toUpdateTask.start == "" && toUpdateTask.done == "") {
+            toUpdateTask.start = new Date().toString()
+            tasks = this.updateGivenTasks(this.state.tasks, toUpdateTask, task)
+            void this.handleSaveLevel({ tasks: tasks, code: this.state.code }, true)
+        }
         this.setState({
             ...this.getResetRunningCodeObject(),
             ...{
                 activeTask: task,
+                tasks: tasks,
                 done: this.state.tasks[task - 1].done
             }
         })
+
     }
 
     handleStep() {
@@ -253,16 +270,16 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         if (level >= 0 && level < levels.length) void this.setLevel(level)
     }
 
-    updateActiveTasks(task: taskData) {
-        const tasks = [...this.state.tasks]
-        const newTask = { ...tasks[this.state.activeTask - 1] }
+    updateGivenTasks(tasksArr: Array<taskData>, task: taskData, taskNumber: number) {
+        const tasks = [...tasksArr]
+        const newTask = this.getGivenTask(taskNumber)
         newTask.done = task.done
         newTask.start = task.start
         newTask.task = task.task
 
         let index = Number.MAX_SAFE_INTEGER
         this.state.tasks.forEach((task, i) => {
-            if (this.state.activeTask == task.task) index = i
+            if (taskNumber == task.task) index = i
         })
         tasks[index] = newTask
         return tasks
@@ -287,32 +304,39 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         // Was the level executed till the end, then the execution is completed
         if (this.state.worldCounter == worldCompletedCounter) executionCompleted = true
         let done = this.state.done
-        let tasks = this.state.tasks
-        let activeTask = this.state.activeTask
+        let tasks = [...this.state.tasks]
+        // const activeTask = this.state.activeTask
         const resetObject = {}
         // Handle first time completed and saves the code and the done date to database
         if (completed && this.state.done == "") {
             // set new active task
-            if (this.state.activeTask < this.state.tasks.length) activeTask++
+            // if (this.state.activeTask < this.state.tasks.length) activeTask++
             // set new done value
             done = new Date().toString()
-            // save to database
-
             // update tasks
-            // const newTask: taskData = { ...this.state.tasks[this.state.activeTask - 1] }
-
             let newTask: taskData = {
                 done: "",
                 start: "",
                 task: Number.MAX_SAFE_INTEGER
             }
-            this.state.tasks.forEach((task) => {
-                if (this.state.activeTask == task.task) newTask = { ...task }
-            })
+            newTask = this.getGivenTask(this.state.activeTask)
             newTask.done = done
-            if (newTask.task != Number.MAX_SAFE_INTEGER) tasks = this.updateActiveTasks(newTask)
+            if (newTask.task != Number.MAX_SAFE_INTEGER) {
+                if (!this.restrictedTasks) {
+                    // Check for lower tasks thats have to be "done" for unrestricted users
+                    const currentTaskState = this.getGivenTask(newTask.task)
+                    if (currentTaskState.done == "" && newTask.done != "") {
+                        tasks.forEach((t) => {
+                            if (newTask.task > t.task && t.done == "") {
+                                t.done = "xxx"
+                                tasks = this.updateGivenTasks(tasks, t, this.state.activeTask)
+                            }
+                        })
+                    }
+                }
+                tasks = this.updateGivenTasks(tasks, newTask, this.state.activeTask)
+            }
             void this.handleSaveLevel({ tasks: tasks, code: this.state.code }, true)
-            // resetObject = this.getResetRunningCodeObject()
         }
         let showModal = false
 
@@ -328,7 +352,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 worldCompletedCounter: worldCompletedCounter,
                 step: 0,
                 activeLine: 0,
-                // activeTask: activeTask,
                 tasks: tasks
             }
         })
@@ -377,7 +400,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
                         2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
                         3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && !this.state.loading && <Explanation tasks={this.state.tasks} setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
+                        4: this.state.displayHelper && !this.state.loading && <Explanation restrictedTasks={this.restrictedTasks} tasks={this.state.tasks} setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
                     }[this.state.activeTab]}
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
                     <div className="w-full h-full bg-code-grey max-w-2xl relative">
