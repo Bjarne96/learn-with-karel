@@ -49,16 +49,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             this.userId = props.id
             this.isLoggedIn = true
             tasks = props.tasks
-            let highestTask = 1
-            let foundOneItems = 0
+            let highestDoneTask = 0
             tasks.forEach((taskObject) => {
-                if (taskObject.done != "") foundOneItems++
-                if (taskObject.task > highestTask && taskObject.done == "") {
-                    highestTask = taskObject.task
-                    // activeTask = taskObject.task
-                }
+                if (taskObject.task > highestDoneTask && taskObject.done != "") highestDoneTask = taskObject.task
             })
-            if (foundOneItems == tasks.length) activeTask = tasks.length
+            activeTask = highestDoneTask + 1
+            if (highestDoneTask == tasks.length) activeTask = tasks.length
             done = tasks[activeTask - 1].done
             lastStage = props.stage
             code = props.code

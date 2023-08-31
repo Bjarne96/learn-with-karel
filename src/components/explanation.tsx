@@ -11,7 +11,7 @@ interface explanation {
 const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, setActiveTask }) => {
 
     function returnTasks(task: taskData, index: number, disabled: boolean) {
-        let classname = "m-auto h-12 flex flex-row w-full rounded-md mb-3 "
+        let classname = "m-auto h-12 flex flex-row w-full rounded-md mb-3  border-l-4 "
         const titleClassname = "p-0 font-semibold whitespace-pre-wrap text-white ml-3 mt-2"
         let checkmark = <svg
             className={"ml-auto fill-white"}
@@ -23,12 +23,12 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
         if (task.done == "") checkmark = <></>
         if ((index + 1) == activeTask) {
             classname += " cursor-default "
-            if (!disabled) classname += " bg-tasks-lightblue border-l-4 border-white "
+            if (!disabled) classname += " bg-tasks-lightblue border-white "
         } else {
             if (disabled) classname += " bg-code-grey cursor-default"
-            else if (index != Number.MAX_SAFE_INTEGER) classname += " bg-tasks-blue cursor-pointer"
+            else if (index != Number.MAX_SAFE_INTEGER) classname += " bg-tasks-blue cursor-pointer border-tasks-blue"
         }
-        if (index == Number.MAX_SAFE_INTEGER) classname += " cursor-default bg-tasks-blue"
+        if (index == Number.MAX_SAFE_INTEGER) classname += " cursor-default bg-tasks-blue border-tasks-blue"
 
         return <div key={index} className={classname} onClick={() => { if (index != Number.MAX_SAFE_INTEGER && !disabled) setActiveTask(index + 1) }}>
             {
@@ -53,13 +53,11 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
             return returnTasks(task, index, disabled)
         })}
         {explanations.map((explanationObject, i) => {
-            if ((i + 1) == activeTask) return <div key={i} >
-                <div
-                    dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}
-                    // 4 = 1 rem
-                    // 3 x headlins + outer padding
-                    className="overflow-y-auto max-h-[calc(100vh-13rem)]">
-                </div>
+            if ((i + 1) == activeTask) return <div
+                key={i}
+                dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}
+                // 4 = 1 rem so calculate = 3 x headlins + outer padding = 18 rem
+                className="overflow-y-auto max-h-[calc(100vh-18rem)]">
             </div>
         })}
     </div>

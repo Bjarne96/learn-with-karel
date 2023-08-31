@@ -91,7 +91,7 @@ export const levels: Array<INewLevel> = [
                 putBeeper();<br>`,
             }
         ],
-        code: ``,
+        code: `//level1\n`,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper", "moveAmount"],
         worlds: [
             {
@@ -213,7 +213,7 @@ export const levels: Array<INewLevel> = [
                 putBeeper();<br>`,
             }
         ],
-        code: ``,
+        code: `//level2\n`,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper", "moveAmount"],
         worlds: [
             {
