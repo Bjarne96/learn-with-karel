@@ -4,19 +4,17 @@ interface Props {
     currentlevel: number
     handleLevelChange(level: number): void
     handleResetExecution(): void
-    toggleModal(level: boolean): void
+    togglLevelModal(level: boolean): void
 }
 
-const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleResetExecution, toggleModal }) => {
+const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleResetExecution, togglLevelModal }) => {
     const nextLevel = () => {
         handleLevelChange(currentlevel + 1)
         hideModal()
         handleResetExecution()
     }
 
-    const hideModal = () => {
-        toggleModal(false)
-    }
+    const hideModal = () => { togglLevelModal(false) }
 
     return (
         <div className="absolute inset-0 flex top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">

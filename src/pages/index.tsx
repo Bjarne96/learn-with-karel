@@ -48,7 +48,7 @@ export async function getServerSideProps(context: query) {
                 const userRes = await db.collection("user").insertOne({
                     lastStage: 0,
                     survey_id: survey_id,
-                    restrictedTask: restrictedTasks
+                    restrictedTasks: restrictedTasks
                 })
                 id = userRes.insertedId.toString()
             } else {
@@ -59,6 +59,7 @@ export async function getServerSideProps(context: query) {
         if (id == "" || id == null) return { props: { id: "" } }
         if (user == null) user = await db.collection("user").findOne({ _id: new ObjectId(id) }) as GetUserDbResponse
         if (user == null) return { props: { id: "" } }
+        else restrictedTasks = user.restrictedTasks
         const response: levelDataResponse = await getLevel({ user_id: id, stage: Number(user.lastStage) }, db) as levelDataResponse
         if (response.level == undefined) return { props: { id: "" } }
         const level: levelData = response.level
