@@ -44,7 +44,6 @@ export async function getServerSideProps(context: query) {
             const dbUser: GetUserDbResponse = await db.collection("user").findOne({ survey_id: survey_id }) as GetUserDbResponse
             if (dbUser == null) {
                 // Create User when the URL is access the first time
-
                 const userRes = await db.collection("user").insertOne({
                     lastStage: 0,
                     survey_id: survey_id,

@@ -1,6 +1,5 @@
 import React from "react"
 // Components
-import Commands from "./commands"
 import Code from "./code"
 import World from "./world"
 //Interfaces
@@ -395,34 +394,34 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         return <>
             <main className="flex justify-center content-center min-h-[100vh] bg-custom-darkblue">
                 <div className="flex flex-row min-h-[100vh] w-full">
-                    <div className="sidebar bg-custom-blue min-w-[75px] h-full">
-                        <Sidebar
-                            setActiveTab={this.setActiveTab.bind(this)}
-                            worldCounter={this.state.worldCounter}
-                            activeTab={this.state.activeTab}
-                            displayHelper={this.state.displayHelper}
-                        />
-                    </div>
-                    {{
-                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
-                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
-                        3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && !this.state.loading && <Explanation restrictedTasks={this.restrictedTasks} tasks={this.state.tasks} setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
-                    }[this.state.activeTab]}
+                    <Explanation
+                        restrictedTasks={this.restrictedTasks}
+                        tasks={this.state.tasks}
+                        setActiveTask={this.setActiveTask.bind(this)}
+                        activeTask={this.state.activeTask}
+                        explanations={levels[this.state.currentLevel].explanations}
+                        commands={this.state.commands}
+                    />
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
                     <div className="w-full h-full bg-code-grey max-w-2xl relative">
                         <Savecode savedCode={this.state.savedCode} />
-                        {this.state.loading ?
-                            <Loading />
-                            :
-                            <Code
-                                code={this.state.code}
-                                onCodeChange={this.onCodeChange.bind(this)}
-                                runningCode={this.state.runningCode}
-                                activeLineProp={this.state.activeLine}
-                                executionCompleted={this.state.executionCompleted}
-                            />
-                        }
+                        <div className="h-[75vh]">
+                            {this.state.loading ?
+                                <Loading />
+                                :
+                                <Code
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                    runningCode={this.state.runningCode}
+                                    activeLineProp={this.state.activeLine}
+                                    executionCompleted={this.state.executionCompleted}
+                                />
+                            }
+                        </div>
+                        <div className="h-[25vh] flex flex-row ">
+                            {<Log log={[...this.state.firstLog]} logNumber={1} worldCounter={this.state.worldCounter} />}
+                            {this.state.worldCounter == 2 && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />}
+                        </div>
                     </div>
                     <div className="w-full h-full">
                         <SelectLevel
