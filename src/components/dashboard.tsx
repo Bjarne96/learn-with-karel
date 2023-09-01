@@ -21,6 +21,7 @@ import type {
 import levels from "../data/idk_somelevels"
 import LevelButtons from "./levelbuttons"
 import LevelModal from "./levelModal"
+import TaskModal from "./taskModal"
 import Sidebar from "./sidebar"
 import Log from "./log"
 import SelectLevel from "./levelselect"
@@ -77,6 +78,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 pauseCode: false,
                 interval: 0,
                 showLevelCompletedModal: false,
+                showTaskCompletedModal: false,
                 firstLog: [],
                 secondLog: [],
                 activeLine: 0,
@@ -328,7 +330,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     if (currentTaskState.done == "" && newTask.done != "") {
                         tasks.forEach((t) => {
                             if (newTask.task > t.task && t.done == "") {
-                                t.done = "xxx"
+                                t.done = newTask.task.toString()
                                 tasks = this.updateGivenTasks(tasks, t, this.state.activeTask)
                             }
                         })
@@ -338,16 +340,19 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             }
             void this.handleSaveLevel({ tasks: tasks, code: this.state.code }, true)
         }
-        let showModal = false
+        let showLevelCompletedModal = false
+        let showTaskCompletedModal = false
 
-        if (this.state.tasks[tasks.length - 1].done != "" && completed) showModal = true
+        if (this.state.tasks[tasks.length - 1].done != "" && completed) showLevelCompletedModal = true
+        else if (completed) showTaskCompletedModal = true
         this.setState({
             ...resetObject,
             ...{
                 done: done,
                 executionSuccessfullyCompleted: completed,
                 executionCompleted: executionCompleted,
-                showLevelCompletedModal: showModal,
+                showLevelCompletedModal: showLevelCompletedModal,
+                showTaskCompletedModal: showTaskCompletedModal,
                 worldSuccessfullyCompletedCounter: worldSuccessfullyCompletedCounter,
                 worldCompletedCounter: worldCompletedCounter,
                 step: 0,
@@ -357,7 +362,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         })
     }
 
-    toggleModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
+    togglLevelModal(toggle: boolean) { this.setState({ showLevelCompletedModal: toggle }) }
+
+    togglTaskModal(toggle: boolean) { this.setState({ showTaskCompletedModal: toggle }) }
 
     updateLogAndLine(entry: string, line: number, type: logType, worldNumber: number) {
         // Work around to highlight the same line again
@@ -469,7 +476,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                     currentlevel={this.state.currentLevel}
                     handleLevelChange={this.handleLevelChange.bind(this)}
                     handleResetExecution={this.handleResetExecution.bind(this)}
-                    toggleModal={this.toggleModal.bind(this)}
+                    togglLevelModal={this.togglLevelModal.bind(this)}
+                />}
+            {this.state.showTaskCompletedModal &&
+                <TaskModal
+                    currentTask={this.state.activeTask}
+                    togglTaskModal={this.togglTaskModal.bind(this)}
                 />}
         </>
     }

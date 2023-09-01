@@ -47,6 +47,7 @@ export interface DashboardState extends ResetStateObject {
     karel: IKarel
     interval: number
     showLevelCompletedModal: boolean
+    showTaskCompletedModal: boolean
     done: string
     commands: Commands
     displayHelper: boolean
@@ -89,6 +90,7 @@ export interface ILevel {
     name: string
     worlds: Array<IWorld>
     commands: Commands
+    playMode?: boolean
 }
 export interface INewLevel {
     code: string
@@ -270,4 +272,6 @@ export interface GetLevelDbResponse {
 export interface GetUserDbResponse {
     _id: ObjectId
     lastStage: number
+    survey_id: string
+    restrictedTasks: boolean
 }
