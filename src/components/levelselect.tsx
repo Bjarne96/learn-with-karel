@@ -1,6 +1,6 @@
 import React from "react";
 import type { ISelectLevelProps, ILevel, INewLevel } from "../types/karel";
-import levels from "../data/idk_somelevels";
+import levels from "../data/task-levels";
 
 const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelChange }) => {
 
