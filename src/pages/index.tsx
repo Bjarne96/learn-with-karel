@@ -38,7 +38,7 @@ export async function getServerSideProps(context: query) {
     try {
         const client = await clientPromise;
         const db = client.db(db_name);
-        if (survey_id != "" && type != "") {
+        if (survey_id != "" && survey_id != undefined && type != "" && type != undefined) {
             if (type == "7cb458") restrictedTasks = false
             // Find user when necessary
             const dbUser: GetUserDbResponse = await db.collection("user").findOne({ survey_id: survey_id }) as GetUserDbResponse
