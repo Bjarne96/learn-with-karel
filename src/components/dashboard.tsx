@@ -18,7 +18,7 @@ import type {
     taskData
 } from "../types/karel"
 //Data
-import levels from "../data/idk_somelevels"
+import levels from "../data/task-levels"
 import LevelButtons from "./levelbuttons"
 import LevelModal from "./levelModal"
 import TaskModal from "./taskModal"

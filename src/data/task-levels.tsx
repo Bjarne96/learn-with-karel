@@ -58,6 +58,10 @@ export const levels: Array<INewLevel> = [
                 <b>Level überspringen oder das vorherige Level nochmal anschauen</b><br>
                 Über dem Spielfeld wird der Name des Aktuellen Levels angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
             },
+            {
+                title: "test",
+                explanation: `test`,
+            },
         ],
         code: ``,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
@@ -77,6 +81,10 @@ export const levels: Array<INewLevel> = [
                     {
                         beepers: [{ x: 2, y: 2, count: 1 },],
                         solutions: [{ x: 3, y: 2, count: 1 },],
+                    },
+                    {
+                        beepers: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 },],
+                        solutions: [{ x: 3, y: 2, count: 1 }, { x: 5, y: 2, count: 1 },],
                     },
                     {
                         beepers: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 },],
@@ -149,7 +157,7 @@ export const levels: Array<INewLevel> = [
                     [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
 
-                karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 },
+                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
                 tasks: [
                     {
                         beepers: [{ x: 3, y: 1, count: 1 }],
