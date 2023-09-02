@@ -205,10 +205,10 @@ export const levels: Array<INewLevel> = [
             },
         ],
         code: `pickBeeper();
-        for (let i = 0; i < 5; i++) {
-            move();
-        }
-        putBeeper();`,
+for (let i = 0; i < 5; i++) {
+    move();
+}
+putBeeper();`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -303,11 +303,11 @@ export const levels: Array<INewLevel> = [
             },
         ],
         code: `move();
-        if(leftIsClear())
-        {
-            turnLeft();
-        }
-        move();`,
+if(leftIsClear())
+{
+    turnLeft();
+}
+move();`,
         commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -484,65 +484,18 @@ move();`,
         ],
     },
     {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
         name: "Test - Interactive Methods",
         explanations: [
             {
-                title: "test 1",
+                title: "Interactive Methods 1",
                 explanation: `test`,
             },
             {
-                title: "test 2",
+                title: "Interactive Methods 2",
                 explanation: `test`,
             },
             {
-                title: "test 3",
+                title: "Interactive Methods 3",
                 explanation: `test`,
             },
         ],
@@ -559,395 +512,19 @@ move();`,
                     [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
 
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
+                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 },
                 tasks: [
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
+                        beepers: [{ x: 1, y: 2, count: 1 }],
+                        solutions: [{ x: 2, y: 2, count: 1 }],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
+                        beepers: [{ x: 1, y: 2, count: 1 }, { x: 3, y: 0, count: 1 }],
+                        solutions: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 1, count: 1 }],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "test",
-        explanations: [
-            {
-                title: "test 1",
-                explanation: `test`,
-            },
-            {
-                title: "test 2",
-                explanation: `test`,
-            },
-            {
-                title: "test 3",
-                explanation: `test`,
-            },
-        ],
-        code: ``,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                ],
-
-                karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
-                    },
-                    {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
+                        beepers: [{ x: 1, y: 2, count: 1 }, { x: 3, y: 0, count: 1 }, { x: 6, y: 5, count: 1 },],
+                        solutions: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 7, y: 4, count: 1 },],
                     },
                 ]
             },
