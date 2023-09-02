@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Dashboard from "~/components/dashboard";
+import levels from "../data/idk_somelevels"
 import clientPromise from '../lib/mongodb'
 import { ObjectId } from "mongodb"
 import type { DashboardProps, GetUserDbResponse, levelData, levelDataResponse } from "~/types/karel";
@@ -9,7 +10,7 @@ import React from 'react';
 
 const db_name = process.env.DB_NAME
 
-const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, user_id: user_id, tasks: tasks, restrictedTasks: restrictedTasks }) => {
+const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, user_id: user_id, tasks: tasks, restrictedTasks: restrictedTasks, doneLevels: doneLevels }) => {
     return (
         <>
             <Head>
@@ -17,7 +18,7 @@ const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, user
                 <meta name="description" content="Learn how to code with Karel." />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Dashboard id={id} stage={stage} code={code} user_id={user_id} tasks={tasks} restrictedTasks={restrictedTasks} />
+            <Dashboard id={id} stage={stage} code={code} user_id={user_id} tasks={tasks} restrictedTasks={restrictedTasks} doneLevels={doneLevels} />
         </>
     );
 };
@@ -60,6 +61,19 @@ export async function getServerSideProps(context: query) {
         if (user == null) return { props: { id: "" } }
         else restrictedTasks = user.restrictedTasks
         const response: levelDataResponse = await getLevel({ user_id: id, stage: Number(user.lastStage) }, db) as levelDataResponse
+        const doneLevels: Array<boolean> = []
+        const dbLevels: Array<levelData> = await db
+            .collection("level")
+            .find({
+                user_id: id,
+            }).toArray() as unknown as Array<levelData>
+        for (let i = 0; i < levels.length; i++) {
+            doneLevels[i] = false
+            for (let j = 0; j < dbLevels.length; j++) {
+                if (dbLevels[j].stage == i && dbLevels[j].tasks[dbLevels[j].tasks.length - 1].done != "") doneLevels[i] = true
+            }
+        }
+
         if (response.level == undefined) return { props: { id: "" } }
         const level: levelData = response.level
         if (response.status == 200) {
@@ -70,7 +84,8 @@ export async function getServerSideProps(context: query) {
                     code: level.code,
                     user_id: level.user_id,
                     tasks: level.tasks,
-                    restrictedTasks: restrictedTasks
+                    restrictedTasks: restrictedTasks,
+                    doneLevels: doneLevels
                 }
             }
         } else {

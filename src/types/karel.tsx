@@ -40,6 +40,7 @@ export interface DashboardProps {
     code: string
     tasks: Array<taskData>
     restrictedTasks: boolean
+    doneLevels: Array<boolean>
 }
 export interface DashboardState extends ResetStateObject {
     currentLevel: number
@@ -57,6 +58,7 @@ export interface DashboardState extends ResetStateObject {
     activeTab: number
     activeTask: number
     tasks: Array<taskData>
+    doneLevels: Array<boolean>
 }
 
 export interface ResetStateObject {
@@ -145,6 +147,7 @@ export interface ICommandProps {
 export interface ISelectLevelProps {
     currentLevel: number
     handleLevelChange(code: number): void
+    doneLevels: Array<boolean>
 }
 
 export interface IWorldState {

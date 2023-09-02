@@ -21,7 +21,6 @@ import levels from "../data/idk_somelevels"
 import LevelButtons from "./levelbuttons"
 import LevelModal from "./levelModal"
 import TaskModal from "./taskModal"
-import Sidebar from "./sidebar"
 import Log from "./log"
 import SelectLevel from "./levelselect"
 import Explanation from "./explanation"
@@ -88,7 +87,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 loading: false,
                 savedCode: 0,
                 activeTask: activeTask,
-                tasks: tasks
+                tasks: tasks,
+                doneLevels: props.doneLevels
             }
         }
     }
@@ -115,7 +115,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 done: this.state.tasks[task - 1].done
             }
         })
-
     }
 
     handleStep() {
@@ -341,8 +340,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
         let showLevelCompletedModal = false
         let showTaskCompletedModal = false
+        const doneLevels = [...this.state.doneLevels]
 
-        if (this.state.tasks[tasks.length - 1].done != "" && completed) showLevelCompletedModal = true
+        if (tasks[tasks.length - 1].done != "" && completed) {
+            doneLevels[this.state.currentLevel] = true
+            showLevelCompletedModal = true
+        }
         else if (completed) showTaskCompletedModal = true
         this.setState({
             ...resetObject,
@@ -356,7 +359,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 worldCompletedCounter: worldCompletedCounter,
                 step: 0,
                 activeLine: 0,
-                tasks: tasks
+                tasks: tasks,
+                doneLevels: doneLevels
             }
         })
     }
@@ -427,6 +431,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         <SelectLevel
                             handleLevelChange={this.handleLevelChange.bind(this)}
                             currentLevel={this.state.currentLevel}
+                            doneLevels={this.state.doneLevels}
                         />
                         {levels[this.state.currentLevel].worlds.map((world, i) =>
                             <World
