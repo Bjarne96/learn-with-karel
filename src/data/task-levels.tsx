@@ -1,7 +1,7 @@
 import type { INewLevel } from "../types/karel";
 export const levels: Array<INewLevel> = [
     {
-        name: "Start - Commands & UI",
+        name: "Commands & UI",
         explanations: [
             {
                 title: "Commands & UI 1",
@@ -27,10 +27,10 @@ export const levels: Array<INewLevel> = [
                 <b>Los geht's</b><br>
                 Kopiere die folgenden Befehle in das Textfeld. Drücke dann auf den Play-Knopf und sieh was passiert:<br><br>
                 
-                move();<br>
-                pickBeeper();<br>
-                move();<br>
-                putBeeper();<br>`,
+                move()<br>
+                pickBeeper()<br>
+                move()<br>
+                putBeeper()<br>`,
             },
             {
                 title: "Commands & UI 2",
@@ -87,30 +87,87 @@ export const levels: Array<INewLevel> = [
         ],
     },
     {
-        name: "Start - Functions",
+        name: "Functions - Beispiel",
         explanations: [
             {
-                title: "Functions 1",
+                title: "Funktionen - Beispiel",
+                explanation: `Hier siehst du ein Beispiel für eine Funktion. Klicke auf Play und schau dir die Demonstration an. Danach wird dir erklärt, was genau hier passiert. <br><br>`,
+            },
+        ],
+        code: `function moveAcross() {
+    move()
+    move()
+    move()
+    move()
+    move()
+    move()
+    move()
+    turnLeft()
+}
+
+pickBeeper()
+moveAcross()
+
+pickBeeper()
+moveAcross()
+
+pickBeeper()
+moveAcross()
+
+pickBeeper()
+moveAcross()`,
+        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
+        worlds: [
+            {
+                walls: [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+
+                karel: { x: 7, y: 0, direction: 2, isSuper: false, beeperCount: 0 },
+                tasks: [
+                    {
+                        beepers: [
+                            { x: 7, y: 0, count: 1 },
+                            { x: 7, y: 7, count: 1 },
+                            { x: 0, y: 7, count: 1 },
+                            { x: 0, y: 0, count: 1 }],
+                        solutions: [],
+                    },
+                ]
+            },
+        ],
+    },
+    {
+        name: "Functions - Aufgabe",
+        explanations: [
+            {
+                title: "1. Das Problem ohne Funktionen lösen",
                 explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>`,
             },
             {
-                title: "Functions 2",
-                explanation: `Man kann also eine Rechtsdrehung aus 3 Linksdrehungen erzeugen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
+                title: "2. Funktionen definieren und aufrufen",
+                explanation: `Man kann eine Rechtsdrehung aus mehreren anderen Befehlen zusammensetzen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
                
-                
+        
                 <b>Definieren einer Funktion</b><br>
-                function turnRight(){<br>
-                turnLeft();<br>
-                turnLeft();<br>
-                turnLeft();<br>
+                function turnAround(){<br>
+                    turnLeft()<br>
+                    turnLeft()<br>
                 }<br><br>
         
-                So wird eine Funktion definiert. "turnRight" ist in diesem Fall der Name der Funktion, der frei wählbar ist. Zwischen die geschwungenen Klammer "{}" können wir so viele andere Befehle schreiben wie wir wollen. Wenn man eine Funktion definiert, passiert dadurch allerdings noch nichts. Dafür müssen wir die Funktion noch aufrufen.<br><br>
+                Dies ein ein Beispiel dafür, wie man eine Funktion definieren kann. "turnAround" ist in diesem Fall der Name der Funktion, der frei wählbar ist. Zwischen die geschwungenen Klammer "{}" können wir so viele andere Befehle schreiben wie wir wollen. Wenn man eine Funktion definiert, passiert dadurch allerdings noch nichts. Dafür müssen wir die Funktion noch aufrufen.<br><br>
         
+
                 <b>Aufrufen einer Funktion</b><br>
-                turnRight();<br><br>
-        
-                Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. Das praktische: jetzt können wir die Funktion so häufig wie wir wollen aufrufen und müssen jedes Mal nur noch eine Zeile statt drei Zeilen schreiben. Wir müssen nur darauf achten, den gleichen Namen wie in der vorher definierten Funktion zu verwenden. In diesem Fall also "turnRight".<br><br>
+                turnAround()<br><br>
+                Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. Das praktische: jetzt können wir die Funktion so häufig wie wir wollen aufrufen und müssen jedes Mal nur noch eine Zeile statt drei Zeilen schreiben. Wir müssen nur darauf achten, den gleichen Namen wie in der vorher definierten Funktion zu verwenden. In diesem Fall also "turnAround".<br><br>
                 
         
                 <b>Tasten-Komination für die {}-Klammern</b><br>
@@ -118,22 +175,8 @@ export const levels: Array<INewLevel> = [
                 Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
             },
             {
-                title: "Functions 3",
-                explanation: `Wie gesagt kann man so viele Befehle in einer Funktion ausführen wie man möchte. Man kann also vor oder nach den drei "turnLeft" Befehlen z.B. auch "move" oder "pickBeeper" aufrufen. Wenn du deine Funktion richtig anpasst, dann kannst du das ganze Level nach der Definition deiner Funktion mit nur drei Aufrufen der Funktion lösen. Aber natürlich kannst du das Level lösen wie du möchtest.<br><br>
-               
-                <b>Definieren einer Funktion</b><br>
-                function turnRight(){<br>
-                turnLeft();<br>
-                turnLeft();<br>
-                turnLeft();<br>
-                }<br><br>
-        
-                <b>Aufrufen einer Funktion</b><br>
-                turnRight();<br><br>
-        
-                <b>Tasten-Komination für die {}-Klammern</b><br>
-                Windows: AltGr + 7 / AltGr + 0<br>
-                Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
+                title: "3. Weiterführende Tipps zu Funktionen",
+                explanation: `Wie gesagt kann man so viele Befehle in einer Funktion ausführen wie man möchte. Man kann also vor oder nach den drei "turnLeft" Befehlen z.B. auch "move" oder "pickBeeper" aufrufen. Wenn du deine Funktion richtig anpasst, dann kannst du das ganze Level nach der Definition deiner Funktion mit nur drei Aufrufen der Funktion lösen. Aber natürlich kannst du das Level lösen wie du möchtest.<br><br>`,
             },
         ],
         code: ``,
@@ -171,7 +214,7 @@ export const levels: Array<INewLevel> = [
         name: "Beeper Line - Loops",
         explanations: [
             {
-                title: "Loops 1",
+                title: "1. Anzahl der Durchläufe festlegen",
                 explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf den Play-Knopf und sieh was passiert.<br></br>
         
                 <b>Anzahl der Schleifen-Durchläufe Ändern</b><br>
@@ -180,23 +223,23 @@ export const levels: Array<INewLevel> = [
                 <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>`,
             },
             {
-                title: "Loops 2",
+                title: "2. Den Inhalt der Schleife verändern",
                 explanation: `Innerhalb der Geschweiften Klammern "{}" der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
         
                 Unter das "move()" könntest du also z.B. noch "pickBeeper()" schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>
                 
                 <b>Aufbau einer For-Loop</b><br>
                 for (let zählIndex = 0; zählIndex < anzahlDerDurchläufe; zählIndex++) {<br>
-                    einBefehl();<br>
-                    zweiterBefehl();<br>
-                    beliebigVieleBefehle();<br>
+                    einBefehl()<br>
+                    zweiterBefehl()<br>
+                    beliebigVieleBefehle()<br>
                 }<br><br>
                 
                 <em>"zählIndex"</em> kann durch einen beliebigen Namen (aus Buchstaben) ersetzt werden. Meistens einfach "i". Hiermit merkt sich die Schleife, wie häufig sie schon durchgelaufen ist.<br>
                 <em>"anzahlDerDurchläufe"</em> wird durch eine Zahl ersetzt, die festlegt, wie häufig die Schleife durchgeführt wird, also zum Beispiel "5".<br><br>`,
             },
             {
-                title: "Loops 3",
+                title: "3. Probleme im letzten Schleifendurchlauf",
                 explanation: `Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt.<br><br>
         
                 Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Wenn Pfeili ganz rechts angekommen ist, muss er z.B. noch einen Beeper aufheben ohne sich danach zu bewegen (Da er sonst gegen den Rand des Levels läuft).<br><br>
@@ -204,11 +247,11 @@ export const levels: Array<INewLevel> = [
                 Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, entsprechend bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. Als Referenz kannst du zwei Level zurückspringen.`,
             },
         ],
-        code: `pickBeeper();
+        code: `pickBeeper()
 for (let i = 0; i < 5; i++) {
-    move();
+    move()
 }
-putBeeper();`,
+putBeeper()`,
         commands: ["move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -297,17 +340,17 @@ putBeeper();`,
                 }<br><br>`,
             },
             {
-                title: "If 3",
+                title: "Andere Bedingungen nutzen",
                 explanation: `<b>Verschiedene Bedingungen</b><br>
                 Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. In diesem Level gibt es neben <em>leftIsClear()</em> auch <em>rightIstClear()</em>.<br><br>`,
             },
         ],
-        code: `move();
+        code: `move()
 if(leftIsClear())
 {
-    turnLeft();
+    turnLeft()
 }
-move();`,
+move()`,
         commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -363,7 +406,7 @@ move();`,
         name: "X-Files 1 - If/ Else",
         explanations: [
             {
-                title: "If/Else 1",
+                title: "Else 1",
                 explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.<br><br>
         
                 <b>Aufbau eines If-Else-Statements</b><br>
@@ -375,7 +418,7 @@ move();`,
                 }<br><br>`,
             },
             {
-                title: "If/Else 2",
+                title: "Else 2",
                 explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.<br><br>
         
                 <b>Aufbau eines If-Else-Statements</b><br>
@@ -387,7 +430,7 @@ move();`,
                 }<br><br>`,
             },
             {
-                title: "If/Else 3",
+                title: "Else-if",
                 explanation: `<b>Else-If</b><br>
                 Nun wird es kniffelig: neben <em>if</em> und <em>else</em> gibt es auch noch das <em>else if</em>...TO DO: TEXT WEITERSCHREIBEN<br><br>
         
@@ -411,11 +454,11 @@ move();`,
                 for (let i = 0; i < 18; i++) {<br>
                     if(frontIsClear())<br>
                     {<br>
-                        move();<br>
+                        move()<br>
                     }<br>
                     else if(leftIsClear())<br>
                     {<br>
-                        turnLeft();<br>
+                        turnLeft()<br>
                     }<br>
                     <br>
                     //Rechtsdrehung?<br>
@@ -424,16 +467,16 @@ move();`,
                 }`,
             },
         ],
-        code: `move();
+        code: `move()
 if(leftIsClear())
 {
-    turnLeft();
+    turnLeft()
 }
 else
 {
-    turnRight();
+    turnRight()
 }
-move();`,
+move()`,
         commands: ["leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -530,6 +573,6 @@ move();`,
             },
         ],
     },
-];
+]
 
-export default levels;
+export default levels
