@@ -4,62 +4,76 @@ export const levels: Array<INewLevel> = [
         name: "Commands & UI",
         explanations: [
             {
-                title: "Commands & UI 1",
+                title: "Das Ziel und Rückgängig machen",
                 explanation: `<b>Willkommen beim Learnlab!</b><br>
                 Dies ist ein Spiel, mit dem Du Programmieren lernen kannst. Die verwendete Programmiersprache trägt den Namen JavaScript, aber die erlernten Konzepte finden sich auch in allen anderen Programmiersprachen wieder.<br><br>
-                
-                <b>Der Code-Editor</b><br>
-                In der Mitte siehst du ein großes Textfeld, in das Du Anweisungen schreiben kannst.<br><br>
-                
+
                 <b>Das Spielfeld</b><br>
-                Rechts davon ist ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf den Play-Knopf unter dem Spielfeld klickst, dann wird Pfeili die Anweisungen im Textfeld ausführen und sich bewegen und Dinge aufheben oder ablegen.<br><br>
-                
+                Im rechten Drittel siehst du ein Spielfeld mit einem blauen Pfeil darin, das ist Pfeili. Wenn du auf den Play-Knopf unter dem Spielfeld klickst, dann wird Pfeili die Anweisungen im Code-Editor ausführen und sich bewegen und Dinge aufheben oder ablegen.<br><br>
+
+                <b>Der Code-Editor</b><br>
+                Der Code-Editor ist das große Textfeld im mittleren Drittel des Bildschirms, in das Du Anweisungen schreiben kannst.<br><br>
+
                 <b>Das Ziel</b><br>
                 Die Rauten die du im Spielfeld siehst, heißen Beeper. Deine Aufgabe besteht darin, Beeper an bestimmten Stellen aufzusammeln oder abzulegen:<br> 
-                1. Alle roten Beeper müssen aufgesammelt werden. Alle Beeper außerhalb der Zielzonen erscheinen als rot.<br>
-                2. In allen Zielzonen (= farblose Rauten) müssen Beeper abgelegt werden. Diese erscheinen dann grün.<br><br>
+                1. Alle roten Beeper müssen aufgesammelt werden.<br>
+                2. In allen Zielzonen (= farblose Rauten) müssen Beeper abgelegt werden. Diese erscheinen dann grün. Wenn es keine Zielzonen gibt, dann musst du nur alle roten Beeper aufheben.<br><br>
+
+                <b>Los geht's</b><br>
+                Drücke auf den Play-Knopf unter dem Spielfeld und sieh zu, wie Pfeili die Befehle im Code-Editor ausführt.<br><br>
+                
+                <b>Hilfe, ich habe den Text im Code-Editor ausversehen verändert!</b><br>
+                Keine Sorge, du kannst einfach in den Code Editor klicken und die Tastenkombination Strg + Z nutzen, um alles rückgängig zu machen. Alternativ lösche allen Text im Code Editor und und kopiere den folgenden zwei Zeilen in den Editor:<br>
+                move()<br>
+                pickBeeper()<br><br>
         
-                <b>Zurücksetzen</b><br>
+                <b>Hilfe, Pfeili ist irgendwo stecken geblieben!</b><br>
                 Um ein Level auf den Startzustand zurückzusetzen drücke einfach auf den kreisförmigen Pfeil unter dem Spielfeld. Alles kann rückgängig gemacht werden, also probiere einfach drauf los. Es gibt zwei Bedingungen die dazu führen, dass die Ausführung des Codes gestoppt wird und du das level zurücksetzen musst:<br>
                 <em>1. Ungültiger Befehl:</em> Du versuchst du einen Befehl auszuführen, der in dieser Situation nicht ausführbar ist (zum Beispiel wenn du versuchst durch eine Wand zu laufen).<br>
-                <em>2. Ziel nicht erreicht:</em> Alle Befehle wurden ausgeführt, ohne alle Beeper korrekt zu platzieren.<br><br>
-                
-                <b>Los geht's</b><br>
-                Kopiere die folgenden Befehle in das Textfeld. Drücke dann auf den Play-Knopf und sieh was passiert:<br><br>
-                
-                move()<br>
-                pickBeeper()<br>
-                move()<br>
-                putBeeper()<br>`,
+                <em>2. Ziel nicht erreicht:</em> Alle Befehle wurden ausgeführt, ohne alle Beeper korrekt zu platzieren.<br><br>`,
             },
             {
-                title: "Commands & UI 2",
+                title: "Die Befehle",
                 explanation: `Weiter unten findest du eine vollständige Beschreibung der Benutzeroberfläche. Wenn du fertig gelesen hast, dann versuche das Level zu lösen, indem du Befehle in das Textfeld schreibst und dann auf den Play-Knopf drückst.<br><br>
 
                 <b>Die Befehle</b><br>
-                Die zur Verfügung stehenden Befehle können sich in jedem Level ändern. Fast immer solltest du allerdings folgende Befehle zur Verfügung haben:<br>
+                Die zur Verfügung stehenden Befehle können sich in jedem Level ändern. Die Liste am Ende der Erklärung führt immer die gerade verfügbaren Befehle auf. Fast immer solltest du allerdings folgende Befehle zur Verfügung haben:<br>
                 <em>move()</em> Pfeili bewegt sich in aktueller Blickrichtung ein Feld vorwärts (sofern keine Wand im Weg ist).<br>
                 <em>turnLeft()</em> Pfeili dreht sich 90° gegen den Uhrzeigersinn.<br>
                 <em>putBeeper()</em> Pfeili legt einen Beeper auf dem Feld ab, auf dem er sich momentan befindet (sofern Pfeili noch genügend Beeper im Rucksack hat).<br>
-                <em>pickBeeper()</em> Pfeili hebt einen Beeper vom Feld auf, auf dem Pfeili momentan steht (sofern sich dort ein Beeper befindet).<br><br>
-                
-                <b>Erklärungstext & Command-Log</b><br>
-                Ganz links am Rand ist eine vertikale Leiste mit drei Menüpunkten:<br>
-                1. <em>Der Erklärungstext.</em> Hier befindest Du dich gerade.<br>
-                2. <em>Die verfügbaren Befehle.</em> Dies sind die grundlegenden Befehle, welche für Pfeili zur Verfügung stehen. Diese können zwischen den Leveln variieren.<br>
-                3. <em>Der Command-Log.</em> Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es ein Fehler mit dem Programm gibt, dann wird dieser hier erscheinen.<br><br>
+                <em>pickBeeper()</em> Pfeili hebt einen Beeper vom Feld auf, auf dem Pfeili momentan steht (sofern sich dort ein Beeper befindet).<br><br>`,
+            },
+            {
+                title: "Probleme identifizieren - das Command Log",
+                explanation: `<b>Command-Log</b><br>
+                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es ein Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt.<br><br>
+
+                Kopiere folgenden (fehlerhaften) Code in den Code Editor:<br>
+                move()<br>
+                pickBeeper()<br>
+
+                Drücke auf Play und schau im Command-Log, was das Problem ist. Setze danach des Level zurück und versuche das Level zu lösen.`,
+            },
+            {
+                title: "Wiedergabegeschwindigkeit Ändern",
+                explanation: `Manchmal muss Pfeili viele Schritt ausführen und alles dauert ein bisschen lange. Oder es wird besonders Knifflig und du willst dir alles Schritt für Schritt anschauen. Für diese Fälle kannst du die Wiedergabegeschwindigkeit ändern.Versuche für dieses Level, eine schnelle Geschwindigkeit einzustellen.<br><br>
                 
                 <b>Wiedergabegeschwindigkeit Einstellen</b><br>
                 Unter dem Spielfeld, gibt es vier verschiedene Pfeil-Icons und einen Pause-Knopf. Mit diesen Kannst du einstellen, in welchem Tempo der Code ausgeführt wird.<br>
                 1. <em>Wiedergabegeschwindigkeiten</em>: Es gibt insgesamt drei Wiedergabegeschwindigkeiten. Ein Pfeil, zwei Pfeile, drei Pfeile.<br>
                 2. <em>Pause</em>: Damit pausierst du die Wiedergabe, ohne sie ganz zu stoppen.<br>
-                2. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br><br>
+                3. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br><br>`,
+            },
+            {
+                title: "Lektion abschließen und vorherige Level anschauen",
+                explanation: `Dies ist die letzte Aufgabe im Einführungsblock. Wenn du sie abgeschlossen hast, wirst du in einen neuen Block weitergeleitet. Falls du allerdings nochmal eine Information nachschauen möchtest, kannst du jederzeit zu allen Bereits absolvierten Aufgbacken-Blöcken zurückkehren.<br><br>
                 
-                <b>Level überspringen oder das vorherige Level nochmal anschauen</b><br>
-                Über dem Spielfeld wird der Name des Aktuellen Levels angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
+                <b>Aufgabenblock Wechsel</b><br>
+                Über dem Spielfeld wird der Name des Aktuellen Aufgaben-Blocks angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
             },
         ],
-        code: ``,
+        code: `move()
+pickBeeper()`,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -76,11 +90,23 @@ export const levels: Array<INewLevel> = [
                 tasks: [
                     {
                         beepers: [{ x: 2, y: 2, count: 1 },],
-                        solutions: [{ x: 3, y: 2, count: 1 },],
+                        solutions: [],
                     },
                     {
-                        beepers: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 },],
-                        solutions: [{ x: 3, y: 2, count: 1 }, { x: 5, y: 2, count: 1 },],
+                        beepers: [{ x: 2, y: 2, count: 1 }],
+                        solutions: [{ x: 3, y: 2, count: 1 }],
+                    },
+                    {
+                        beepers: [{ x: 3, y: 2, count: 1 }],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 7, y: 2, count: 1 }],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 }],
+                        solutions: [{ x: 3, y: 2, count: 1 }, { x: 5, y: 2, count: 1 }],
                     },
                 ]
             },
