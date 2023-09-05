@@ -232,40 +232,50 @@ pickBeeper()</code></pre>`,
         ],
     },
     {
-        name: "Beeper Line - Loops",
+        name: "Schleifen",
         explanations: [
             {
                 title: "1. Anzahl der Durchläufe festlegen",
-                explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen.Programmier * innen hassen es allerdings, sich zu wiederholen.Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen.Drücke auf den Play - Knopf und sieh was passiert.<br></br >
-        
-                <b>Anzahl der Schleifen-Durchläufe Ändern</b><br>
-                Wenn du die "5" in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern.<br><br>
+                explanation: `Manchmal muss man einen Befehl mehrfach direkt hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Wenn du die <code>5</code> in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern. Drücke einfach auf Play und sieh was passiert.<br><br>
         
                 <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>`,
             },
             {
                 title: "2. Den Inhalt der Schleife verändern",
-                explanation: `Innerhalb der Geschweiften Klammern "{}" der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
+                explanation: `Innerhalb der <code>{}</code>-Klammern der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
         
-                Unter das "move()" könntest du also z.B. noch "pickBeeper()" schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>
-                
-                <b>Aufbau einer For-Loop</b><br>
-                for (let zählIndex = 0; zählIndex < anzahlDerDurchläufe; zählIndex++) {<br>
-                    einBefehl()<br>
-                    zweiterBefehl()<br>
-                    beliebigVieleBefehle()<br>
-                }<br><br>
-                
-                <em>"zählIndex"</em> kann durch einen beliebigen Namen (aus Buchstaben) ersetzt werden. Meistens einfach "i". Hiermit merkt sich die Schleife, wie häufig sie schon durchgelaufen ist.<br>
-                <em>"anzahlDerDurchläufe"</em> wird durch eine Zahl ersetzt, die festlegt, wie häufig die Schleife durchgeführt wird, also zum Beispiel "5".<br><br>`,
+                Unter das <code>move()</code> könntest du also z.B. noch <code>pickBeeper()</code> schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>`,
             },
             {
-                title: "3. Probleme im letzten Schleifendurchlauf",
-                explanation: `Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt.<br><br>
+                title: "3. Den Aufbau von Schleifen verstehen",
+                explanation: `Leider wirst du in diesem Kurs nicht alle Einzelheiten zu Schleifen lernen können, ist normal dass die Schreibweise kryptisch auf dich wirkt. Wenn es dich interessiert, dann findest du hier weiterführende Infos, aber für diesen Kurs wird das nicht mehr wichtig werden. <em>Du kannst diese Lektion ohne Probleme überspringen</em>.<br><br>
+                
+                <b>Aufbau einer For-Loop</b><br>
+<pre><code>for (let i = 0; i < beliebigeZahl; i++) {<br>
+    einBefehl()<br>
+    zweiterBefehl()<br>
+    beliebigVieleBefehle()<br>
+}</code></pre><br>
+                
+                Was hier passiert, ist dass wir uns merken, wie häufig die Schleife schon durchlaufen wurde und diesen Wert jeden Durchlauf mit einer festen Zahl vergleichen. So lange die Anzahl der Durchläufe kleiner ist, als unsere festgelegte Zahl, wird die Schleife weiter durchlaufen.<br><br>
+
+                <em>"let i = 0"</em> Das "i" ist eine sogenannte Variable, aber das ist ein Thema für sich. Dies ist eine Art Speicher für eine Information. Zunächst wird hier eine "0" gespeichert.<br><br>
+
+                <em>"i++"</em> Dies bedeutet, dass wir nach jedem Schleifen-Durchlauf 1 auf unsere Zahl im Speicher addieren. Somit spiegelt die Zahl im Speicher immer die Anzahl der Durchläufe wieder (beginnend beim "nullten" Durchauf. Informatiker*innen fangen gerne bei 0 statt bei 1 an zu zählen.)<br><br>
+                <em>"i < beliebigeZahl"</em> Dies ist ein Vergleich zwischen zwei Zahlen. So lange die Zahl im Speicher (das "i") kleiner ist, als unsere festgelegte Zahl, wird die Schleife weiter ausgeführt.<br>`
+            },
+            {
+                title: "4. Sonderfälle im ersten/letzten Schleifendurchlauf",
+                explanation: `Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt:<br><br>
+
+<pre><code>for (let i = 0; i < 5; i++) {
+    pickBeeper()
+    move()
+}</code></pre><br>
         
                 Manchmal wird es etwas knifflig, wenn man im ersten oder letzten Durchlauf der Schleife an Sonderfälle denken muss. Wenn Pfeili ganz rechts angekommen ist, muss er z.B. noch einen Beeper aufheben ohne sich danach zu bewegen (Da er sonst gegen den Rand des Levels läuft).<br><br>
                 
-                Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird, entsprechend bevor die Schleife startet und nachdem sie komplett durchgelaufen ist. Als Referenz kannst du zwei Level zurückspringen.`,
+                Du kannst natürlich auch vor und nach einer Schleife Code schreiben, der dann nicht mehrfach sondern nur einmal ausgeführt wird.`,
             },
         ],
         code: `pickBeeper()
@@ -292,6 +302,22 @@ putBeeper()`,
                     {
                         beepers: [{ x: 0, y: 2, count: 1 },],
                         solutions: [{ x: 7, y: 3, count: 1 },],
+                    },
+                    {
+                        beepers: [{ x: 0, y: 2, count: 1 },
+                        { x: 1, y: 2, count: 1 },
+                        { x: 2, y: 2, count: 1 },
+                        { x: 3, y: 2, count: 1 },
+                        { x: 4, y: 2, count: 1 },
+                        { x: 5, y: 2, count: 1 },
+                        { x: 6, y: 2, count: 1 },],
+                        solutions: [{ x: 1, y: 3, count: 1 },
+                        { x: 2, y: 3, count: 1 },
+                        { x: 3, y: 3, count: 1 },
+                        { x: 4, y: 3, count: 1 },
+                        { x: 5, y: 3, count: 1 },
+                        { x: 6, y: 3, count: 1 },
+                        { x: 7, y: 3, count: 1 },],
                     },
                     {
                         beepers: [{ x: 0, y: 2, count: 1 },
