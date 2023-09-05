@@ -1,7 +1,7 @@
 import type { INewLevel } from "../types/karel";
 export const levels: Array<INewLevel> = [
     {
-        name: "Commands & UI",
+        name: "Grundlagen & Befehle",
         explanations: [
             {
                 title: "Das Ziel und Rückgängig machen",
@@ -34,23 +34,23 @@ export const levels: Array<INewLevel> = [
             },
             {
                 title: "Die Befehle",
-                explanation: `Weiter unten findest du eine vollständige Beschreibung der Benutzeroberfläche. Wenn du fertig gelesen hast, dann versuche das Level zu lösen, indem du Befehle in das Textfeld schreibst und dann auf den Play-Knopf drückst.<br><br>
+                explanation: `Versuche nun selbst die Aufgabe zu lösen, indem du Befehle in das Textfeld schreibst und dann auf den Play-Knopf drückst.<br><br>
 
                 <b>Die Befehle</b><br>
-                Die zur Verfügung stehenden Befehle können sich in jedem Level ändern. Die Liste am Ende der Erklärung führt immer die gerade verfügbaren Befehle auf. Fast immer solltest du allerdings folgende Befehle zur Verfügung haben:<br>
-                <em>move()</em> Pfeili bewegt sich in aktueller Blickrichtung ein Feld vorwärts (sofern keine Wand im Weg ist).<br>
-                <em>turnLeft()</em> Pfeili dreht sich 90° gegen den Uhrzeigersinn.<br>
-                <em>putBeeper()</em> Pfeili legt einen Beeper auf dem Feld ab, auf dem er sich momentan befindet (sofern Pfeili noch genügend Beeper im Rucksack hat).<br>
+                Die zur Verfügung stehenden Befehle können sich in jedem Level ändern. Die Liste am Ende der Erklärung führt immer die gerade verfügbaren Befehle auf. Fast immer solltest du allerdings folgende Befehle zur Verfügung haben:<br><br>
+                <em>move()</em> Pfeili bewegt sich in aktueller Blickrichtung ein Feld vorwärts (sofern keine Wand im Weg ist).<br><br>
+                <em>turnLeft()</em> Pfeili dreht sich 90° gegen den Uhrzeigersinn.<br><br>
+                <em>putBeeper()</em> Pfeili legt einen Beeper auf dem Feld ab, auf dem er sich momentan befindet (sofern Pfeili noch genügend Beeper im Rucksack hat).<br><br>
                 <em>pickBeeper()</em> Pfeili hebt einen Beeper vom Feld auf, auf dem Pfeili momentan steht (sofern sich dort ein Beeper befindet).<br><br>`,
             },
             {
                 title: "Probleme identifizieren - das Command Log",
                 explanation: `<b>Command-Log</b><br>
-                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es ein Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt.<br><br>
+                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt.<br><br>
 
-                Kopiere folgenden (fehlerhaften) Code in den Code Editor:<br>
+                Kopiere folgenden (fehlerhaften) Code in den Code Editor:<br><br>
                 move()<br>
-                pickBeeper()<br>
+                pickBeeper()<br><br>
 
                 Drücke auf Play und schau im Command-Log, was das Problem ist. Setze danach des Level zurück und versuche das Level zu lösen.`,
             },
@@ -68,7 +68,7 @@ export const levels: Array<INewLevel> = [
                 title: "Lektion abschließen und vorherige Level anschauen",
                 explanation: `Dies ist die letzte Aufgabe im Einführungsblock. Wenn du sie abgeschlossen hast, wirst du in einen neuen Block weitergeleitet. Falls du allerdings nochmal eine Information nachschauen möchtest, kannst du jederzeit zu allen Bereits absolvierten Aufgbacken-Blöcken zurückkehren.<br><br>
                 
-                <b>Aufgabenblock Wechsel</b><br>
+                <b>Aufgabenblock Wechseln</b><br>
                 Über dem Spielfeld wird der Name des Aktuellen Aufgaben-Blocks angezeigt. Die Kannst die Pfeile links und rechts des Level-Namens benutzen, um die vorherigen oder nachfolgenden Level auszuwählen. Du kannst auch direkt auf den Namen des Levels klicken, um eine Liste mit allen Leveln anzuzeigen.<br><br>`,
             },
         ],
@@ -113,96 +113,75 @@ pickBeeper()`,
         ],
     },
     {
-        name: "Functions - Beispiel",
-        explanations: [
-            {
-                title: "Funktionen - Beispiel",
-                explanation: `Hier siehst du ein Beispiel für eine Funktion. Klicke auf Play und schau dir die Demonstration an. Danach wird dir erklärt, was genau hier passiert. <br><br>`,
-            },
-        ],
-        code: `function moveAcross() {
-    move()
-    move()
-    move()
-    move()
-    move()
-    move()
-    move()
-    turnLeft()
-}
-
-pickBeeper()
-moveAcross()
-
-pickBeeper()
-moveAcross()
-
-pickBeeper()
-moveAcross()
-
-pickBeeper()
-moveAcross()`,
-        commands: ["move", "turnLeft", "putBeeper", "pickBeeper"],
-        worlds: [
-            {
-                walls: [
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0]
-                ],
-
-                karel: { x: 7, y: 0, direction: 2, isSuper: false, beeperCount: 0 },
-                tasks: [
-                    {
-                        beepers: [
-                            { x: 7, y: 0, count: 1 },
-                            { x: 7, y: 7, count: 1 },
-                            { x: 0, y: 7, count: 1 },
-                            { x: 0, y: 0, count: 1 }],
-                        solutions: [],
-                    },
-                ]
-            },
-        ],
-    },
-    {
-        name: "Functions - Aufgabe",
+        name: "Funktionen",
         explanations: [
             {
                 title: "1. Das Problem ohne Funktionen lösen",
                 explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>`,
             },
             {
-                title: "2. Funktionen definieren und aufrufen",
-                explanation: `Man kann eine Rechtsdrehung aus mehreren anderen Befehlen zusammensetzen. Wenn du die Rechtsdrehung auf diese Weise häufiger nutzt, dann wird es allerdings unübersichtlich im Code. Um das zu vermeiden, kann man sogenannte "Funktionen" schreiben. Diese bündeln eine beliebige  Abfolge bereits vorhandener Befehle unter einem neuen Namen zusammen.<br><br>
-               
-        
-                <b>Definieren einer Funktion</b><br>
-                function turnAround(){<br>
-                    turnLeft()<br>
-                    turnLeft()<br>
-                }<br><br>
-        
-                Dies ein ein Beispiel dafür, wie man eine Funktion definieren kann. "turnAround" ist in diesem Fall der Name der Funktion, der frei wählbar ist. Zwischen die geschwungenen Klammer "{}" können wir so viele andere Befehle schreiben wie wir wollen. Wenn man eine Funktion definiert, passiert dadurch allerdings noch nichts. Dafür müssen wir die Funktion noch aufrufen.<br><br>
-        
-
-                <b>Aufrufen einer Funktion</b><br>
-                turnAround()<br><br>
-                Selbst definiert Funktionen werden genauso aufgerufen wie die bereits vorhandenen Befehle. Genau genommen sind die bereits vorhandenen Befehle auch nur Funktionen, die jemand anders für uns geschrieben hat. Das praktische: jetzt können wir die Funktion so häufig wie wir wollen aufrufen und müssen jedes Mal nur noch eine Zeile statt drei Zeilen schreiben. Wir müssen nur darauf achten, den gleichen Namen wie in der vorher definierten Funktion zu verwenden. In diesem Fall also "turnAround".<br><br>
+                title: "2. Wann benutzt man Funktionen",
+                explanation: `Wenn man die selbe Abfolge von Befehlen mehrmals nutzt, dann sollte man dafür meistens eine Funktion dafür nutzen. Eine Funktion bündelt eine beliebige  Abfolge von Befehle unter einem neuen Namen zusammen. Diese ganze Abfolge von Befehlen kann man danach so häufig abrufen wie man möchte, und das mit minimalen Schreibaufwand.<br><br>
                 
-        
-                <b>Tasten-Komination für die {}-Klammern</b><br>
+                Hier wirst jedoch noch ein letztes Mal ohne Funktionen arbeiten, weil man so am besten sieht, in welchen Szenarien Funktionen einem das Leben einfacher machen. Hier hast du fast das gleich Problem wie bei Aufgabe 1. Du kannst die Aufgabe einfach so wie immer lösen. Allerdings wirst du merken, dass du dich dabei wiederholen musst.<br><br>`,
+            },
+            {
+                title: "3. Wie Modifiziert man Funktionen",
+                explanation: `Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br>
+               
+<pre><code>function turnRight(){
+    turnLeft()
+    turnLeft()
+}
+
+turnRight()
+move()
+move()
+pickBeeper()
+turnRight()
+move()
+move()
+pickBeeper()</code></pre>`,
+            },
+            {
+                title: "4. Wie schreibt man selbst eine Funktion",
+                explanation: `Es gibt immer noch mehrere Stellen im Code, in denen wir uns unnötig wiederholen. Zum Glück kannst du so viele neue Funktionen mit anderen Namen definieren wie du willst. Versuche <code>move()</code> und <code>pickBeeper()</code> in eine neue Funktion auszulagern:<br><br>
+
+<pre><code>function bewegenUndAufsammeln(){
+    move()
+    move()
+    pickBeeper()
+}</code></pre><br>
+                
+                Um eine Funktion zu nutzen brauchst du zwei Komponenten:<br><br>
+                
+                1. Die Definition. Diese ist wie ein Koch-Rezept. Es steht einfach eine Abfolge von Instruktionen darin. Der Name der Funktion ist beliebig wählbar. Von einem Koch-Rezept alleine kocht sich allerdings noch kein Essen. <br><br>
+                
+<pre><code>function funktionsName(){
+    beliebigerBefehl()
+    beliebigerAndererBefehl()
+    soVieleBefehleWieDuWillst()
+}</code></pre><br>
+
+                2. Der Aufruf. Hier beauftragen wir den Computer damit, die Instruktionen im Rezept (also in der Definition) auch auszuführen. Hierfür nutzt du den den gleichen Namen, den du vorher in der Definition gewählt hast, gefolgt von (). Ein Aufruf kann erst nach der Definition stattfinden, also weiter unten im Code.<br><br>
+
+<pre><code>funktionsName()</code></pre><br><br>`,
+            },
+            {
+                title: "5. Tipps zur Benennung von Funktionen",
+                explanation: `-Benennung von funktionen semantisch sinnvoll`,
+            },
+            {
+                title: "6. Wie man {}-Klammern macht",
+                explanation: `<b>Tasten-Komination für die {}-Klammern</b><br>
                 Windows: AltGr + 7 / AltGr + 0<br>
                 Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
             },
             {
-                title: "3. Weiterführende Tipps zu Funktionen",
-                explanation: `Wie gesagt kann man so viele Befehle in einer Funktion ausführen wie man möchte. Man kann also vor oder nach den drei "turnLeft" Befehlen z.B. auch "move" oder "pickBeeper" aufrufen. Wenn du deine Funktion richtig anpasst, dann kannst du das ganze Level nach der Definition deiner Funktion mit nur drei Aufrufen der Funktion lösen. Aber natürlich kannst du das Level lösen wie du möchtest.<br><br>`,
+                title: "7. Warum Funktionen Änderungen am Code vereinfachen",
+                explanation: `Im Programmier-Alltag verändern sich dauernd irgendwelche Rahmenbedingungen, sodass man im Nachhinein Dinge an seinem Code ändern muss. Wenn man jedoch eine Funktionen hat die an vielen Stellen genutzt wird, dann muss man häufig nur eine kleine Änderung an der Funktion vornehmen. Sonst sonst hätte man an vielen Stellen des Programms alle Änderungen einzeln vornehmen müssen.<br><br>
+                
+                Wenn du deinen Code schon in den vorherigen Übungen in Funktionen Aufgeteilt hast, dann hast du jetzt ein leichtes Spiel.`,
             },
         ],
         code: ``,
@@ -221,16 +200,32 @@ moveAcross()`,
                 karel: { x: 2, y: 1, direction: 1, isSuper: false, beeperCount: 0 },
                 tasks: [
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }],
+                        beepers: [{ x: 4, y: 1, count: 1 }],
+                        solutions: [],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
+                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }],
+                        solutions: [],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
-                        solutions: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
+                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 },],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 }],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 }],
+                        solutions: [],
+                    },
+                    {
+                        beepers: [{ x: 5, y: 1, count: 1 }, { x: 5, y: 4, count: 1 }, { x: 2, y: 4, count: 1 },],
+                        solutions: [],
                     },
                 ]
             },
@@ -241,7 +236,7 @@ moveAcross()`,
         explanations: [
             {
                 title: "1. Anzahl der Durchläufe festlegen",
-                explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Drücke auf den Play-Knopf und sieh was passiert.<br></br>
+                explanation: `Manchmal muss man einen Befehl mehrfach hintereinander ausführen.Programmier * innen hassen es allerdings, sich zu wiederholen.Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen.Drücke auf den Play - Knopf und sieh was passiert.<br></br >
         
                 <b>Anzahl der Schleifen-Durchläufe Ändern</b><br>
                 Wenn du die "5" in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern.<br><br>
