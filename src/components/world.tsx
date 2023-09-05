@@ -20,6 +20,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     karel: IKarel
     beepers: Beepers
     step = 0
+    handleKeyDown: (e: KeyboardEvent) => void
     loadingWorld = [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -51,6 +52,10 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     /* REACT FUNCTIONS */
+
+    componentWillUnmount() {
+        console.log('unmount')
+    }
 
     componentDidUpdate(): void {
         // Reset Button was pressed, while executing code
@@ -116,6 +121,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         const update = this.getUpdateFromProps()
         this.karel = update.karel
         this.beepers = update.beepers
+        document.removeEventListener("keydown", this.handleKeyDown)
     }
     // Deep copies all the props and returns them
     getUpdateFromProps() {
@@ -258,6 +264,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         let facingNorth, notFacingNorth, facingEast, notFacingEast, facingSouth, notFacingSouth, facingWest, notFacingWest
         // Help to determine the world
         let isWorld1, isWorld2, isWorld
+        // Playmode functions
+        let leftIsPressed: () => void, rightIsPressed: () => void, topIsPressed: () => void, bottomIsPressed: () => void, pickBeeperIsPressed: () => void, putBeeperIsPressed: () => void
 
         // Binds all available functions like this, because only eval does dynamic binding.
         // move = async (line, param) => await this.executeCommand("move", line, param)
@@ -293,6 +301,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             const allFunctions: Array<string> = [...this.props.commands]
             // Regex Pattern to find all function declarations
             const funcDefPattern = /\b(function\s+)(\w+)(\s*\([^)]*\)\s*)/g;
+            const wholeFuncDefPattern = /function\s*([A-z0-9]+)?\s*\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)\s*\{(?:[^}{]+|\{(?:[^}{]+|\{[^}{]*\})*\})*\}/g
+            const playmodeFunctions = ["leftIsPressed", "rightIsPressed", "topIsPressed", "bottomIsPressed", "pickBeeperIsPressed", "putBeeperIsPressed"]
             codeString = codeString
                 // Puts a callback function into the replace-function to get all params
                 // group1 = function + whitespace character
@@ -304,23 +314,69 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
                     //Returns the string to replace in the user code string with an addtional async
                     return `async ${group1}${group2}${group3}`
                 })
+
             // Finds all function calls that are allowed and declared by the user and adds an await to them
             const activeFunctions = new RegExp(`(?<!function\\s+)((${allFunctions.join('|')}))\\s*(?=\\([^)]*\\))`, 'g')
             codeString = codeString.replace(activeFunctions, (match) => "await " + match)
+            // Creates an extra String to define all playmode functions, in case an error happens before, so the functions can still be used
+            if (this.props.playmode) {
+                let functionDefinitionString = ""
+                const allFuncs = codeString.match(wholeFuncDefPattern)
+                allFuncs.forEach((func) => {
+                    let isPressedFunction = false
+                    func = func.replace(funcDefPattern, (match: string, group1: string, group2: string, group3: string) => {
+                        if (playmodeFunctions.includes(group2)) {
+                            isPressedFunction = true
+                            return `${group2} = async ${group3} => `
+                        }
+                    })
+                    func += "\n"
+                    if (isPressedFunction) functionDefinitionString += func
+                })
+                await eval(functionDefinitionString)
+            }
             //Execute user code from string as an async function
             codeString = "\n(async () => {\n" + codeString + "\n})()"
             await eval(codeString)
-            // if (normalMode) {
-            //     await eval(codeString)
-            // }
-            // if (playGroundMode) {
-            //     leftIsPressed();
-            // }
 
         } catch (e) {
             this.errorFound = e.toString()
         } finally {
             this.completeWorld()
+        }
+        if (this.props.playmode && !this.checkSolution()) {
+            this.props.updateLogAndLine("Playmode is now enabled: Try to finish the Level.", 0, "info", this.props.worldNumber)
+            try {
+                this.handleKeyDown = (e: KeyboardEvent) => {
+                    try {
+                        if (e.key == "a" || e.key == "ArrowLeft") {
+                            leftIsPressed()
+                        } else if (e.key == "d" || e.key == "ArrowRight") {
+                            rightIsPressed()
+                        } else if (e.key == "s" || e.key == "ArrowDown") {
+                            bottomIsPressed()
+                        } else if (e.key == "w" || e.key == "ArrowUp") {
+                            topIsPressed()
+                        } else if (e.key == "n") {
+                            //nehmen
+                            pickBeeperIsPressed()
+                        } else if (e.key == "l") {
+                            //legen
+                            putBeeperIsPressed()
+                        }
+                        if (this.checkSolution()) {
+                            document.removeEventListener("keydown", this.handleKeyDown)
+                            this.completeWorld()
+                            this.props.updateLogAndLine("Playmode is now disabled.", 0, "info", this.props.worldNumber)
+                        }
+                    } catch (e) {
+                        this.props.updateLogAndLine(e.toString(), 0, "error", this.props.worldNumber)
+                    }
+                }
+                document.addEventListener("keydown", this.handleKeyDown)
+            } catch (e) {
+                console.log('e', e);
+            }
         }
     }
 

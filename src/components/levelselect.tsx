@@ -24,7 +24,7 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
         }]
         const btn = svgPaths.filter((e) => { if (e.name == name) return true })[0]
         let checkPath
-        if (name == "arrow-right") checkPath = currentLevel + 1
+        if (name == "arrow-right") checkPath = currentLevel
         if (name == "arrow-left") checkPath = currentLevel - 1
 
         let className = "max-h-10 "
@@ -57,7 +57,7 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
             >
                 {levels.map((level: INewLevel, i: number) => (
                     <option className={((i != 0 && doneLevels[i - 1]) || i == 0) ? "" : "text-gray-600"} value={i} key={i}>
-                        {i + 1}. {level.name}
+                        {i + 1}. {level.name} {level.playmode == true ? "(playmode enabled)" : ""}
                     </option>
                 ))}
             </select>

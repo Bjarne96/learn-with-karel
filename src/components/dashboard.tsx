@@ -45,6 +45,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let code = levels[lastStage].code
         let tasks: Array<taskData> = []
         let activeTask = 1
+        let playmode = false
         if (props.id && props.id.length) {
             this.restrictedTasks = props.restrictedTasks
             this.userId = props.id
@@ -60,6 +61,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             lastStage = props.stage
             code = props.code
         }
+        if (levels[props.stage].playmode != undefined) playmode = levels[props.stage].playmode
         //Setting state
         if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
@@ -88,7 +90,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 savedCode: 0,
                 activeTask: activeTask,
                 tasks: tasks,
-                doneLevels: props.doneLevels
+                doneLevels: props.doneLevels,
+                playmode: playmode
             }
         }
     }
@@ -148,6 +151,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             done = res.tasks[0].done
             tasks = res.tasks
         }
+        let playmode = false
+        if (levels[level].playmode != undefined) playmode = levels[level].playmode
         this.setState({
             ...this.getResetRunningCodeObject(),
             ...{
@@ -159,6 +164,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 activeTab: 4,
                 activeTask: 1,
                 worldCounter: levels[level].worlds.length,
+                playmode: playmode,
                 loading: false,
                 tasks: tasks
             }
@@ -454,6 +460,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
                                 step={this.state.step}
                                 loading={this.state.loading}
+                                playmode={this.state.playmode}
                             />
                         )
                         }

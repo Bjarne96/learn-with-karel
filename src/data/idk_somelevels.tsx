@@ -335,6 +335,7 @@ export const levels: Array<INewLevel> = [
                 putBeeper();<br>`,
             }
         ],
+        playmode: true,
         code: `//level2\n`,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper", "moveAmount"],
         worlds: [
