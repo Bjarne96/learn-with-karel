@@ -92,6 +92,7 @@ export const levels: Array<INewLevel> = [
             }
         ],
         code: `//level1\n`,
+        playmode: true,
         commands: ["move", "turnLeft", "putBeeper", "pickBeeper", "moveAmount"],
         worlds: [
             {
