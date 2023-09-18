@@ -51,7 +51,8 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
         })}
         {explanations.map((explanationObject, i) => {
             let notice = ""
-            if ((!restrictedTasks) && i + 1 != tasks.length) notice = "*You can always skip tasks, by doing a task higher up."
+            if ((!restrictedTasks) && i + 1 != tasks.length) notice = "(Diese Aufgabe ist Optional. Immer nur die letzte Aufgabe in jedem Block ist eine Pflichtaufgabe.)"
+            if ((!restrictedTasks) && i + 1 == tasks.length) notice = "(Diese Aufgabe ist eine Pflichtaufgabe. Löse sie, um zum nächsten Block weiterzukommen.)"
             if ((i + 1) == activeTask) return <div key={i} className="overflow-y-auto mt-8 max-h-[calc(100vh-17rem)]">
                 <p className="py-2" >{notice}&nbsp;</p>
                 <div dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}></div>

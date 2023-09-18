@@ -48,7 +48,7 @@ pickBeeper()
             {
                 title: "Probleme identifizieren - das Command Log",
                 explanation: `<b>Command-Log</b><br>
-                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt. Kopiere nun folgenden (fehlerhaften) Code in den Code Editor:<br><br>
+                Das Command-Log ist unter dem Code-Editor. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt. Kopiere nun folgenden (fehlerhaften) Code in den Code Editor:<br><br>
                 
 <pre><code>move()
 pickBeeper()
