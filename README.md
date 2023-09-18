@@ -18,7 +18,6 @@
     - The Hash: "7cb458"
 # Tickets
 PRIO
-    - log unter dem code
     - playmode with regex
 LOW PRIO
     - add ctrl + s = saving https://www.fullstacklabs.co/blog/keyboard-shortcuts-with-react-hooks

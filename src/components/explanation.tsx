@@ -1,5 +1,6 @@
 import React from 'react'
-import { type taskData, type IExplanation } from '~/types/karel'
+import { type taskData, type IExplanation, type Commands } from '~/types/karel'
+import CommandComp from './commands'
 
 interface explanation {
     explanations: Array<IExplanation>
@@ -7,9 +8,10 @@ interface explanation {
     activeTask: number
     setActiveTask(task: number): void
     restrictedTasks: boolean
+    commands: Commands
 }
 
-const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, setActiveTask, restrictedTasks }) => {
+const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, setActiveTask, restrictedTasks, commands }) => {
 
     function returnTasks(task: taskData, index: number, disabled: boolean) {
         let classname = "m-auto h-12 flex flex-row w-full rounded-md mb-3  border-l-4 "
@@ -41,13 +43,7 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
             <div className={"w-6 h-8 ml-auto mt-2 mr-3"} title={"This task has been completed."}>{checkmark}</div>
         </div>
     }
-    // const allTasksTask: taskData = {
-    //     done: tasks[tasks.length - 1].done,
-    //     start: "",
-    //     task: 0
-    // }
     return <div className={"h-[100vh] p-8 text-white tracking-wide w-full max-w-lg"}>
-        {/* {returnTasks(allTasksTask, Number.MAX_SAFE_INTEGER, false)} */}
         {tasks.map((task, index) => {
             let disabled = false
             if (index > 0 && tasks[index - 1].done == "") disabled = restrictedTasks
@@ -55,13 +51,12 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
         })}
         {explanations.map((explanationObject, i) => {
             let notice = ""
-            if ((!restrictedTasks) && i + 1 != tasks.length) notice = "(Diese Aufgabe ist Optional. Immer nur die letzte Aufgabe in jedem Block ist eine Pflichtaufgabe.)"
-            if ((!restrictedTasks) && i + 1 == tasks.length) notice = "(Diese Aufgabe ist eine Pflichtaufgabe. Löse sie, um zum nächsten Block weiterzukommen.)"
-            if ((i + 1) == activeTask) return <div key={i}><p className="py-2" >{notice}&nbsp;</p><div
-                dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}
-                // 4 = 1 rem so calculate = 3 x headlins + outer padding = 18 rem
-                className="overflow-y-auto max-h-[calc(100vh-18rem)]">
-            </div></div>
+            if ((!restrictedTasks) && i + 1 != tasks.length) notice = "*You can always skip tasks, by doing a task higher up."
+            if ((i + 1) == activeTask) return <div key={i} className="overflow-y-auto mt-8 max-h-[calc(100vh-17rem)]">
+                <p className="py-2" >{notice}&nbsp;</p>
+                <div dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}></div>
+                <CommandComp commands={commands} />
+            </div>
         })}
     </div>
 }

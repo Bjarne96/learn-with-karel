@@ -80,8 +80,8 @@ const Topbar: React.FC<ISidebar> = (props) => {
         <div className="flex flex-center flex-col items-center pt-6 gap-6">
             {returnButton("task")}
             {returnButton("commands")}
-            {returnButton("log1")}
-            {props.worldCounter == 2 && returnButton("log2")}
+            {/* {returnButton("log1")} */}
+            {/* {props.worldCounter == 2 && returnButton("log2")} */}
             {/* {returnButton("code")} */}
         </div>
     );

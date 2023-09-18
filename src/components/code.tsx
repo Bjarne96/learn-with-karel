@@ -12,7 +12,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     const { setContainer } = useCodeMirror({
         container: editorContainer.current,
         value: code,
-        height: "100vh",
+        height: "75vh",
         width: "100%",
         onChange: (value: string) => onCodeChange(value),
         theme: "dark",

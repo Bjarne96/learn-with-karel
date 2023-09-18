@@ -1,6 +1,5 @@
 import React from "react"
 // Components
-import Commands from "./commands"
 import Code from "./code"
 import World from "./world"
 //Interfaces
@@ -22,7 +21,6 @@ import levels from "../data/task-levels"
 import LevelButtons from "./levelbuttons"
 import LevelModal from "./levelModal"
 import TaskModal from "./taskModal"
-import Sidebar from "./sidebar"
 import Log from "./log"
 import SelectLevel from "./levelselect"
 import Explanation from "./explanation"
@@ -47,6 +45,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let code = levels[lastStage].code
         let tasks: Array<taskData> = []
         let activeTask = 1
+        let playmode = false
         if (props.id && props.id.length) {
             this.restrictedTasks = props.restrictedTasks
             this.userId = props.id
@@ -62,6 +61,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             lastStage = props.stage
             code = props.code
         }
+        if (levels[props.stage].playmode != undefined) playmode = levels[props.stage].playmode
         //Setting state
         if (levels != undefined && levels[lastStage] != undefined && levels[lastStage].worlds[0] != undefined) {
             this.state = {
@@ -89,7 +89,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 loading: false,
                 savedCode: 0,
                 activeTask: activeTask,
-                tasks: tasks
+                tasks: tasks,
+                doneLevels: props.doneLevels,
+                playmode: playmode
             }
         }
     }
@@ -116,7 +118,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 done: this.state.tasks[task - 1].done
             }
         })
-
     }
 
     handleStep() {
@@ -150,6 +151,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             done = res.tasks[0].done
             tasks = res.tasks
         }
+        let playmode = false
+        if (levels[level].playmode != undefined) playmode = levels[level].playmode
         this.setState({
             ...this.getResetRunningCodeObject(),
             ...{
@@ -161,6 +164,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 activeTab: 4,
                 activeTask: 1,
                 worldCounter: levels[level].worlds.length,
+                playmode: playmode,
                 loading: false,
                 tasks: tasks
             }
@@ -342,8 +346,12 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
         let showLevelCompletedModal = false
         let showTaskCompletedModal = false
+        const doneLevels = [...this.state.doneLevels]
 
-        if (this.state.tasks[tasks.length - 1].done != "" && completed) showLevelCompletedModal = true
+        if (tasks[tasks.length - 1].done != "" && completed) {
+            doneLevels[this.state.currentLevel] = true
+            showLevelCompletedModal = true
+        }
         else if (completed) showTaskCompletedModal = true
         this.setState({
             ...resetObject,
@@ -357,7 +365,8 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 worldCompletedCounter: worldCompletedCounter,
                 step: 0,
                 activeLine: 0,
-                tasks: tasks
+                tasks: tasks,
+                doneLevels: doneLevels
             }
         })
     }
@@ -395,39 +404,40 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         return <>
             <main className="flex justify-center content-center min-h-[100vh] bg-custom-darkblue">
                 <div className="flex flex-row min-h-[100vh] w-full">
-                    <div className="sidebar bg-custom-blue min-w-[75px] h-full">
-                        <Sidebar
-                            setActiveTab={this.setActiveTab.bind(this)}
-                            worldCounter={this.state.worldCounter}
-                            activeTab={this.state.activeTab}
-                            displayHelper={this.state.displayHelper}
-                        />
-                    </div>
-                    {{
-                        1: this.state.displayHelper && !this.state.loading && <Log log={this.state.firstLog} logNumber={1} worldCounter={this.state.worldCounter} />,
-                        2: this.state.displayHelper && !this.state.loading && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />,
-                        3: this.state.displayHelper && !this.state.loading && <Commands commands={this.state.commands} />,
-                        4: this.state.displayHelper && !this.state.loading && <Explanation restrictedTasks={this.restrictedTasks} tasks={this.state.tasks} setActiveTask={this.setActiveTask.bind(this)} activeTask={this.state.activeTask} explanations={levels[this.state.currentLevel].explanations} />,
-                    }[this.state.activeTab]}
+                    <Explanation
+                        restrictedTasks={this.restrictedTasks}
+                        tasks={this.state.tasks}
+                        setActiveTask={this.setActiveTask.bind(this)}
+                        activeTask={this.state.activeTask}
+                        explanations={levels[this.state.currentLevel].explanations}
+                        commands={this.state.commands}
+                    />
                     {this.state.loading && <div className={"p-8 text-white tracking-wide w-full max-w-lg"}><Loading /></div>}
                     <div className="w-full h-full bg-code-grey max-w-2xl relative">
                         <Savecode savedCode={this.state.savedCode} />
-                        {this.state.loading ?
-                            <Loading />
-                            :
-                            <Code
-                                code={this.state.code}
-                                onCodeChange={this.onCodeChange.bind(this)}
-                                runningCode={this.state.runningCode}
-                                activeLineProp={this.state.activeLine}
-                                executionCompleted={this.state.executionCompleted}
-                            />
-                        }
+                        <div className="h-[75vh]">
+                            {this.state.loading ?
+                                <Loading />
+                                :
+                                <Code
+                                    code={this.state.code}
+                                    onCodeChange={this.onCodeChange.bind(this)}
+                                    runningCode={this.state.runningCode}
+                                    activeLineProp={this.state.activeLine}
+                                    executionCompleted={this.state.executionCompleted}
+                                />
+                            }
+                        </div>
+                        <div className="h-[25vh] flex flex-row ">
+                            {<Log log={[...this.state.firstLog]} logNumber={1} worldCounter={this.state.worldCounter} />}
+                            {this.state.worldCounter == 2 && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />}
+                        </div>
                     </div>
                     <div className="w-full h-full">
                         <SelectLevel
                             handleLevelChange={this.handleLevelChange.bind(this)}
                             currentLevel={this.state.currentLevel}
+                            doneLevels={this.state.doneLevels}
                         />
                         {levels[this.state.currentLevel].worlds.map((world, i) =>
                             <World
@@ -450,6 +460,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 updateLogAndLine={this.updateLogAndLine.bind(this)}
                                 step={this.state.step}
                                 loading={this.state.loading}
+                                playmode={this.state.playmode}
                             />
                         )
                         }

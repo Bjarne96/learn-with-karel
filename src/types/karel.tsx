@@ -40,6 +40,7 @@ export interface DashboardProps {
     code: string
     tasks: Array<taskData>
     restrictedTasks: boolean
+    doneLevels: Array<boolean>
 }
 export interface DashboardState extends ResetStateObject {
     currentLevel: number
@@ -52,11 +53,13 @@ export interface DashboardState extends ResetStateObject {
     commands: Commands
     displayHelper: boolean
     loading: boolean
+    playmode: boolean
     savedCode: number
     worldCounter: number
     activeTab: number
     activeTask: number
     tasks: Array<taskData>
+    doneLevels: Array<boolean>
 }
 
 export interface ResetStateObject {
@@ -90,7 +93,6 @@ export interface ILevel {
     name: string
     worlds: Array<IWorld>
     commands: Commands
-    playMode?: boolean
 }
 export interface INewLevel {
     code: string
@@ -98,6 +100,7 @@ export interface INewLevel {
     worlds: Array<INewWorld>
     commands: Commands
     explanations: Array<IExplanation>
+    playmode?: boolean
 }
 export interface IExplanation {
     title: string,
@@ -145,6 +148,7 @@ export interface ICommandProps {
 export interface ISelectLevelProps {
     currentLevel: number
     handleLevelChange(code: number): void
+    doneLevels: Array<boolean>
 }
 
 export interface IWorldState {
@@ -179,6 +183,7 @@ export interface IWorldProps {
     displayHelper: boolean
     step: number
     loading: boolean
+    playmode: boolean
     activeTask: number
     completedWorld(completed: boolean): void
     updateLogAndLine(log: string, line: number, type: logType, worldNumber: number): void
