@@ -56,6 +56,7 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
         {explanations.map((explanationObject, i) => {
             let notice = ""
             if ((!restrictedTasks) && i + 1 != tasks.length) notice = "(Diese Aufgabe ist Optional. Immer nur die letzte Aufgabe in jedem Block ist eine Pflichtaufgabe.)"
+            if ((!restrictedTasks) && i + 1 == tasks.length) notice = "(Diese Aufgabe ist eine Pflichtaufgabe. Löse sie, um zum nächsten Block weiterzukommen.)"
             if ((i + 1) == activeTask) return <div key={i}><p className="py-2" >{notice}&nbsp;</p><div
                 dangerouslySetInnerHTML={{ __html: explanationObject.explanation }}
                 // 4 = 1 rem so calculate = 3 x headlins + outer padding = 18 rem

@@ -23,9 +23,11 @@ export const levels: Array<INewLevel> = [
                 Drücke auf den Play-Knopf unter dem Spielfeld und sieh zu, wie Pfeili die Befehle im Code-Editor ausführt.<br><br>
                 
                 <b>Hilfe, ich habe den Text im Code-Editor ausversehen verändert!</b><br>
-                Keine Sorge, du kannst einfach in den Code Editor klicken und die Tastenkombination Strg + Z nutzen, um alles rückgängig zu machen. Alternativ lösche allen Text im Code Editor und und kopiere den folgenden zwei Zeilen in den Editor:<br>
-                move()<br>
-                pickBeeper()<br><br>
+                Keine Sorge, du kannst einfach in den Code Editor klicken und die Tastenkombination Strg + Z nutzen, um alles rückgängig zu machen. Alternativ lösche allen Text im Code Editor und und kopiere den folgenden zwei Zeilen in den Editor:<br><br>
+
+<pre><code>move()
+pickBeeper()
+</code></pre><br>
         
                 <b>Hilfe, Pfeili ist irgendwo stecken geblieben!</b><br>
                 Um ein Level auf den Startzustand zurückzusetzen drücke einfach auf den kreisförmigen Pfeil unter dem Spielfeld. Alles kann rückgängig gemacht werden, also probiere einfach drauf los. Es gibt zwei Bedingungen die dazu führen, dass die Ausführung des Codes gestoppt wird und du das level zurücksetzen musst:<br>
@@ -46,17 +48,19 @@ export const levels: Array<INewLevel> = [
             {
                 title: "Probleme identifizieren - das Command Log",
                 explanation: `<b>Command-Log</b><br>
-                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt.<br><br>
-
-                Kopiere folgenden (fehlerhaften) Code in den Code Editor:<br><br>
-                move()<br>
-                pickBeeper()<br><br>
-
+                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt. Kopiere nun folgenden (fehlerhaften) Code in den Code Editor:<br><br>
+                
+<pre><code>move()
+pickBeeper()
+move()
+pickBeeper()
+</code></pre><br>
+                
                 Drücke auf Play und schau im Command-Log, was das Problem ist. Setze danach des Level zurück und versuche das Level zu lösen.`,
             },
             {
                 title: "Wiedergabegeschwindigkeit Ändern",
-                explanation: `Manchmal muss Pfeili viele Schritt ausführen und alles dauert ein bisschen lange. Oder es wird besonders Knifflig und du willst dir alles Schritt für Schritt anschauen. Für diese Fälle kannst du die Wiedergabegeschwindigkeit ändern.Versuche für dieses Level, eine schnelle Geschwindigkeit einzustellen.<br><br>
+                explanation: `Manchmal muss Pfeili viele Schritt ausführen und alles dauert ein bisschen lange. Oder es wird besonders knifflig und du willst dir alles Schritt für Schritt anschauen. Für diese Fälle kannst du die Wiedergabegeschwindigkeit ändern.Versuche für dieses Level, eine schnelle Geschwindigkeit einzustellen.<br><br>
                 
                 <b>Wiedergabegeschwindigkeit Einstellen</b><br>
                 Unter dem Spielfeld, gibt es vier verschiedene Pfeil-Icons und einen Pause-Knopf. Mit diesen Kannst du einstellen, in welchem Tempo der Code ausgeführt wird.<br>
