@@ -14,8 +14,8 @@ interface explanation {
 const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, setActiveTask, restrictedTasks, commands }) => {
 
     function returnTasks(task: taskData, index: number, disabled: boolean) {
-        let classname = "m-auto h-12 flex flex-row w-full rounded-md mb-3  border-l-4 "
-        const titleClassname = "p-0 font-semibold whitespace-pre-wrap text-white ml-3 mt-2"
+        let classname = "m-auto flex flex-row w-full rounded-md mb-1  border-l-4 "
+        const titleClassname = "p-1 whitespace-pre-wrap text-white ml-3"
         let checkmark = <svg
             className={"ml-auto fill-white"}
             xmlns="http://www.w3.org/2000/svg"
@@ -36,11 +36,11 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
         return <div key={index} className={classname} onClick={() => { if (index != Number.MAX_SAFE_INTEGER && !disabled) setActiveTask(index + 1) }}>
             {
                 index != Number.MAX_SAFE_INTEGER ?
-                    <h1 className={titleClassname}>{explanations[index].title}</h1>
+                    <p className={titleClassname}>{explanations[index].title}</p>
                     :
-                    <h1 className={titleClassname}>All Tasks</h1>
+                    <p className={titleClassname}>All Tasks</p>
             }
-            <div className={"w-6 h-8 ml-auto mt-2 mr-3"} title={"This task has been completed."}>{checkmark}</div>
+            <div className={"w-6 ml-auto mt-2 mr-3"} title={"This task has been completed."}>{checkmark}</div>
         </div>
     }
     return <div className={"h-[100vh] p-8 text-white tracking-wide w-full max-w-lg"}>

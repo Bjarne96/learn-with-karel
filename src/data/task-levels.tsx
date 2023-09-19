@@ -46,9 +46,9 @@ pickBeeper()
                 <em>pickBeeper()</em> Pfeili hebt einen Beeper vom Feld auf, auf dem Pfeili momentan steht (sofern sich dort ein Beeper befindet).<br><br>`,
             },
             {
-                title: "Probleme identifizieren - das Command Log",
+                title: "Probleme identifizieren/ Command Log",
                 explanation: `<b>Command-Log</b><br>
-                Das Command-Log ist unter dem Code-Editor. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt. Kopiere nun folgenden (fehlerhaften) Code in den Code Editor:<br><br>
+                Das Command-Log ist unter dem Spielfeld. Hier werden die von Pfeili ausgeführten Befehle in einer Liste mitgeschrieben. Wenn es einen Fehler mit dem Programm gibt, dann wird das im Command-Log mitgeteilt. Kopiere nun folgenden (fehlerhaften) Code in den Code Editor:<br><br>
                 
 <pre><code>move()
 pickBeeper()
@@ -69,7 +69,7 @@ pickBeeper()
                 3. <em>Nächster Schritt</em>: Rechts vom Pause-Knopf gibt einen Knopf, mit dem immer nur der jeweils nächste Befehl ausgeführt wird. Drücke dafür erst auf den Pause-Knopf und dann so oft du willst auf den Nächster-Schritt-Knopf.<br><br>`,
             },
             {
-                title: "Lektion abschließen und vorherige Level anschauen",
+                title: "Lektion abschließen/ vorherige Level anschauen",
                 explanation: `Dies ist die letzte Aufgabe im Einführungsblock. Wenn du sie abgeschlossen hast, wirst du in einen neuen Block weitergeleitet. Falls du allerdings nochmal eine Information nachschauen möchtest, kannst du jederzeit zu allen Bereits absolvierten Aufgbacken-Blöcken zurückkehren.<br><br>
                 
                 <b>Aufgabenblock Wechseln</b><br>
@@ -120,18 +120,18 @@ pickBeeper()`,
         name: "Funktionen",
         explanations: [
             {
-                title: "1. Das Problem ohne Funktionen lösen",
+                title: "Das Problem ohne Funktionen lösen",
                 explanation: `Manchmal müssen wir Dinge tun für die es noch keinen Befehl gibt. Hier muss sich Pfeili nach rechts drehen, aber es gibt nur einen Befehl zur Linksdrehung. Kannst du mit den vorhandenen Befehlen trotzdem eine Rechtsdrehung erreichen und das Level abschließen?<br><br>`,
             },
             {
-                title: "2. Wann benutzt man Funktionen",
+                title: "Wann benutzt man Funktionen",
                 explanation: `Wenn man die selbe Abfolge von Befehlen mehrmals nutzt, dann sollte man dafür meistens eine Funktion dafür nutzen. Eine Funktion bündelt eine beliebige  Abfolge von Befehle unter einem neuen Namen zusammen. Diese ganze Abfolge von Befehlen kann man danach so häufig abrufen wie man möchte, und das mit minimalen Schreibaufwand.<br><br>
                 
                 Hier wirst jedoch noch ein letztes Mal ohne Funktionen arbeiten, weil man so am besten sieht, in welchen Szenarien Funktionen einem das Leben einfacher machen. Hier hast du fast das gleich Problem wie bei Aufgabe 1. Du kannst die Aufgabe einfach so wie immer lösen. Allerdings wirst du merken, dass du dich dabei wiederholen musst.<br><br>`,
             },
             {
-                title: "3. Wie Modifiziert man Funktionen",
-                explanation: `Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br>
+                title: "Wie Modifiziert man Funktionen",
+                explanation: `Nun werden wir das Problem auf die elegante Art lösen. Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br>
                
 <pre><code>function turnRight(){
     turnLeft()
@@ -148,7 +148,7 @@ move()
 pickBeeper()</code></pre>`,
             },
             {
-                title: "4. Wie schreibt man selbst eine Funktion",
+                title: "Selbst Funktionen schreiben",
                 explanation: `Es gibt immer noch mehrere Stellen im Code, in denen wir uns unnötig wiederholen. Zum Glück kannst du so viele neue Funktionen mit anderen Namen definieren wie du willst. Versuche <code>move()</code> und <code>pickBeeper()</code> in eine neue Funktion auszulagern:<br><br>
 
 <pre><code>function bewegenUndAufsammeln(){
@@ -169,20 +169,14 @@ pickBeeper()</code></pre>`,
 
                 2. Der Aufruf. Hier beauftragen wir den Computer damit, die Instruktionen im Rezept (also in der Definition) auch auszuführen. Hierfür nutzt du den den gleichen Namen, den du vorher in der Definition gewählt hast, gefolgt von (). Ein Aufruf kann erst nach der Definition stattfinden, also weiter unten im Code.<br><br>
 
-<pre><code>funktionsName()</code></pre><br><br>`,
-            },
-            {
-                title: "5. Tipps zur Benennung von Funktionen",
-                explanation: `-Benennung von funktionen semantisch sinnvoll`,
-            },
-            {
-                title: "6. Wie man {}-Klammern macht",
-                explanation: `<b>Tasten-Komination für die {}-Klammern</b><br>
+<pre><code>funktionsName()</code></pre><br>
+
+                <b>Tasten-Komination für die {}-Klammern</b><br>
                 Windows: AltGr + 7 / AltGr + 0<br>
                 Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
             },
             {
-                title: "7. Warum Funktionen Änderungen am Code vereinfachen",
+                title: "Flexiblen Code schreiben",
                 explanation: `Im Programmier-Alltag verändern sich dauernd irgendwelche Rahmenbedingungen, sodass man im Nachhinein Dinge an seinem Code ändern muss. Wenn man jedoch eine Funktionen hat die an vielen Stellen genutzt wird, dann muss man häufig nur eine kleine Änderung an der Funktion vornehmen. Sonst sonst hätte man an vielen Stellen des Programms alle Änderungen einzeln vornehmen müssen.<br><br>
                 
                 Wenn du deinen Code schon in den vorherigen Übungen in Funktionen Aufgeteilt hast, dann hast du jetzt ein leichtes Spiel.`,
@@ -220,14 +214,6 @@ pickBeeper()</code></pre>`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 }],
-                        solutions: [],
-                    },
-                    {
-                        beepers: [{ x: 4, y: 1, count: 1 }, { x: 4, y: 3, count: 1 }, { x: 2, y: 3, count: 1 }],
-                        solutions: [],
-                    },
-                    {
                         beepers: [{ x: 5, y: 1, count: 1 }, { x: 5, y: 4, count: 1 }, { x: 2, y: 4, count: 1 },],
                         solutions: [],
                     },
@@ -239,19 +225,19 @@ pickBeeper()</code></pre>`,
         name: "Schleifen",
         explanations: [
             {
-                title: "1. Anzahl der Durchläufe festlegen",
+                title: "Anzahl der Durchläufe festlegen",
                 explanation: `Manchmal muss man einen Befehl mehrfach direkt hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Wenn du die <code>5</code> in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern. Drücke einfach auf Play und sieh was passiert.<br><br>
         
                 <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>`,
             },
             {
-                title: "2. Den Inhalt der Schleife verändern",
+                title: "Den Inhalt der Schleife verändern",
                 explanation: `Innerhalb der <code>{}</code>-Klammern der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
         
                 Unter das <code>move()</code> könntest du also z.B. noch <code>pickBeeper()</code> schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>`,
             },
             {
-                title: "3. Den Aufbau von Schleifen verstehen",
+                title: "Den Aufbau von Schleifen verstehen",
                 explanation: `Leider wirst du in diesem Kurs nicht alle Einzelheiten zu Schleifen lernen können, ist normal dass die Schreibweise kryptisch auf dich wirkt. Wenn es dich interessiert, dann findest du hier weiterführende Infos, aber für diesen Kurs wird das nicht mehr wichtig werden. <em>Du kannst diese Lektion ohne Probleme überspringen</em>.<br><br>
                 
                 <b>Aufbau einer For-Loop</b><br>
@@ -269,7 +255,7 @@ pickBeeper()</code></pre>`,
                 <em>"i < beliebigeZahl"</em> Dies ist ein Vergleich zwischen zwei Zahlen. So lange die Zahl im Speicher (das "i") kleiner ist, als unsere festgelegte Zahl, wird die Schleife weiter ausgeführt.<br>`
             },
             {
-                title: "4. Sonderfälle im ersten/letzten Schleifendurchlauf",
+                title: "Sonderfälle im ersten/letzten Schleifendurchlauf",
                 explanation: `Alle Befehle die innerhalb der Schleife stehen, werden immer zusammen ausgeführt. In diesem Beispiel wird immer ein Beeper aufgehoben und sich danach immer bewegt:<br><br>
 
 <pre><code>for (let i = 0; i < 5; i++) {
@@ -365,7 +351,7 @@ putBeeper()`,
         name: "Off-brand Tetris - If",
         explanations: [
             {
-                title: "If 1",
+                title: "Den Inhalt des If-Statements ändern",
                 explanation: `<b>If-Statements</b><br>
                 wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
                 
@@ -378,7 +364,7 @@ putBeeper()`,
                 }<br><br>`,
             },
             {
-                title: "If 2",
+                title: "Die Bedingung im If-Statement ändern",
                 explanation: `<b>If-Statements</b><br>
                 wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
                 
@@ -399,7 +385,7 @@ putBeeper()`,
         code: `move()
 if(leftIsClear())
 {
-    turnLeft()
+    turnRight()
 }
 move()`,
         commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
