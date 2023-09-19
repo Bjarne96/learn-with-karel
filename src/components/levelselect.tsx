@@ -2,6 +2,9 @@ import React from "react";
 import type { ISelectLevelProps, INewLevel } from "../types/karel";
 import levels from "../data/task-levels";
 
+// DEV Variable (has to be always false when doing a commit)
+const cheater = false
+
 const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelChange, doneLevels }) => {
 
     const returnButton = (name: string) => {
@@ -24,16 +27,20 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
         }]
         const btn = svgPaths.filter((e) => { if (e.name == name) return true })[0]
         let checkPath
+        let disabled = false
         if (name == "arrow-right") checkPath = currentLevel
         if (name == "arrow-left") checkPath = currentLevel - 1
 
         let className = "max-h-10 "
-        if (doneLevels.length - 1 > checkPath && doneLevels[checkPath]) className += " cursor-pointer " + btn.color
-        else className += " cursor-not-allowed " + btn.disabledColor
+        if ((doneLevels.length - 1 > checkPath && doneLevels[checkPath]) || cheater) className += " cursor-pointer " + btn.color
+        else {
+            disabled = true
+            className += " cursor-not-allowed " + btn.disabledColor
+        }
 
         return <div className={"w-10 h-10 my-auto"} title={btn.text}>
             <svg
-                onClick={btn.onClick}
+                onClick={(() => { if (!disabled) btn.onClick() })}
                 className={className}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox={btn.viewBox}
@@ -47,16 +54,15 @@ const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelCha
         <div className="m-8 px-4 overflow-auto flex flex-row justify-center items-center gap-4">
             {returnButton("arrow-left")}
             <select
-                // className="peer h-full max-w-[480px] w-full font-semibold text-base  text-gray-900 rounded-lg  dark:text-white dark:border-gray-600 dark:bg-sky-700 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200"
                 className="peer h-full max-w-[480px] w-full font-semibold text-base bg-gray-50 text-gray-900 rounded-lg dark:focus:border-blue-500 border-gray-300 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:text-white dark:border-gray-600 dark:bg-sky-700 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200"
                 value={currentLevel}
                 onChange={(e) => {
-                    if ((Number(e.target.value) != 0 && doneLevels[Number(e.target.value) - 1]) || Number(e.target.value) == 0) handleLevelChange(Number(e.target.value))
+                    if ((Number(e.target.value) != 0 && doneLevels[Number(e.target.value) - 1]) || Number(e.target.value) == 0 || cheater) handleLevelChange(Number(e.target.value))
                 }}
                 title="Select a level."
             >
                 {levels.map((level: INewLevel, i: number) => (
-                    <option className={((i != 0 && doneLevels[i - 1]) || i == 0) ? "" : "text-gray-600"} value={i} key={i}>
+                    <option className={((i != 0 && doneLevels[i - 1]) || i == 0 || cheater) ? "" : "text-gray-600"} value={i} key={i}>
                         {i + 1}. {level.name} {level.playmode == true ? "(playmode enabled)" : ""}
                     </option>
                 ))}

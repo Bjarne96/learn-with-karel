@@ -22,10 +22,12 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     function changeHighlighting(remove = false) {
         setTimeout(() => {
             try {
-                const line = document.getElementsByClassName("cm-content")[0].children[activeLine.current].classList
+                const lines = document.getElementsByClassName("cm-content")[0].children
+                if (lines.length - 1 < activeLine.current) return
+                const line = lines[activeLine.current].classList
                 if (remove) line.remove("highlighted-line")
                 if (!remove) line.add("highlighted-line")
-            } catch (e) { console.warn('e', e); }
+            } catch (e) { console.warn('e', e) }
         }, 16)
     }
 
