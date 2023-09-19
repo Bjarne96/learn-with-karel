@@ -88,6 +88,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 step: 0,
                 loading: false,
                 savedCode: 0,
+                resetCode: 0,
                 activeTask: activeTask,
                 tasks: tasks,
                 doneLevels: props.doneLevels,
@@ -268,7 +269,14 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         }
     }
 
-    handleResetExecution() { this.setState(this.getResetRunningCodeObject.bind(this)) }
+    handleResetExecution() {
+        this.setState({
+            ...this.getResetRunningCodeObject(),
+            ...{
+                resetCode: (this.state.resetCode + 1)
+            }
+        })
+    }
 
     handleResetToDefaulftCode() { this.setState({ code: levels[this.state.currentLevel].code }) }
 
@@ -347,11 +355,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         let showTaskCompletedModal = false
         const doneLevels = [...this.state.doneLevels]
 
-        if (tasks[tasks.length - 1].done != "" && completed) {
-            doneLevels[this.state.currentLevel] = true
-            showLevelCompletedModal = true
-        }
+        if (tasks[tasks.length - 1].done != "" && completed) doneLevels[this.state.currentLevel] = true
         else if (completed) showTaskCompletedModal = true
+        if (this.state.tasks[tasks.length - 1].done == "" && completed) showLevelCompletedModal = true
         if ((this.state.worldCounter > 1 && worldCompletedCounter == 2) || this.state.worldCounter == 1) this.worldSuccessfullyCompletedCounter = 0
         this.setState({
             ...resetObject,
@@ -448,6 +454,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                                 code={this.state.code}
                                 runningCode={this.state.runningCode}
                                 pauseCode={this.state.pauseCode}
+                                resetCode={this.state.resetCode}
                                 interval={this.state.interval}
                                 karel={this.state.karel}
                                 world={world}

@@ -14,6 +14,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     pauseInterval = false
     finishedCode = false
     startedCode = false
+    resetCode = 0
     errorFound = ""
     boundContinue: () => void = null
     logs: Log = []
@@ -54,6 +55,15 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     /* REACT FUNCTIONS */
 
     componentDidUpdate(): void {
+        if (this.props.resetCode != this.resetCode) {
+            this.finishedCode = false
+            this.startedCode = false
+            this.step = 0
+            this.resetCode = this.props.resetCode
+            this.resetLevel()
+            this.setLevel()
+            return
+        }
         // Reset Button was pressed, while executing code
         if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
             this.resetLevel()
@@ -168,6 +178,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     async executeCommand(command: string, line: number, param: string) {
+        if (!this.startedCode) return
         if (typeof this[command as keyof this] == undefined) return
         let val: boolean | number = null
         // MOVEMENT COMMANDS
@@ -377,6 +388,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     }
 
     completeWorld() {
+        if (!this.startedCode) return
         let lastLog = { message: this.errorFound, type: "error" as logType }
         // Check if the level was solved
         const solved = this.checkSolution() && lastLog.message == ""
