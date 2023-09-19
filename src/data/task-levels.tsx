@@ -131,7 +131,7 @@ pickBeeper()`,
             },
             {
                 title: "Wie Modifiziert man Funktionen",
-                explanation: `Nun werden wir das Problem auf die elegante Art lösen. Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br>
+                explanation: `Nun werden wir das Problem auf die elegante Art lösen. Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br><br><br>
                
 <pre><code>function turnRight(){
     turnLeft()
@@ -327,11 +327,11 @@ putBeeper()`,
         explanations: [
             {
                 title: "Mehrere Pfeilis",
-                explanation: `Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrer eigenen Welt. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, und die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet.<br><br>`,
+                explanation: `Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrer eigenen Welt. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, und die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet. Als Resultat muss der selbe Cod für zwei verschiedene Situationen funktionieren.<br><br>`,
             },
             {
                 title: "Wofür man If-Statements nutzt",
-                explanation: `wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
+                explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist. Mit dem folgenden Code kannst du ausprobieren, wie das funktioniert.<br><br>
 
                 <b>Code Beispiel:</b><br>
 <pre><code>move()
@@ -342,17 +342,11 @@ if(leftIsClear())
 move()</code></pre><br>`,
             },
             {
-                title: "Die Bedingung im If-Statement ändern",
-                explanation: `<b>If-Statements</b><br>
-                Häufig wollen wir unseren Code so schreiben, dass er später flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
-    
-                <b>Aufbau eines If-Statements</b><br>
-                if(meineBedingung()){<br>
-                code der ausgeführt wird, wenn die Bedingung wahr ist.<br>
-                }<br><br>`,
+                title: "Den Inhalt vom If-Statement ändern",
+                explanation: `Zwischen die {}-Klammer des If-Statements kannst du belliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements.`,
             },
             {
-                title: "Andere Bedingungen nutzen",
+                title: "Die Bedingung im If-Statement ändern",
                 explanation: `<b>Verschiedene Bedingungen</b><br>
                 Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. In diesem Level gibt es neben <em>leftIsClear()</em> auch <em>rightIstClear()</em>.<br><br>`,
             },
