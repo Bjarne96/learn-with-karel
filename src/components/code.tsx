@@ -22,6 +22,8 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
     function changeHighlighting(remove = false) {
         setTimeout(() => {
             try {
+                const scroller = document.getElementsByClassName("cm-scroller")[0]
+                if (scroller.scrollHeight > scroller.clientHeight) return
                 const lines = document.getElementsByClassName("cm-content")[0].children
                 if (lines.length - 1 < activeLine.current) return
                 const line = lines[activeLine.current].classList
@@ -39,6 +41,7 @@ const Code: React.FC<ICodeProps> = ({ code, onCodeChange, runningCode, activeLin
             changeHighlighting()
         } else if (executionCompleted && activeLineProp == 0) {
             // Remove highlighting -> cange active line to inactive
+
             changeHighlighting(true)
         }
 
