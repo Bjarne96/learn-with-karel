@@ -424,7 +424,7 @@ putBeeper()`,
         name: "X-Files 1 - If/ Else",
         explanations: [
             {
-                title: "Else 1",
+                title: "Wofür If-Else benutzt wird",
                 explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.<br><br>
         
                 <b>Aufbau eines If-Else-Statements</b><br>
@@ -436,16 +436,28 @@ putBeeper()`,
                 }<br><br>`,
             },
             {
-                title: "Else 2",
-                explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.<br><br>
-        
-                <b>Aufbau eines If-Else-Statements</b><br>
-                if(meineBedingung()){<br>
-                code der ausgeführt wird, wenn die Bedingung wahr ist.<br>
-                }<br>
-                else{<br>
-                code der ausgeführt wird, wenn die Bedingung nicht wahr ist.<br>
-                }<br><br>`,
+                title: "Besonderheit von If-Statements vs. If-Else",
+                explanation: `Verlgeiche die beiden Codeblöcke:<br><br>
+
+                <b>Code-Beispiel 1</b><br>
+<pre><code>if(leftIsClear())
+{
+    turnLeft()
+}
+if(rightIsClear())
+{
+    turnRight()
+}</code></pre><br>
+
+<b>Code-Beispiel 2</b><br>
+<pre><code>if(leftIsClear())
+{
+    turnLeft()
+}
+else
+{
+    turnRight()
+}</code></pre><br>`,
             },
             {
                 title: "Else-if",
