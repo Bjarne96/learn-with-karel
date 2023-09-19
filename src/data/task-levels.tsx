@@ -331,24 +331,34 @@ putBeeper()`,
             },
             {
                 title: "Wofür man If-Statements nutzt",
-                explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist. Mit dem folgenden Code kannst du ausprobieren, wie das funktioniert.<br><br>
+                explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der <code>{}</code>-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist. Mit dem folgenden Code kannst du ausprobieren, wie das funktioniert.<br><br>
 
                 <b>Code Beispiel:</b><br>
-<pre><code>move()
-if(leftIsClear())
+<pre><code>if(leftIsClear())
 {
     turnLeft()
-}
-move()</code></pre><br>`,
+}</code></pre><br>`,
             },
             {
-                title: "Den Inhalt vom If-Statement ändern",
-                explanation: `Zwischen die {}-Klammer des If-Statements kannst du belliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements.`,
+                title: "Code zwischen den {}-Klammern ändern",
+                explanation: `Zwischen die <code>{}</code>-Klammern des If-Statements kannst du beliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements. Der gesamte Code-Block zwischen den <code>{}</code>-Klammern wird ausgeführt, sofern zum ursprünglichen Zeitpunkt, an dem die Bedingung geprüft wurde, diese auch zutraf. Die Bedingung wird also genau einmal geprüft, egal wieviele Zeilen Code danach kommen.<br><br>
+                
+                <b>Code Beispiel:</b><br>
+<pre><code>if(leftIsClear())
+{
+    turnLeft()
+    move()
+}</code></pre><br>`,
             },
             {
-                title: "Die Bedingung im If-Statement ändern",
-                explanation: `<b>Verschiedene Bedingungen</b><br>
-                Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. In diesem Level gibt es neben <em>leftIsClear()</em> auch <em>rightIstClear()</em>.<br><br>`,
+                title: "Neue Bedingungen",
+                explanation: `In den <code>()</code>-Klammern der If-Statements hast du bist jetzt immer <code>leftIsClear()</code> abgefragt, jedoch können dort auch beliebige andere Bedingungen stehen.<br><br>
+                
+                <b>Code Beispiel:</b><br>
+<pre><code>if(rightIsClear())
+{
+
+}</code></pre><br>`,
             },
         ],
         code: `move()`,
@@ -357,8 +367,8 @@ move()</code></pre><br>`,
             {
                 walls: [
                     [0, 0, 13, 0, 0, 0, 0, 0],
-                    [0, 0, 3, 10, 10, 10, 12, 0],
-                    [0, 0, 0, 0, 0, 0, 7, 0],
+                    [0, 0, 3, 10, 12, 0, 0, 0],
+                    [0, 0, 0, 0, 7, 0, 0, 0],
                 ],
 
                 karel: { x: 2, y: 0, direction: 3, isSuper: false, beeperCount: 0 },
@@ -368,15 +378,15 @@ move()</code></pre><br>`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 5, y: 1, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 3, y: 1, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 2, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 4, y: 2, count: 1 },],
                         solutions: [],
                     },
                 ]
@@ -385,8 +395,7 @@ move()</code></pre><br>`,
                 walls: [
                     [0, 0, 13, 0, 0, 0, 0, 0],
                     [0, 0, 5, 0, 0, 0, 0, 0],
-                    [0, 0, 5, 0, 0, 0, 0, 0],
-                    [0, 0, 3, 10, 10, 14, 0, 0],
+                    [0, 0, 3, 10, 10, 10, 14, 0],
                 ],
 
                 karel: { x: 2, y: 0, direction: 3, isSuper: false, beeperCount: 0 },
@@ -396,15 +405,15 @@ move()</code></pre><br>`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 2, y: 2, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 2, y: 2, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 2, y: 2, count: 1 }, { x: 3, y: 3, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 5, y: 2, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 2, y: 2, count: 1 }, { x: 3, y: 3, count: 1 }, { x: 5, y: 3, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 5, y: 2, count: 1 }, { x: 6, y: 2, count: 1 },],
                         solutions: [],
                     },
                 ]
