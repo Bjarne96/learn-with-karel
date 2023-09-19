@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Dashboard from "~/components/dashboard";
-import levels from "../data/idk_somelevels"
+import levels from "../data/task-levels"
 import clientPromise from '../lib/mongodb'
 import { ObjectId } from "mongodb"
 import type { DashboardProps, GetUserDbResponse, levelData, levelDataResponse } from "~/types/karel";

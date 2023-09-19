@@ -227,32 +227,23 @@ pickBeeper()</code></pre>`,
             {
                 title: "Anzahl der Durchläufe festlegen",
                 explanation: `Manchmal muss man einen Befehl mehrfach direkt hintereinander ausführen. Programmier*innen hassen es allerdings, sich zu wiederholen. Also nutzen sie die sogenannten Schleifen oder auch Loops, um das Problem zu lösen. Wenn du die <code>5</code> in der Schleife durch eine andere Zahl ersetzt, wird sich die Anzahl der Schleifendurchläufe ändern. Drücke einfach auf Play und sieh was passiert.<br><br>
-        
+
+Beispiel einer Schleife:
+<pre><code>for (let i = 0; i < 5; i++) {
+    move()
+}</code></pre><br>
+
                 <i>(Ab dieser Lektion ist die Funktion "turnRight" direkt verfügbar, und muss nicht mehr manuell definiert werden.)</i><br><br>`,
             },
             {
                 title: "Den Inhalt der Schleife verändern",
                 explanation: `Innerhalb der <code>{}</code>-Klammern der For-Schleife kannst du so viele Befehle schreiben wie du möchtest. Jeder dieser Befehle wird bei jedem Durchlauf der Schleife aufgerufen.<br><br>
         
-                Unter das <code>move()</code> könntest du also z.B. noch <code>pickBeeper()</code> schreiben, dann wird sich Pfeili in jedem Durchlauf erst bewegen und dann einen Beeper aufheben.<br><br>`,
-            },
-            {
-                title: "Den Aufbau von Schleifen verstehen",
-                explanation: `Leider wirst du in diesem Kurs nicht alle Einzelheiten zu Schleifen lernen können, ist normal dass die Schreibweise kryptisch auf dich wirkt. Wenn es dich interessiert, dann findest du hier weiterführende Infos, aber für diesen Kurs wird das nicht mehr wichtig werden. <em>Du kannst diese Lektion ohne Probleme überspringen</em>.<br><br>
-                
-                <b>Aufbau einer For-Loop</b><br>
-<pre><code>for (let i = 0; i < beliebigeZahl; i++) {<br>
-    einBefehl()<br>
-    zweiterBefehl()<br>
-    beliebigVieleBefehle()<br>
-}</code></pre><br>
-                
-                Was hier passiert, ist dass wir uns merken, wie häufig die Schleife schon durchlaufen wurde und diesen Wert jeden Durchlauf mit einer festen Zahl vergleichen. So lange die Anzahl der Durchläufe kleiner ist, als unsere festgelegte Zahl, wird die Schleife weiter durchlaufen.<br><br>
-
-                <em>"let i = 0"</em> Das "i" ist eine sogenannte Variable, aber das ist ein Thema für sich. Dies ist eine Art Speicher für eine Information. Zunächst wird hier eine "0" gespeichert.<br><br>
-
-                <em>"i++"</em> Dies bedeutet, dass wir nach jedem Schleifen-Durchlauf 1 auf unsere Zahl im Speicher addieren. Somit spiegelt die Zahl im Speicher immer die Anzahl der Durchläufe wieder (beginnend beim "nullten" Durchauf. Informatiker*innen fangen gerne bei 0 statt bei 1 an zu zählen.)<br><br>
-                <em>"i < beliebigeZahl"</em> Dies ist ein Vergleich zwischen zwei Zahlen. So lange die Zahl im Speicher (das "i") kleiner ist, als unsere festgelegte Zahl, wird die Schleife weiter ausgeführt.<br>`
+                Beispiel mit mehreren Befehlen:
+<pre><code>for (let i = 0; i < 5; i++) {
+    move()
+    pickBeeper()
+}</code></pre><br>`,
             },
             {
                 title: "Sonderfälle im ersten/letzten Schleifendurchlauf",
@@ -316,22 +307,6 @@ putBeeper()`,
                         { x: 3, y: 2, count: 1 },
                         { x: 4, y: 2, count: 1 },
                         { x: 5, y: 2, count: 1 },
-                        { x: 6, y: 2, count: 1 },],
-                        solutions: [{ x: 1, y: 3, count: 1 },
-                        { x: 2, y: 3, count: 1 },
-                        { x: 3, y: 3, count: 1 },
-                        { x: 4, y: 3, count: 1 },
-                        { x: 5, y: 3, count: 1 },
-                        { x: 6, y: 3, count: 1 },
-                        { x: 7, y: 3, count: 1 },],
-                    },
-                    {
-                        beepers: [{ x: 0, y: 2, count: 1 },
-                        { x: 1, y: 2, count: 1 },
-                        { x: 2, y: 2, count: 1 },
-                        { x: 3, y: 2, count: 1 },
-                        { x: 4, y: 2, count: 1 },
-                        { x: 5, y: 2, count: 1 },
                         { x: 6, y: 2, count: 1 },
                         { x: 7, y: 2, count: 1 },],
                         solutions: [{ x: 0, y: 3, count: 1 },
@@ -351,26 +326,26 @@ putBeeper()`,
         name: "Off-brand Tetris - If",
         explanations: [
             {
-                title: "Den Inhalt des If-Statements ändern",
-                explanation: `<b>If-Statements</b><br>
-                wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
-                
-                <b>Mehrere Welten</b><br>
-                Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrem eigenen Spielfeld. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet.<br><br>
-        
-                <b>Aufbau eines If-Statements</b><br>
-                if(meineBedingung()){<br>
-                code der ausgeführt wird, wenn die Bedingung wahr ist.<br>
-                }<br><br>`,
+                title: "Mehrere Pfeilis",
+                explanation: `Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrer eigenen Welt. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, und die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet.<br><br>`,
+            },
+            {
+                title: "Wofür man If-Statements nutzt",
+                explanation: `wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
+
+                <b>Code Beispiel:</b><br>
+<pre><code>move()
+if(leftIsClear())
+{
+    turnLeft()
+}
+move()</code></pre><br>`,
             },
             {
                 title: "Die Bedingung im If-Statement ändern",
                 explanation: `<b>If-Statements</b><br>
-                wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
-                
-                <b>Mehrere Welten</b><br>
-                Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrem eigenen Spielfeld. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet.<br><br>
-        
+                Häufig wollen wir unseren Code so schreiben, dass er später flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der {}-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist.<br><br>
+    
                 <b>Aufbau eines If-Statements</b><br>
                 if(meineBedingung()){<br>
                 code der ausgeführt wird, wenn die Bedingung wahr ist.<br>
@@ -382,12 +357,7 @@ putBeeper()`,
                 Es kann ganz verschiedene Bedingungen geben, die wir abfragen können. In diesem Level gibt es neben <em>leftIsClear()</em> auch <em>rightIstClear()</em>.<br><br>`,
             },
         ],
-        code: `move()
-if(leftIsClear())
-{
-    turnRight()
-}
-move()`,
+        code: `move()`,
         commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
@@ -399,6 +369,10 @@ move()`,
 
                 karel: { x: 2, y: 0, direction: 3, isSuper: false, beeperCount: 0 },
                 tasks: [
+                    {
+                        beepers: [{ x: 2, y: 1, count: 1 },],
+                        solutions: [],
+                    },
                     {
                         beepers: [{ x: 3, y: 1, count: 1 },],
                         solutions: [],
@@ -423,6 +397,10 @@ move()`,
 
                 karel: { x: 2, y: 0, direction: 3, isSuper: false, beeperCount: 0 },
                 tasks: [
+                    {
+                        beepers: [{ x: 2, y: 1, count: 1 },],
+                        solutions: [],
+                    },
                     {
                         beepers: [{ x: 2, y: 2, count: 1 },],
                         solutions: [],

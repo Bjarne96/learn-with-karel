@@ -8,7 +8,7 @@ const CommandComp: React.FC<ICommandProps> = ({ commands }) => {
 
     const copyCommand = (e: React.MouseEvent, command: string) => {
         if (time != null) clearTimeout(time)
-        void navigator.clipboard.writeText(command + "();")
+        void navigator.clipboard.writeText(command + "()")
         const tooltipSpan = document.getElementById('command-tooltip')
         tooltipSpan.style.display = "block"
         const x = e.clientX + 20
