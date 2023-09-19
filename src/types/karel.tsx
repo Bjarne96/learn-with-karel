@@ -70,7 +70,6 @@ export interface ResetStateObject {
     executionSuccessfullyCompleted: boolean
     executionCompleted: boolean
     activeLine: number
-    worldSuccessfullyCompletedCounter: number
     worldCompletedCounter: number
     step: number
 }

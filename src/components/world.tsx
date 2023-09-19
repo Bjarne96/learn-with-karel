@@ -53,10 +53,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     /* REACT FUNCTIONS */
 
-    componentWillUnmount() {
-        console.log('unmount')
-    }
-
     componentDidUpdate(): void {
         // Reset Button was pressed, while executing code
         if (!this.props.runningCode && !this.finishedCode && this.startedCode) {
@@ -73,7 +69,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.setLevel()
         }
         // Return when the world is not active
-        if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
+        // if (this.props.worldNumber - 1 != this.props.worldCompletedCounter && this.props.currentLevel == this.state.currentLevel) return
         //Run Code Button was pressed
         if (this.props.runningCode && !this.finishedCode && !this.startedCode) {
             // Updates the interval initally
@@ -81,7 +77,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
             this.startedCode = true
             void this.executeCode()
         }
-        // Level changed
+        // Level or Task changed
         if (((this.props.currentLevel != this.state.currentLevel) || this.props.activeTask != this.state.activeTask) && !this.props.runningCode && !this.finishedCode && !this.startedCode) {
             this.resetLevel()
             this.setLevel()

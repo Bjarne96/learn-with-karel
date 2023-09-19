@@ -36,6 +36,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     restrictedTasks = true
     userId = ""
     saveCode: ReturnType<typeof setTimeout> = null
+    worldSuccessfullyCompletedCounter = 0
 
     constructor(props: DashboardProps) {
         super(props)
@@ -70,7 +71,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 commands: levels[lastStage].commands,
                 code: code,
                 runningCode: false,
-                worldSuccessfullyCompletedCounter: 0,
                 worldCompletedCounter: 0,
                 worldCounter: levels[lastStage].worlds.length,
                 executionSuccessfullyCompleted: false,
@@ -254,6 +254,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     getResetRunningCodeObject(): ResetStateObject {
+        this.worldSuccessfullyCompletedCounter = 0
         return {
             firstLog: [] as LogEntry[],
             secondLog: [] as LogEntry[],
@@ -262,7 +263,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             executionSuccessfullyCompleted: false,
             executionCompleted: false,
             activeLine: 0,
-            worldSuccessfullyCompletedCounter: 0,
             worldCompletedCounter: 0,
             step: 0
         }
@@ -292,7 +292,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
     }
 
     completedWorld(completed: boolean) {
-        let worldSuccessfullyCompletedCounter = this.state.worldSuccessfullyCompletedCounter
         let worldCompletedCounter = this.state.worldCompletedCounter
         let executionCompleted = false
         // If the level was already completed at some point, the execution is completed
@@ -302,9 +301,9 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
         // Check if all worlds have completed
         if (this.state.worldCounter > 1 && completed) {
             // Counts up, because one world was completed
-            worldSuccessfullyCompletedCounter++
+            this.worldSuccessfullyCompletedCounter++
             // Resets when all where completed successfully
-            if (this.state.worldCounter == worldSuccessfullyCompletedCounter) worldSuccessfullyCompletedCounter = (this.state.worldCounter - 1)
+            if (this.state.worldCounter == this.worldSuccessfullyCompletedCounter) this.worldSuccessfullyCompletedCounter = (this.state.worldCounter - 1)
             else completed = false // Sets to false, when they didn't match the count
         }
         // Was the level executed till the end, then the execution is completed
@@ -353,6 +352,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
             showLevelCompletedModal = true
         }
         else if (completed) showTaskCompletedModal = true
+        if ((this.state.worldCounter > 1 && worldCompletedCounter == 2) || this.state.worldCounter == 1) this.worldSuccessfullyCompletedCounter = 0
         this.setState({
             ...resetObject,
             ...{
@@ -361,7 +361,6 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                 executionCompleted: executionCompleted,
                 showLevelCompletedModal: showLevelCompletedModal,
                 showTaskCompletedModal: showTaskCompletedModal,
-                worldSuccessfullyCompletedCounter: worldSuccessfullyCompletedCounter,
                 worldCompletedCounter: worldCompletedCounter,
                 step: 0,
                 activeLine: 0,
@@ -430,7 +429,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                         </div>
                         <div className="h-[25vh] flex flex-row ">
                             {<Log log={[...this.state.firstLog]} logNumber={1} worldCounter={this.state.worldCounter} />}
-                            {this.state.worldCounter == 2 && <Log log={this.state.secondLog} logNumber={2} worldCounter={this.state.worldCounter} />}
+                            {this.state.worldCounter == 2 && <Log log={[...this.state.secondLog]} logNumber={2} worldCounter={this.state.worldCounter} />}
                         </div>
                     </div>
                     <div className="w-full h-full">
@@ -443,7 +442,7 @@ export default class Dashboard extends React.Component<DashboardProps, Dashboard
                             <World
                                 key={i}
                                 worldNumber={i + 1}
-                                worldSuccessfullyCompletedCounter={this.state.worldSuccessfullyCompletedCounter}
+                                worldSuccessfullyCompletedCounter={this.worldSuccessfullyCompletedCounter}
                                 worldCompletedCounter={this.state.worldCompletedCounter}
                                 currentLevel={this.state.currentLevel}
                                 code={this.state.code}
