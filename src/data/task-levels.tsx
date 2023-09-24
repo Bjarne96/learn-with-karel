@@ -130,56 +130,57 @@ pickBeeper()`,
                 Hier wirst jedoch noch ein letztes Mal ohne Funktionen arbeiten, weil man so am besten sieht, in welchen Szenarien Funktionen einem das Leben einfacher machen. Hier hast du fast das gleich Problem wie bei Aufgabe 1. Du kannst die Aufgabe einfach so wie immer lösen. Allerdings wirst du merken, dass du dich dabei wiederholen musst.<br><br>`,
             },
             {
-                title: "Wie Modifiziert man Funktionen",
-                explanation: `Nun werden wir das Problem auf die elegante Art lösen. Die Funktion im folgenden Code funktioniert leider noch nicht so richtig. Wenn zwischen den {}-Klammern neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern. Erinnere dich an die vorherigen Lektionen, was du tun musstest, um eine Rechtsdrehung zu machen. Die entsprechende Abfolge von Befehlen muss innerhalb der {}-Klammer stehen.<br><br><br><br>
+                title: "Funktionen nutzen: Definition und Aufruf",
+                explanation: `Nun werden wir das Problem auf die elegante Art lösen. Um eine Funktion zu nutzen brauchst du zwei Komponenten:<br><br>
+                
+                <b>1. Die Definition</b><br>
+                Diese wird durch das Wort "function" eingeleitet. Diese ist wie ein Koch-Rezept, denn es steht eine Abfolge von Instruktionen darin. Der Name der Funktion ist beliebig wählbar (hier: "turnRight").<br><br>
                
 <pre><code>function turnRight(){
     turnLeft()
     turnLeft()
-}
+    turnLeft()
+}</code></pre><br>
 
-turnRight()
+                <b>2. Der Aufruf</b><br>
+                Von einem Koch-Rezept alleine kocht sich noch kein Essen. Deswegen müssen wir den Computer damit beauftragen, die Instruktionen im Rezept (also in der Definition) auch auszuführen. Und dass machen wir mit dem Aufruf. Hierfür nutzt du den den gleichen Namen, den du vorher in der Definition gewählt hast, gefolgt von (). In diesem Fall "turnRight()". Ein Aufruf kann erst nach der Definition stattfinden, also weiter unten im Code. Wir nutzen Aufrufe genauso im Code, wie die Befehle, die du schon kennst.<br><br>
+
+<pre><code>turnRight()
 move()
 move()
 pickBeeper()
-turnRight()
-move()
-move()
-pickBeeper()</code></pre>`,
-            },
-            {
-                title: "Selbst Funktionen schreiben",
-                explanation: `Es gibt immer noch mehrere Stellen im Code, in denen wir uns unnötig wiederholen. Zum Glück kannst du so viele neue Funktionen mit anderen Namen definieren wie du willst. Versuche <code>move()</code> und <code>pickBeeper()</code> in eine neue Funktion auszulagern:<br><br>
-
-<pre><code>function bewegenUndAufsammeln(){
-    move()
-    move()
-    pickBeeper()
-}</code></pre><br>
-                
-                Um eine Funktion zu nutzen brauchst du zwei Komponenten:<br><br>
-                
-                1. Die Definition. Diese ist wie ein Koch-Rezept. Es steht einfach eine Abfolge von Instruktionen darin. Der Name der Funktion ist beliebig wählbar. Von einem Koch-Rezept alleine kocht sich allerdings noch kein Essen. <br><br>
-                
-<pre><code>function funktionsName(){
-    beliebigerBefehl()
-    beliebigerAndererBefehl()
-    soVieleBefehleWieDuWillst()
-}</code></pre><br>
-
-                2. Der Aufruf. Hier beauftragen wir den Computer damit, die Instruktionen im Rezept (also in der Definition) auch auszuführen. Hierfür nutzt du den den gleichen Namen, den du vorher in der Definition gewählt hast, gefolgt von (). Ein Aufruf kann erst nach der Definition stattfinden, also weiter unten im Code.<br><br>
-
-<pre><code>funktionsName()</code></pre><br>
+turnRight()</code></pre><br>
 
                 <b>Tasten-Komination für die {}-Klammern</b><br>
                 Windows: AltGr + 7 / AltGr + 0<br>
                 Mac: Shift + Alt + 8 / Shift + Alt + 9<br><br>`,
             },
             {
+                title: "Eine Funktionsdefinition modifizieren",
+                explanation: `Es gibt immer noch mehrere Stellen im Code, in denen wir uns unnötig wiederholen, also brauchen wir noch eine Funktion. Die neue Funktion <code>moveAndPick()</code> im folgenden Code funktioniert leider noch nicht so richtig.<br><br>
+                
+                Wenn zwischen den {}-Klammern der Definition von <code>moveAndPick()</code> neue Befehle einfügst oder die vorhandenen löscht, kannst du die Funktion verändern.<br><br>
+
+<pre><code>function moveAndPick(){
+    move()
+    pickBeeper()
+}
+
+function turnRight(){
+    turnLeft()
+    turnLeft()
+    turnLeft()
+}
+
+turnRight()
+moveAndPick()
+turnRight()</code></pre><br>`,
+            },
+            {
                 title: "Flexiblen Code schreiben",
                 explanation: `Im Programmier-Alltag verändern sich dauernd irgendwelche Rahmenbedingungen, sodass man im Nachhinein Dinge an seinem Code ändern muss. Wenn man jedoch eine Funktionen hat die an vielen Stellen genutzt wird, dann muss man häufig nur eine kleine Änderung an der Funktion vornehmen. Sonst sonst hätte man an vielen Stellen des Programms alle Änderungen einzeln vornehmen müssen.<br><br>
                 
-                Wenn du deinen Code schon in den vorherigen Übungen in Funktionen Aufgeteilt hast, dann hast du jetzt ein leichtes Spiel.`,
+                Wenn du deinen Code schon in den vorherigen Übungen in Funktionen Aufgeteilt hast, dann musst du jetzt nur noch eine Code-Zeile in einer Funktionsdefinition einzügen, um das Level zu lösen.`,
             },
         ],
         code: ``,
@@ -327,15 +328,14 @@ putBeeper()`,
         explanations: [
             {
                 title: "Mehrere Pfeilis",
-                explanation: `Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrer eigenen Welt. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, und die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet. Als Resultat muss der selbe Cod für zwei verschiedene Situationen funktionieren.<br><br>`,
+                explanation: `Wie du siehst gibt es in diesem Level zwei Pfeilis, jeweils mit ihrer eigenen Welt. In diesem Fall wird dein Code erst für die eine Welt ausgeführt und direkt im Anschluss wird derselbe Code nochmal von vorne für die andere Welt ausgeführt. Die beiden Welten beeinflussen sich gegenseitig also in keiner Form, und die komplette Code-Ausführung wird auf Anfang zurückgesetzt, bevor die zweite Welt startet. Als Resultat muss der selbe Code für zwei verschiedene Situationen funktionieren.<br><br>`,
             },
             {
-                title: "Wofür man If-Statements nutzt",
+                title: "Wie man If-Statements nutzt",
                 explanation: `Häufig wollen wir unseren Code so schreiben, dass er flexibel auf unterschiedliche Situationen reagieren kann. Dafür nutzen wir sogenannte "Bedingungen" oder "If-Statements". Diese prüfen, ob eine bestimmte Bedingung erfüllt ist und führen dann den Code innerhalb der <code>{}</code>-Klammern nach dem "if" nur aus, wenn die Bedingung erfüllt ist. Mit dem folgenden Code kannst du ausprobieren, wie das funktioniert.<br><br>
 
                 <b>Code Beispiel:</b><br>
-<pre><code>if(leftIsClear())
-{
+<pre><code>if(leftIsClear()){
     turnLeft()
 }</code></pre><br>`,
             },
@@ -344,8 +344,7 @@ putBeeper()`,
                 explanation: `Zwischen die <code>{}</code>-Klammern des If-Statements kannst du beliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements. Der gesamte Code-Block zwischen den <code>{}</code>-Klammern wird ausgeführt, sofern zum ursprünglichen Zeitpunkt, an dem die Bedingung geprüft wurde, diese auch zutraf. Die Bedingung wird also genau einmal geprüft, egal wieviele Zeilen Code danach kommen.<br><br>
                 
                 <b>Code Beispiel:</b><br>
-<pre><code>if(leftIsClear())
-{
+<pre><code>if(leftIsClear()){
     turnLeft()
     move()
 }</code></pre><br>`,
@@ -355,8 +354,7 @@ putBeeper()`,
                 explanation: `In den <code>()</code>-Klammern der If-Statements hast du bist jetzt immer <code>leftIsClear()</code> abgefragt, jedoch können dort auch beliebige andere Bedingungen stehen.<br><br>
                 
                 <b>Code Beispiel:</b><br>
-<pre><code>if(rightIsClear())
-{
+<pre><code>if(rightIsClear()){
 
 }</code></pre><br>`,
             },
@@ -424,16 +422,29 @@ putBeeper()`,
         name: "X-Files 1 - If/ Else",
         explanations: [
             {
-                title: "Wofür If-Else benutzt wird",
+                title: "Wie man If-Else benutzt",
                 explanation: `Manchmal soll ein alternativer Code nur dann ausgeführt werden, wenn die Bedingung im If-Statement nicht erfüllt ist. Dafür gibt es das "Else" nach dem "if". Der Code innerhalb der {}-Klammern nach dem "Else" wird nur ausgeführt, wenn die Bedingung im "If" nicht erfüllt ist.<br><br>
         
-                <b>Aufbau eines If-Else-Statements</b><br>
-                if(meineBedingung()){<br>
-                code der ausgeführt wird, wenn die Bedingung wahr ist.<br>
-                }<br>
-                else{<br>
-                code der ausgeführt wird, wenn die Bedingung nicht wahr ist.<br>
-                }<br><br>`,
+                <b>Code Beispiel:</b><br>
+<pre><code>if(leftIsClear()){
+    turnLeft()
+}
+else{
+    turnRight()   
+}</code></pre><br>`,
+            },
+            {
+                title: "Code zwischen den {}-Klammern ändern",
+                explanation: `Zwischen die <code>{}</code>-Klammern des If-Else-Statements kannst du beliebigen Code schreiben, also einen oder mehrere Befehle, Loops, If-Statements usw. Diesbezüglich  verhält es sich exakt wie bei If-Statements.<br><br>
+                
+                <b>Code Beispiel:</b><br>
+<pre><code>if(leftIsClear()){
+    turnLeft()
+    move() 
+}
+else{
+    turnRight() 
+}</code></pre><br>`,
             },
             {
                 title: "Besonderheit von If-Statements vs. If-Else",
@@ -497,13 +508,10 @@ else
                 }`,
             },
         ],
-        code: `move()
-if(leftIsClear())
-{
+        code: `if(leftIsClear()){
     turnLeft()
 }
-else
-{
+else{
     turnRight()
 }
 move()`,
@@ -515,7 +523,7 @@ move()`,
                     [0, 3, 12, 0, 9, 6, 0],
                     [0, 0, 3, 10, 6, 0, 0],
                 ],
-                karel: { x: 0, y: 0, direction: 0, isSuper: false, beeperCount: 0 },
+                karel: { x: 1, y: 0, direction: 0, isSuper: false, beeperCount: 0 },
                 tasks: [
                     {
                         beepers: [{ x: 1, y: 1, count: 1 }],
@@ -538,7 +546,7 @@ move()`,
                     [11, 6, 0, 0, 0, 3, 14],
                 ],
 
-                karel: { x: 0, y: 2, direction: 0, isSuper: false, beeperCount: 0 },
+                karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 },
                 tasks: [
                     {
                         beepers: [{ x: 1, y: 1, count: 1 }],
