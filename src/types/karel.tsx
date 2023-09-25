@@ -55,6 +55,7 @@ export interface DashboardState extends ResetStateObject {
     loading: boolean
     playmode: boolean
     savedCode: number
+    resetCode: number
     worldCounter: number
     activeTab: number
     activeTask: number
@@ -171,6 +172,7 @@ export interface IWorldProps {
     world: INewWorld
     runningCode: boolean
     pauseCode: boolean
+    resetCode: number
     code: string
     currentLevel: number
     worldCompletedCounter: number
