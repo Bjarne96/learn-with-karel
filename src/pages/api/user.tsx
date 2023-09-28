@@ -28,14 +28,14 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, db: Db) {
 
 // async function handlePost(req: NextApiRequest, res: NextApiResponse, db: Db) {
 //     try {
-//         let survey_id = ""
+//         let surveyid = ""
 //         let restrictedTasks = true
 //         console.log('req.body', req.body);
 //         if (req["body"]["hash"] == "7cb458") restrictedTasks = false
-//         if (req["body"]["survey_id"] != "") survey_id = req.body.survey_id
+//         if (req["body"]["surveyid"] != "") surveyid = req.body.surveyid
 //         const response = await db.collection("user").insertOne({
 //             lastStage: 1,
-//             survey_id: survey_id,
+//             surveyid: surveyid,
 //             restrictedTask: restrictedTasks
 //         });
 //         req["body"] = { id: response.insertedId }

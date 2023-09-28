@@ -25,7 +25,7 @@ const Home: NextPage<DashboardProps> = ({ id: id, stage: stage, code: code, user
 interface query {
     query: {
         id?: string
-        survey_id?: string
+        surveyid?: string
         type?: string
     }
 }
@@ -34,20 +34,20 @@ export async function getServerSideProps(context: query) {
     let id = context.query.id
     let user: GetUserDbResponse | null = null
     let restrictedTasks = true
-    const survey_id = context.query.survey_id
+    const surveyid = context.query.surveyid
     const type = context.query.type
     try {
         const client = await clientPromise;
         const db = client.db(db_name);
-        if (survey_id != "" && survey_id != undefined && type != "" && type != undefined) {
-            if (type == "7cb458") restrictedTasks = false
+        if (surveyid != "" && surveyid != undefined && type != "" && type != undefined) {
+            if (type == "0") restrictedTasks = false
             // Find user when necessary
-            const dbUser: GetUserDbResponse = await db.collection("user").findOne({ survey_id: survey_id }) as GetUserDbResponse
+            const dbUser: GetUserDbResponse = await db.collection("user").findOne({ surveyid: surveyid }) as GetUserDbResponse
             if (dbUser == null) {
                 // Create User when the URL is access the first time
                 const userRes = await db.collection("user").insertOne({
                     lastStage: 0,
-                    survey_id: survey_id,
+                    surveyid: surveyid,
                     restrictedTasks: restrictedTasks
                 })
                 id = userRes.insertedId.toString()

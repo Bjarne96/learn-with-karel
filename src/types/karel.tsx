@@ -278,6 +278,6 @@ export interface GetLevelDbResponse {
 export interface GetUserDbResponse {
     _id: ObjectId
     lastStage: number
-    survey_id: string
+    surveyid: string
     restrictedTasks: boolean
 }
