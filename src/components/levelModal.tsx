@@ -22,7 +22,7 @@ const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleRe
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Level {currentlevel + 1} Completed
+                            Aufgabenblock {currentlevel + 1} abgeschlossen
                         </h3>
                         <button
                             type="button"
@@ -46,7 +46,7 @@ const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleRe
                     </div>
                     <div className="p-6 space-y-6">
                         <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            You have completed this level! Ready for the next level?
+                            Du hast den Aufgabenblock abgeschlossen! Klicke entweder auf weiter, oder auf den Pfeil nach rechts über dem Spielfeld, um zum nächsten Aufgabenblock zu gelangen.
                         </p>
                     </div>
                     <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -55,14 +55,14 @@ const LevelModal: React.FC<Props> = ({ currentlevel, handleLevelChange, handleRe
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             onClick={nextLevel}
                         >
-                            Next Level
+                            Nächster Aufgabenblock
                         </button>
                         <button
                             type="button"
                             className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                             onClick={hideModal}
                         >
-                            Stay on the level
+                            Beim Aufgabenblock bleiben
                         </button>
                     </div>
                 </div>
