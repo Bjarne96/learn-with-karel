@@ -137,4 +137,66 @@ putBeeper()`,
     },
 ];
 
+{
+    title: "Besonderheit von If-Statements vs. If-Else",
+        explanation: `Verlgeiche die beiden Codeblöcke:<br><br>
+
+    <b>Code-Beispiel 1</b><br>
+<pre><code>if(leftIsClear())
+{
+turnLeft()
+}
+if(rightIsClear())
+{
+turnRight()
+}</code></pre><br>
+
+<b>Code-Beispiel 2</b><br>
+<pre><code>if(leftIsClear())
+{
+turnLeft()
+}
+else
+{
+turnRight()
+}</code></pre><br>`,
+},
+{
+    title: "Else-if",
+        explanation: `<b>Else-If</b><br>
+    Nun wird es kniffelig: neben <em>if</em> und <em>else</em> gibt es auch noch das <em>else if</em>...TO DO: TEXT WEITERSCHREIBEN<br><br>
+
+    <em>Vergiss nicht, nachzusehen, welche Funktionen du in diesem Level zur Verfügung hast.</em><br><br>
+    
+    <b>Aufbau eines If-Else-If-Statements</b><br>
+    if(ersteBedingung()){<br>
+    code der ausgeführt wird, wenn die erste Bedingung wahr ist.<br>
+    }<br>
+    else if(zweiteBedingung()){<br>
+    code der ausgeführt wird, wenn die zweite Bedingung wahr ist.<br>
+    }<br>
+    else{<br>
+    code der ausgeführt wird, wenn keine der vorherigen Bedingungen wahr ist.<br>
+    }<br><br>
+    
+    <b>Anmerkungen im Code</b><br>
+    Manchmal möchte man Notizen direkt im Code schreiben, die aber bei der Ausführung ignoriert werden sollen. In diesem Fall schreibt man // und sämtlicher Code der in der selben Zeile dahinter steht, wird ausgegraut angezeigt und in der Ausführung des Codes ignoriert.<br><br>
+    
+    <b>Lösungsansatz</b><br>
+    for (let i = 0; i < 18; i++) {<br>
+        if(frontIsClear())<br>
+        {<br>
+            move()<br>
+        }<br>
+        else if(leftIsClear())<br>
+        {<br>
+            turnLeft()<br>
+        }<br>
+        <br>
+        //Rechtsdrehung?<br>
+        <br>
+        //Beeper aufsammeln?<br>
+    }`,
+},
+
 export default levels;

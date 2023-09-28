@@ -324,7 +324,7 @@ putBeeper()`,
         ],
     },
     {
-        name: "Off-brand Tetris - If",
+        name: "If",
         explanations: [
             {
                 title: "Mehrere Pfeilis",
@@ -340,8 +340,8 @@ putBeeper()`,
 }</code></pre><br>`,
             },
             {
-                title: "Code zwischen den {}-Klammern ändern",
-                explanation: `Zwischen die <code>{}</code>-Klammern des If-Statements kannst du beliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements. Der gesamte Code-Block zwischen den <code>{}</code>-Klammern wird ausgeführt, sofern zum ursprünglichen Zeitpunkt, an dem die Bedingung geprüft wurde, diese auch zutraf. Die Bedingung wird also genau einmal geprüft, egal wieviele Zeilen Code danach kommen.<br><br>
+                title: "Anderen Code zwischen den {}-Klammern",
+                explanation: `Zwischen die <code>{}</code>-Klammern des If-Statements kannst du beliebigen anderen Code schreiben, also einen oder mehrere Befehle, Loops, oder weitere If-Statements. Die Bedingung wird immer nur genau einmal geprüft, egal wieviele Zeilen Code danach zwischen den <code>{}</code>-Klammern stehen. Es wird also immer der gesamte Code-Block ausgeführt, sofern die Bedingung zutrifft. <br><br>
                 
                 <b>Code Beispiel:</b><br>
 <pre><code>if(leftIsClear()){
@@ -350,23 +350,23 @@ putBeeper()`,
 }</code></pre><br>`,
             },
             {
-                title: "Neue Bedingungen",
-                explanation: `In den <code>()</code>-Klammern der If-Statements hast du bist jetzt immer <code>leftIsClear()</code> abgefragt, jedoch können dort auch beliebige andere Bedingungen stehen.<br><br>
+                title: "Neue Bedingungen zwischen den ()-Klammern",
+                explanation: `In den <code>()</code>-Klammern der If-Statements hast du bist jetzt immer <code>leftIsClear()</code> abgefragt, jedoch können dort auch andere Bedingungen stehen. Das Prinzip bleibt das gleiche: nur wenn die Bedingung erfüllt ist, wird der Code in den {}-Klammern danach ausgeführt.<br><br>
                 
                 <b>Code Beispiel:</b><br>
-<pre><code>if(rightIsClear()){
+<pre><code>if(beeperIsPresent()){
 
 }</code></pre><br>`,
             },
         ],
         code: `move()`,
-        commands: ["leftIsClear", "rightIsClear", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["leftIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
                     [0, 0, 13, 0, 0, 0, 0, 0],
-                    [0, 0, 3, 10, 12, 0, 0, 0],
-                    [0, 0, 0, 0, 7, 0, 0, 0],
+                    [0, 0, 3, 10, 10, 14, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                 ],
 
                 karel: { x: 2, y: 0, direction: 3, isSuper: false, beeperCount: 0 },
@@ -384,7 +384,7 @@ putBeeper()`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 4, y: 2, count: 1 },],
+                        beepers: [{ x: 2, y: 1, count: 1 }, { x: 3, y: 1, count: 1 }, { x: 4, y: 1, count: 1 },],
                         solutions: [],
                     },
                 ]
@@ -419,7 +419,7 @@ putBeeper()`,
         ],
     },
     {
-        name: "X-Files 1 - If/ Else",
+        name: "If/ Else",
         explanations: [
             {
                 title: "Wie man If-Else benutzt",
@@ -435,7 +435,7 @@ else{
             },
             {
                 title: "Code zwischen den {}-Klammern ändern",
-                explanation: `Zwischen die <code>{}</code>-Klammern des If-Else-Statements kannst du beliebigen Code schreiben, also einen oder mehrere Befehle, Loops, If-Statements usw. Diesbezüglich  verhält es sich exakt wie bei If-Statements.<br><br>
+                explanation: `Zwischen die <code>{}</code>-Klammern des If-Else-Statements kannst du beliebigen Code schreiben, also einen oder mehrere Befehle, Loops, If-Statements usw. Sobald die Ausführung in einem der <code>{}</code>-Blöcke beginnt (entweder bei <code>if</code> oder bei <code>else</code>), werden alle Befehle in diesem Block ausgeführt. Die Bedingung am Anfang wird auch bei mehreren Code-Zeilen nicht noch einmal geprüft.<br><br>
                 
                 <b>Code Beispiel:</b><br>
 <pre><code>if(leftIsClear()){
@@ -447,65 +447,16 @@ else{
 }</code></pre><br>`,
             },
             {
-                title: "Besonderheit von If-Statements vs. If-Else",
-                explanation: `Verlgeiche die beiden Codeblöcke:<br><br>
-
-                <b>Code-Beispiel 1</b><br>
-<pre><code>if(leftIsClear())
-{
-    turnLeft()
+                title: "Code zwischen den ()-Klammern ändern",
+                explanation: `Zwischen die <code>()</code>-Klammern des If-Else-Statements kannst du, wie auch bei einfachen If-Statements, andere Bedingungen nutzen.<br><br>
+                
+                <b>Code Beispiel:</b><br>
+<pre><code>if(beeperIsPresent()){
+    pickBeeper()
 }
-if(rightIsClear())
-{
-    turnRight()
-}</code></pre><br>
-
-<b>Code-Beispiel 2</b><br>
-<pre><code>if(leftIsClear())
-{
-    turnLeft()
-}
-else
-{
-    turnRight()
+else{
+    
 }</code></pre><br>`,
-            },
-            {
-                title: "Else-if",
-                explanation: `<b>Else-If</b><br>
-                Nun wird es kniffelig: neben <em>if</em> und <em>else</em> gibt es auch noch das <em>else if</em>...TO DO: TEXT WEITERSCHREIBEN<br><br>
-        
-                <em>Vergiss nicht, nachzusehen, welche Funktionen du in diesem Level zur Verfügung hast.</em><br><br>
-                
-                <b>Aufbau eines If-Else-If-Statements</b><br>
-                if(ersteBedingung()){<br>
-                code der ausgeführt wird, wenn die erste Bedingung wahr ist.<br>
-                }<br>
-                else if(zweiteBedingung()){<br>
-                code der ausgeführt wird, wenn die zweite Bedingung wahr ist.<br>
-                }<br>
-                else{<br>
-                code der ausgeführt wird, wenn keine der vorherigen Bedingungen wahr ist.<br>
-                }<br><br>
-                
-                <b>Anmerkungen im Code</b><br>
-                Manchmal möchte man Notizen direkt im Code schreiben, die aber bei der Ausführung ignoriert werden sollen. In diesem Fall schreibt man // und sämtlicher Code der in der selben Zeile dahinter steht, wird ausgegraut angezeigt und in der Ausführung des Codes ignoriert.<br><br>
-                
-                <b>Lösungsansatz</b><br>
-                for (let i = 0; i < 18; i++) {<br>
-                    if(frontIsClear())<br>
-                    {<br>
-                        move()<br>
-                    }<br>
-                    else if(leftIsClear())<br>
-                    {<br>
-                        turnLeft()<br>
-                    }<br>
-                    <br>
-                    //Rechtsdrehung?<br>
-                    <br>
-                    //Beeper aufsammeln?<br>
-                }`,
             },
         ],
         code: `if(leftIsClear()){
@@ -515,13 +466,13 @@ else{
     turnRight()
 }
 move()`,
-        commands: ["leftIsClear", "rightIsClear", "frontIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
+        commands: ["leftIsClear", "beeperIsPresent", "move", "turnLeft", "turnRight", "putBeeper", "pickBeeper"],
         worlds: [
             {
                 walls: [
-                    [11, 12, 0, 0, 0, 9, 14],
-                    [0, 3, 12, 0, 9, 6, 0],
-                    [0, 0, 3, 10, 6, 0, 0],
+                    [0, 13, 0, 0, 0, 0, 0],
+                    [0, 3, 10, 10, 10, 14, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
                 ],
                 karel: { x: 1, y: 0, direction: 0, isSuper: false, beeperCount: 0 },
                 tasks: [
@@ -530,20 +481,20 @@ move()`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 2, count: 1 },],
+                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 4, y: 1, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 2, count: 1 }, { x: 4, y: 2, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 0, count: 1 }],
+                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 4, y: 1, count: 1 }, { x: 5, y: 1, count: 1 },],
                         solutions: [],
                     },
                 ]
             },
             {
                 walls: [
-                    [0, 0, 9, 10, 12, 0, 0],
-                    [0, 9, 6, 0, 3, 12, 0],
-                    [11, 6, 0, 0, 0, 3, 14],
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 9, 10, 14, 0, 0, 0],
+                    [0, 7, 0, 0, 0, 0, 0],
                 ],
 
                 karel: { x: 1, y: 2, direction: 0, isSuper: false, beeperCount: 0 },
@@ -553,12 +504,12 @@ move()`,
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 0, count: 1 },],
+                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 1, count: 1 },],
                         solutions: [],
                     },
                     {
-                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 0, count: 1 }, { x: 4, y: 0, count: 1 }, { x: 5, y: 1, count: 1 }, { x: 6, y: 2, count: 1 }],
-                        solutions: [],
+                        beepers: [{ x: 1, y: 1, count: 1 }, { x: 2, y: 1, count: 1 },],
+                        solutions: [{ x: 3, y: 1, count: 1 },],
                     },
                 ]
             },
