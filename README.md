@@ -9,10 +9,9 @@
     Run "npm run build" to test your changes before you push / merge them on main (mainly for es lint errors)
 
 # URLs
-    - Survey-User-Links: http://localhost:3000/?surveyid=642878085&type=7cb458
+    - Survey-User-Links: http://localhost:3000/?surveyid=642878085&type=0
     - Normal-User-Links: http://localhost:3000/?id=64e1f72a423d104bcb6bc433
-# Notes
-    - The Hash: "7cb458"
+
 # Tickets
 PRIO
     - playmode with regex

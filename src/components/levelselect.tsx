@@ -1,9 +1,9 @@
 import React from "react";
 import type { ISelectLevelProps, INewLevel } from "../types/karel";
-import levels from "../data/task-levels";
+import levels from "../data/levels";
 
 // DEV Variable (has to be always false when doing a commit)
-const cheater = false
+const cheater = true
 
 const SelectLevel: React.FC<ISelectLevelProps> = ({ currentLevel, handleLevelChange, doneLevels }) => {
 
