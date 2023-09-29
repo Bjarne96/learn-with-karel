@@ -40,7 +40,7 @@ const Explanation: React.FC<explanation> = ({ tasks, explanations, activeTask, s
                     :
                     <p className={titleClassname}>All Tasks</p>
             }
-            <div className={"w-6 ml-auto mt-2 mr-3"} title={"This task has been completed."}>{checkmark}</div>
+            <div className={"w-6 ml-auto mt-2 mr-3"} title={"Diese Aufgabe wurde abgeschlossen."}>{checkmark}</div>
         </div>
     }
     return <div className={"h-[100vh] p-8 text-white tracking-wide w-full max-w-lg"}>

@@ -17,7 +17,7 @@ const LevelModal: React.FC<Props> = ({ currentTask, togglTaskModal }) => {
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Task {currentTask} Completed
+                            Aufgabe {currentTask} abgeschlossen
                         </h3>
                         <button
                             type="button"
@@ -41,7 +41,7 @@ const LevelModal: React.FC<Props> = ({ currentTask, togglTaskModal }) => {
                     </div>
                     <div className="p-6 space-y-6">
                         <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            You have completed this task! Ready for the next task? Select one on the top left.
+                            Du hast die Aufgabe abgeschlossen! Du kannst links-oben in der Liste eine neue Aufgabe auswählen.
                         </p>
                     </div>
                     <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -50,7 +50,7 @@ const LevelModal: React.FC<Props> = ({ currentTask, togglTaskModal }) => {
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             onClick={hideModal}
                         >
-                            Next task
+                            Weiter
                         </button>
                     </div>
                 </div>
